@@ -22,12 +22,16 @@ app.layout = html.Div([
    dcc.Graph(id='price-chart')  # Placeholder for the price chart
 ])
 
+# TODO: fetch data from different timeframes
 # Fetch historical market data
 def fetch_data(ticker):
    stock = yf.Ticker(ticker)
    hist = stock.history(period="1mo",interval="1h")  # Retrieve data for the past year
    return hist
 
+
+# TODO: Make this update!
+# TODO: Make line green if stock is up and red if down
 def create_price_chart(df):
    fig = go.Figure()
    fig.add_trace(go.Scatter(x=df.index, y=df['Close'], mode='lines', name='Close Price'))
