@@ -1,23 +1,25 @@
 import datetime
 import yfinance as yf
 import time
-import matplotlib.pyplot as plt
 import pandas as pd
 from dash import dash, dcc, html, Input, Output, callback
 import plotly.graph_objs as go
 from dash.dependencies import Input, Output
+from flask import Flask
+
+server = Flask(__name__)
 
 # Initialize the Dash app
-app = dash.Dash(__name__)
+app = dash.Dash(__name__, server=server)
 
 # Define the layout of the dashboard
 app.layout = html.Div([
    html.H1("Custom Trading Dashboard"),  # Title of the dashboard
    dcc.Input(
-       id="search",
-            type="text",
-            placeholder="Search".format("text"),
-            debounce=True
+      id="search",
+      type="text",
+      placeholder="Search".format("text"),
+      debounce=True
    ),
    dcc.Graph(id='price-chart')  # Placeholder for the price chart
 ])
@@ -32,10 +34,10 @@ def fetch_data(ticker):
 
 # TODO: Make this update!
 # TODO: Make line green if stock is up and red if down
-def create_price_chart(df):
+def create_price_chart(df,ticker):
    fig = go.Figure()
    fig.add_trace(go.Scatter(x=df.index, y=df['Close'], mode='lines', name='Close Price'))
-   fig.update_layout(title='Stock Price Over Time', xaxis_title='Date', yaxis_title='Price')
+   fig.update_layout(title=str(ticker))
    return fig
 
 @app.callback(
@@ -44,12 +46,12 @@ def create_price_chart(df):
 )
 def update_price_chart(ticker):
    df = pd.DataFrame(fetch_data(ticker))
-   fig = create_price_chart(df)
+   fig = create_price_chart(df,ticker)
    return fig
 
 # Run the app
 if __name__ == '__main__':
-   app.run_server(debug=True)
+   server.run(debug=True)
 
 
 
