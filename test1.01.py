@@ -40,7 +40,7 @@ app.layout = html.Div([
    html.H1(children="BearWatch",style={'textAlign':'center'}),  # Title of the dashboard
    # Input for stock symbol
    html.Div([
-        dcc.Input(id="stock-input", type="text", value="AAPL", placeholder="Enter stock symbol",
+        dcc.Input(id="stock-input", type="text", placeholder="Enter stock symbol",
                   style={'marginRight': '10px', 'padding': '10px', 'fontSize': '16px'}),
         html.Button("Submit", id="submit-button", n_clicks=0, style={'padding': '10px', 'fontSize': '16px'})
    ], style={'marginBottom': '20px'}),
@@ -60,7 +60,7 @@ app.layout = html.Div([
 )
 def update_graph(n, n_clicks, stock_symbol):
     if not stock_symbol:
-        stock_symbol = "AAPL"  # Default to AAPL if no input
+        stock_symbol = "^GSPC"  # Default to AAPL if no input
     
     stock = yf.Ticker(stock_symbol)
     data = stock.history(period="1d", interval="1m")  # Fetch recent minute data
