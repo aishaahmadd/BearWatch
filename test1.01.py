@@ -37,7 +37,6 @@ def get_news(query, count=5):
 
 # 🔹 Dash Layout (Stock Chart + Search Bar)
 app.layout = html.Div([
-   html.H1(children="BearWatch",style={'textAlign':'center'}),  # Title of the dashboard
    # Input for stock symbol
    html.Div([
         dcc.Input(id="stock-input", type="text", placeholder="Enter stock symbol",
