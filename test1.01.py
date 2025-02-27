@@ -2,7 +2,7 @@ import datetime
 import yfinance as yf
 import time
 import pandas as pd
-from dash import Dash, dcc, html, Input, Output
+from dash import Dash, dcc, html, Input, Output, State
 import plotly.graph_objs as go
 from flask import Flask, render_template, request
 
@@ -11,17 +11,6 @@ server = Flask(__name__)
 
 # Initialize Dash with Flask as server
 app = Dash(__name__, server=server, routes_pathname_prefix="/dashboard/")
-
-
-# 🔹 Fetch Stock Price Data
-def fetch_data(ticker):
-    try:
-        stock = yf.Ticker(ticker)
-        hist = stock.history(period="1mo", interval="1h")
-        return hist
-    except Exception as e:
-        print(f"Error fetching stock data: {e}")
-        return pd.DataFrame()
 
 
 # 🔹 Fetch Stock News
@@ -45,35 +34,50 @@ def get_news(query, count=5):
         return []
 
 
-# 🔹 Create Price Chart
-def create_price_chart(df, ticker):
-    fig = go.Figure()
-    color = "green" if df['Close'].iloc[-1] > df['Close'].iloc[0] else "red"  # Green if stock is up, Red if down
-    fig.add_trace(go.Scatter(x=df.index, y=df['Close'], mode='lines', name='Close Price', line=dict(color=color)))
-    fig.update_layout(title=f"Stock Price: {ticker}")
-    return fig
-
 
 # 🔹 Dash Layout (Stock Chart + Search Bar)
 app.layout = html.Div([
-    html.H1("BearWatch - Stock News & Charts"),
-    dcc.Input(id="search", type="text", placeholder="Enter stock ticker (e.g., AAPL)", debounce=True),
-    dcc.Graph(id='price-chart'),  # Stock price chart
+   html.H1(children="BearWatch",style={'textAlign':'center'}),  # Title of the dashboard
+   # Input for stock symbol
+   html.Div([
+        dcc.Input(id="stock-input", type="text", value="AAPL", placeholder="Enter stock symbol",
+                  style={'marginRight': '10px', 'padding': '10px', 'fontSize': '16px'}),
+        html.Button("Submit", id="submit-button", n_clicks=0, style={'padding': '10px', 'fontSize': '16px'})
+   ], style={'marginBottom': '20px'}),
+
+   dcc.Graph(id="live-stock-graph"),
+
+    # Interval component to update the graph every 5 seconds
+   dcc.Interval(id="interval-component", interval=5000, n_intervals=0)
 ])
 
 
 # 🔹 Dash Callback (Updates Chart)
 @app.callback(
-    Output('price-chart', 'figure'),
-    [Input("search", "value")]
+    Output("live-stock-graph", "figure"),
+    [Input("interval-component", "n_intervals"), Input("submit-button", "n_clicks")],
+    [State("stock-input", "value")]
 )
-def update_price_chart(ticker):
-    if not ticker:
-        return go.Figure()
-    df = fetch_data(ticker)
-    if df.empty:
-        return go.Figure()
-    return create_price_chart(df, ticker)
+def update_graph(n, n_clicks, stock_symbol):
+    if not stock_symbol:
+        stock_symbol = "AAPL"  # Default to AAPL if no input
+    
+    stock = yf.Ticker(stock_symbol)
+    data = stock.history(period="1d", interval="1m")  # Fetch recent minute data
+
+    if not data.empty:
+        figure = go.Figure(data=[go.Scatter(
+            x=data.index,
+            y=data["Close"],
+            mode="lines+markers",
+            name=stock_symbol
+        )])
+        figure.update_layout(title=f"Real-Time {stock_symbol} Stock Price",
+                             xaxis_title="Time",
+                             yaxis_title="Price",
+                             xaxis=dict(showgrid=True),
+                             yaxis=dict(showgrid=True))
+        return figure
 
 
 # 🔹 Flask Route (News Page)
