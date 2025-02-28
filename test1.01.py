@@ -42,12 +42,12 @@ app.layout = html.Div([
         dcc.Input(id="stock-input", type="text", placeholder="Enter stock symbol",
                   style={'marginRight': '10px', 'padding': '10px', 'fontSize': '16px'}),
         html.Button("Submit", id="submit-button", n_clicks=0, style={'padding': '10px', 'fontSize': '16px'})
-   ], style={'marginBottom': '20px'}),
+   ], style={'marginBottom': '20px','textAlign': 'right'}),
 
    dcc.Graph(id="live-stock-graph"),
 
-    # Interval component to update the graph every 5 seconds
-   dcc.Interval(id="interval-component", interval=5000, n_intervals=0)
+    # Interval component to update the graph every 1 second
+   dcc.Interval(id="interval-component", interval=1000, n_intervals=0)
 ])
 
 
