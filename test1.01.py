@@ -37,27 +37,29 @@ def get_news(query, count=5):
 
 # 🔹 Dash Layout (Stock Chart + Search Bar)
 app.layout = html.Div([
-   # Input for stock symbol
-   #html.Div([
-        #dcc.Input(id="stock-input", type="text", placeholder="Enter stock symbol",
-        #          style={'marginRight': '10px', 'padding': '10px', 'fontSize': '16px'}, debounce=True),
-        #html.Button("Submit", id="submit-button", n_clicks=0, style={'padding': '10px', 'fontSize': '16px'})
-   #], style={'marginBottom': '20px','textAlign': 'center'}),
-
-   dcc.Graph(id="live-stock-graph"),
-
+    dcc.Location(id="url", refresh=False),
+    dcc.Graph(id="live-stock-graph"),
     # Interval component to update the graph every 1 second
-   dcc.Interval(id="interval-component", interval=1000, n_intervals=0)
+    dcc.Interval(id="interval-component", interval=1000, n_intervals=0)
 ])
 
 
 # 🔹 Dash Callback (Updates Chart)
 @app.callback(
     Output("live-stock-graph", "figure"),
-    [Input("interval-component", "n_intervals")]
+    [Input("interval-component", "n_intervals"),
+    Input("url", "search")]
 )
-def update_graph(n):
-    stock_symbol = request.args.get("stock", "^GSPC")
+def update_graph(n, search):
+    # Default stock symbol
+    stock_symbol = "^GSPC"
+
+    # Extract stock symbol from URL (?stock=AAPL)
+    if search:
+        query_params = search.lstrip("?").split("&")
+        params_dict = dict(param.split("=") for param in query_params if "=" in param)
+        stock_symbol = params_dict.get("stock", "^GSPC")
+
     stock = yf.Ticker(stock_symbol)
     data = stock.history(period="1d", interval="1m")  # Fetch recent minute data
 

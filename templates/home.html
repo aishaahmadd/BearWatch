@@ -27,12 +27,11 @@
         </div>
 
         <!--SEARCH-->
-        <div id = "search">
+        <div id="search">
             <form action="/" method="GET">
-                <input id="stock-input", type="text", placeholder="Enter stock symbol", debounce=True>
-                <button id="submit-button", n_clicks=0>Submit</button>
+                <input id="stock-input" name="stock" type="text" placeholder="Enter stock symbol" required>
+                <button id="submit-button" type="submit">Submit</button>
             </form>
-            
         </div>
 
         <!--TREND BUTTONS-->
@@ -47,9 +46,7 @@
         </div>
 
         <!--GRAPH-->
-        <div id = "graph"> 
-            <iframe src="/dashboard/" width="100%" height="600px" style="border:none;"></iframe>
-        </div>
+        <iframe id="stock-graph" src="/dashboard?stock={{ stock_symbol }}" width="100%" height="600px" style="border:none;"></iframe>
 
         <!--TIME BUTTONS-->
         <div id = "time buttons">
