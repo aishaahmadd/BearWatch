@@ -37,6 +37,13 @@ def get_news(query, count=5):
 
 # 🔹 Dash Layout (Stock Chart + Search Bar)
 app.layout = html.Div([
+   # Input for stock symbol
+   #html.Div([
+        #dcc.Input(id="stock-input", type="text", placeholder="Enter stock symbol",
+        #          style={'marginRight': '10px', 'padding': '10px', 'fontSize': '16px'}, debounce=True),
+        #html.Button("Submit", id="submit-button", n_clicks=0, style={'padding': '10px', 'fontSize': '16px'})
+   #], style={'marginBottom': '20px','textAlign': 'center'}),
+
    dcc.Graph(id="live-stock-graph"),
 
     # Interval component to update the graph every 1 second
@@ -47,13 +54,10 @@ app.layout = html.Div([
 # 🔹 Dash Callback (Updates Chart)
 @app.callback(
     Output("live-stock-graph", "figure"),
-    [Input("interval-component", "n_intervals"), Input("submit-button", "n_clicks")],
-    [State("stock-input", "value")]
+    [Input("interval-component", "n_intervals")]
 )
-def update_graph(n, n_clicks, stock_symbol):
-    if not stock_symbol:
-        stock_symbol = "^GSPC"
-    
+def update_graph(n):
+    stock_symbol = request.args.get("stock", "^GSPC")
     stock = yf.Ticker(stock_symbol)
     data = stock.history(period="1d", interval="1m")  # Fetch recent minute data
 
@@ -75,6 +79,7 @@ def update_graph(n, n_clicks, stock_symbol):
 # 🔹 Flask Route (News Page)
 @server.route("/", methods=["GET", "POST"])
 def home():
+    stock_symbol = request.args.get("stock", "^GSPC")
     news_articles = []
     query = "Google"  # Default
 
@@ -82,7 +87,7 @@ def home():
         query = request.form.get("query")
 
     news_articles = get_news(query, count=5)
-    return render_template("home.html", news=news_articles)
+    return render_template("home.html", news=news_articles, stock_symbol=stock_symbol)
 @server.route('/news.html', methods=["GET", "POST"])
 def news():
     news_articles = []
