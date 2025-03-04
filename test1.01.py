@@ -40,7 +40,7 @@ app.layout = html.Div([
    # Input for stock symbol
    html.Div([
         dcc.Input(id="stock-input", type="text", placeholder="Enter stock symbol",
-                  style={'marginRight': '10px', 'padding': '10px', 'fontSize': '16px'}),
+                  style={'marginRight': '10px', 'padding': '10px', 'fontSize': '16px'}, debounce=True),
         html.Button("Submit", id="submit-button", n_clicks=0, style={'padding': '10px', 'fontSize': '16px'})
    ], style={'marginBottom': '20px','textAlign': 'right'}),
 
@@ -59,7 +59,7 @@ app.layout = html.Div([
 )
 def update_graph(n, n_clicks, stock_symbol):
     if not stock_symbol:
-        stock_symbol = "^GSPC"  # Default to AAPL if no input
+        stock_symbol = "^GSPC"
     
     stock = yf.Ticker(stock_symbol)
     data = stock.history(period="1d", interval="1m")  # Fetch recent minute data
@@ -89,8 +89,17 @@ def home():
         query = request.form.get("query")
 
     news_articles = get_news(query, count=5)
-    return render_template("index.html", news=news_articles)
+    return render_template("home.html", news=news_articles)
+@server.route('/news.html', methods=["GET", "POST"])
+def news():
+    news_articles = []
+    query = "Google"  # Default
 
+    if request.method == "POST":
+        query = request.form.get("query")
+
+    news_articles = get_news(query, count=5)
+    return render_template("news.html", news=news_articles)
 
 # Run Flask + Dash
 if __name__ == "__main__":

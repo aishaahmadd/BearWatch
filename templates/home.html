@@ -1,0 +1,81 @@
+<!--
+------THIS IS THE HOME PAGE------
+9 sections:
+1. Logo = div id = "logo"
+2. Search Engine = div id = "search"
+3. Buttons (Trends) = div id = "trend buttons"
+4. Graph = div id = "graph"
+5. Headlines = div id = "headlines"
+6. Trending (has graphs... will have to figure out) = div id = "trending"
+7. Buttons (time) = div id = "time buttons"
+8. Info = div id = "info"
+9. Overview = div = "overview"
+-->
+
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width">
+        <title>BearWatch</title>
+        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css"/>
+    </head>
+    <body>
+        <!--LOGO-->
+        <div id = "logo">
+            <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+        </div>
+
+        <!--SEARCH-->
+        <div id = "search">
+            
+        </div>
+
+        <!--TREND BUTTONS-->
+        <div id = "trend buttons">
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+            <button></button>
+        </div>
+
+        <!--GRAPH-->
+        <div id = "graph"> 
+            <iframe src="/dashboard/" width="100%" height="600px" style="border:none;"></iframe>
+        </div>
+
+        <!--TIME BUTTONS-->
+        <div id = "time buttons">
+            <button>1D</button>
+            <button>1W</button>
+            <button>1M</button>
+            <button>3M</button>
+            <button>YTD</button>
+            <button>1Y</button>
+            <button>ALL</button>
+        </div>
+
+        <!--HEADLINES-->
+        <div id = "headlines">
+            <h2><a href ="news.html">Headlines</a></h2>
+        </div>
+
+        <!--TRENDING-->
+        <div id = "trending">
+            <h2>Trending</h2>
+        </div>
+
+        <!--INFO-->
+        <div id = "info">
+
+        </div>
+
+        <!--OVERVIEW-->
+        <div id = "overview">
+
+        </div>
+    </body>
+</html>
