@@ -37,13 +37,6 @@ def get_news(query, count=5):
 
 # 🔹 Dash Layout (Stock Chart + Search Bar)
 app.layout = html.Div([
-   # Input for stock symbol
-   html.Div([
-        dcc.Input(id="stock-input", type="text", placeholder="Enter stock symbol",
-                  style={'marginRight': '10px', 'padding': '10px', 'fontSize': '16px'}, debounce=True),
-        html.Button("Submit", id="submit-button", n_clicks=0, style={'padding': '10px', 'fontSize': '16px'})
-   ], style={'marginBottom': '20px','textAlign': 'right'}),
-
    dcc.Graph(id="live-stock-graph"),
 
     # Interval component to update the graph every 1 second
