@@ -62,20 +62,51 @@ def update_graph(n, search):
 
     stock = yf.Ticker(stock_symbol)
     data = stock.history(period="1d", interval="1m")  # Fetch recent minute data
+    stock_info = stock.info
+    
 
-    if not data.empty:
-        figure = go.Figure(data=[go.Scatter(
-            x=data.index,
-            y=data["Close"],
-            mode="lines+markers",
-            name=stock_symbol
-        )])
-        figure.update_layout(title=f"Real-Time {stock_symbol} Stock Price",
-                             xaxis_title="Time",
-                             yaxis_title="Price",
-                             xaxis=dict(showgrid=True),
-                             yaxis=dict(showgrid=True))
-        return figure
+    if data.empty or "currentPrice" not in stock_info:
+        return go.Figure()
+
+    current_price = stock_info.get("currentPrice", data["Close"].iloc[-1])
+    prev_close = stock_info.get("previousClose", data["Close"].iloc[0])
+
+    # Calculate price change and percentage
+    price_change = current_price - prev_close
+    percent_change = (price_change / prev_close) * 100
+
+    # Determine line color
+    line_color = "green" if price_change > 0 else "red"
+    sign = "+" if price_change > 0 else ""
+
+    title = f"""
+    {stock_info.get('shortName', stock_symbol)} <br>
+    ${current_price:.2f} <span style='color:{line_color};'> <br>
+    {sign}${price_change:.2f} ({sign}{percent_change:.2f}%) Today</span>
+    """
+
+
+    figure = go.Figure(data=[go.Scatter(
+        x=data.index,
+        y=data["Close"],
+        mode="lines",
+        line=dict(color=line_color, width=2),
+        name=stock_symbol
+    )])
+    
+    figure.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',  # Transparent plot background
+        paper_bgcolor='rgba(0,0,0,0)',
+        title=title,
+        title_x=0.5,
+        xaxis_title="Time",
+        yaxis_title="Price",
+        xaxis=dict(showgrid=True),
+        yaxis=dict(showgrid=True)
+    )
+    
+    return figure
+    
 
 
 # 🔹 Flask Route (News Page)
