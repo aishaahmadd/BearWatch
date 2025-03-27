@@ -1,3 +1,4 @@
+
 body {
     /*background-image: url(backgroundImage.png); */
     display:grid;
@@ -11,9 +12,9 @@ body {
 }
 
 [id = "logo"]{
-    grid-area: top; 
+    grid-area: top;
     text-align: center;
-    margin: auto;   
+    margin: auto;
 
 }
 
