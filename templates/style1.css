@@ -1,0 +1,48 @@
+body {
+    display:grid;
+    grid-template:  "top        top       top     top"
+                    "title      nav       nav     nav"
+                    "card      card1      card2   card3"
+                    "card4      card5     card6   card7"
+                    "bottom    bottom    bottom   bottom";
+
+    grid-template-rows: auto auto auto 1fr auto auto auto; 
+    grid-template-columns: 1fr 2fr 1fr; 
+    gap: 15px;
+    padding: 20px;
+}
+
+
+[id = "logo"]{
+    grid-area: top; 
+    text-align: center;
+    margin: auto;   
+}
+
+[id = "newsHeadline"]{
+    grid-area: title; 
+    text-align: left;
+    margin: auto;   
+}
+
+[id = "search"]{
+    grid-area: nav;
+    text-align: right;
+    padding: 10px;
+    font-size: 16px;
+}
+
+[id = "card"]{
+    grid-area: card; 
+    margin: auto;   
+}
+[id = "card1"]{
+    grid-area: card2;
+    margin: auto;   
+}
+
+[id = "load"]{
+    grid-area: bottom; 
+    text-align: center;
+    margin: auto;   
+}

@@ -1,5 +1,4 @@
 body {
-    /*background-image: url(backgroundImage.png); */
     display:grid;
     grid-template:  "top        top       top"
                     "nav        nav       nav"
@@ -8,6 +7,10 @@ body {
                     "headlines  time      trending"
                     "headlines  info      trending"
                     "headlines  overview  trending";
+    grid-template-rows: auto auto auto 1fr auto auto auto; /* Define row heights */
+    grid-template-columns: 1fr 2fr 1fr; /* Columns: left, center, right */
+    gap: 15px;
+    padding: 20px;
 }
 
 [id = "logo"]{
@@ -61,4 +64,11 @@ body {
 [id = "overview"]{
     grid-area: overview;
     text-align: center;
+}
+
+button {
+    padding: 10px;
+    margin: 5px;
+    font-size: 16px;
+    cursor: pointer;
 }

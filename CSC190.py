@@ -5,12 +5,18 @@ import pandas as pd
 from dash import dash, dcc, html, Input, Output, callback
 import plotly.graph_objs as go
 from dash.dependencies import Input, Output
-from flask import Flask
+from flask import Flask, render_template, request
 
 server = Flask(__name__)
 
+# Route code from this file to home.html
+@server.route("/")
+def home():
+    stock_symbol = request.args.get("stock", "AAPL")  # Default stock
+    return render_template("home.html", stock_symbol=stock_symbol)
+
 # Initialize the Dash app
-app = dash.Dash(__name__, server=server)
+app = dash.Dash(__name__, server=server, routes_pathname_prefix="/dashboard/")
 
 # Defines the layout of the dashboard
 app.layout = html.Div([

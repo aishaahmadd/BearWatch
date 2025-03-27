@@ -18,19 +18,18 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>BearWatch</title>
-        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="style.css" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <!--LOGO-->
         <div id = "logo">
-            <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+            <img src="BearWatchLogo.png" alt="BearWatch Logo">
         </div>
 
         <!--SEARCH-->
         <div id="search">
             <form action="/" method="GET">
                 <input id="stock-input" name="stock" type="text" placeholder="Enter stock symbol" required>
-                <button id="submit-button" type="submit">Submit</button>
             </form>
         </div>
 
@@ -39,24 +38,20 @@
             <button></button>
             <button></button>
             <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
         </div>
 
         <!--GRAPH-->
-        <iframe id="stock-graph" src="/dashboard?stock={{ stock_symbol }}" width="100%" height="600px" style="border:none;"></iframe>
+        <iframe id="stock-graph" src="/dashboard?stock=AAPL" width="100%" height="600px" style="border:none;"></iframe>
 
         <!--TIME BUTTONS-->
         <div id = "time buttons">
-            <button>1D</button>
-            <button>1W</button>
-            <button>1M</button>
-            <button>3M</button>
-            <button>YTD</button>
-            <button>1Y</button>
-            <button>ALL</button>
+            <button onclick = "updateGraph('1d')">1D</button>
+            <button onclick = "updateGraph('1wk')">1Wk</button>
+            <button onclick = "updateGraph('1mo')">1Mo</button>
+            <button onclick = "updateGraph('3mo')">3Mo</button>
+            <button onclick = "updateGraph('ytd')">YTD</button>
+            <button onclick = "updateGraph('1y')">1Y</button>
+            <button onclick = "updateGraph('max')">ALL</button>
         </div>
 
         <!--HEADLINES-->
