@@ -26,6 +26,11 @@
             <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
         </div>
 
+        <!-- DARK MODE BUTTON -->
+        <div id="dark-mode-toggle">
+            <button id="dark-mode-button">Toggle Dark Mode</button>
+        </div>
+
         <!--SEARCH-->
         <div id="search">
             <form action="/" method="GET">
@@ -78,5 +83,14 @@
         <div id = "overview">
 
         </div>
+
+        <script>
+            const toggleButton = document.getElementById('dark-mode-button');
+        
+            toggleButton.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+            });
+        </script>
+
     </body>
 </html>

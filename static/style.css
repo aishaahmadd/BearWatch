@@ -1,5 +1,23 @@
 
 body {
+    background-color: #ffffff;
+    color: #000000;
+
+    /*background-image: url(backgroundImage.png); */
+    display:grid;
+    grid-template:  "top        top       top"
+                    "nav        nav       nav"
+                    "buttons    buttons   buttons"
+                    "headlines  graph     trending"
+                    "headlines  time      trending"
+                    "headlines  info      trending"
+                    "headlines  overview  trending";
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: #e0e0e0;
+
     /*background-image: url(backgroundImage.png); */
     display:grid;
     grid-template:  "top        top       top"
@@ -16,6 +34,13 @@ body {
     text-align: center;
     margin: auto;
 
+}
+
+[id="dark-mode-toggle"]{
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    z-index: 1000;
 }
 
 [id = "search"]{
