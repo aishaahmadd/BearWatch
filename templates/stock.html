@@ -20,7 +20,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>BearWatch</title>
-        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css"/>
+        <link href="{{ url_for('static', filename='stock.css') }}" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <!--LOGO-->
@@ -30,7 +30,7 @@
 
         <!--SEARCH-->
         <div id="search">
-            <form action="/" method="GET">
+            <form action="stock.html" method="GET">
                 <input id="stock-input" name="stock" type="text" placeholder="Enter stock symbol" required>
                 <button id="submit-button" type="submit">Submit</button>
             </form>
@@ -83,16 +83,16 @@
 
         <!--INFO-->
         <div id = "information">
-
+            <h2>Stock Information</h2>
         </div>
 
         <!--Stats-->
         <div id = "stats">
-
+            <h2>Stock Statistics</h2>
         </div>
 
         <!--pass the stock symbol as a URL parameter-->
-        <script> 
+        <!-- <script> 
             // Function to get query parameters from the URL
             function getQueryParam(name) {
                 const urlParams = new URLSearchParams(window.location.search);
@@ -112,7 +112,7 @@
             } else {
                 document.getElementById("overview").innerHTML = "<h2>No stock selected</h2>";
             }
-        </script>
+        </script> -->
         
     </body>
 </html>
