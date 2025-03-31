@@ -18,11 +18,7 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>BearWatch</title>
-<<<<<<< Updated upstream
-        <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet" type="text/css"/>
-=======
-        <link href="home.css" rel="stylesheet" type="text/css"/>
->>>>>>> Stashed changes
+        <link href="{{ url_for('static', filename='home.css') }}" rel="stylesheet" type="text/css"/>
     </head>
     <body>
         <!--LOGO-->
@@ -40,17 +36,15 @@
 
         <!--TREND BUTTONS-->
         <div id = "trend buttons">
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
+            <button>S&P 500</button>
+            <button>Nasdaq</button>
+            <button>Dow Jones</button>
         </div>
 
         <!--GRAPH-->
+        <div id="graph">
         <iframe id="stock-graph" src="/dashboard?stock={{ stock_symbol }}" width="100%" height="600px" style="border:none;"></iframe>
+        </div>
 
         <!--TIME BUTTONS-->
         <div id = "time buttons">

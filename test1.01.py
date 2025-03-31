@@ -1,28 +1,23 @@
-<<<<<<< Updated upstream
-import datetime
 import yfinance as yf
-import time
-import pandas as pd
-from dash import Dash, dcc, html, Input, Output, State
+from flask import Flask, render_template, request, jsonify
+from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objs as go
-from flask import Flask, render_template, request
 
 # Initialize Flask
 server = Flask(__name__)
 
-# Initialize Dash with Flask as server
+# Initialize Dash
 app = Dash(__name__, server=server, routes_pathname_prefix="/dashboard/")
 
-
-# 🔹 Fetch Stock News
-def get_news(query, count=5):
+# 🔹 Fetch Stock News (With Pagination)
+def get_news(query="Stock Market", count=8, offset=0):
     try:
-        search_result = yf.Search(query, news_count=count)
+        search_result = yf.Search(query, news_count=(count + offset))
         if not search_result or not search_result.news:
             return []
 
         news_list = []
-        for article in search_result.news:
+        for article in search_result.news[offset:offset + count]:
             news_list.append({
                 "title": article.get("title", "No Title"),
                 "link": article.get("link", "#"),
@@ -35,36 +30,31 @@ def get_news(query, count=5):
         return []
 
 
-
-# 🔹 Dash Layout (Stock Chart + Search Bar)
+# 🔹 Dash Layout (Stock Chart)
 app.layout = html.Div([
     dcc.Location(id="url", refresh=False),
     dcc.Graph(id="live-stock-graph"),
-    # Interval component to update the graph every 1 second
-    dcc.Interval(id="interval-component", interval=1000, n_intervals=0)
+    dcc.Interval(id="interval-component", interval=1000, n_intervals=0)  # Auto-update every 1 second
 ])
 
 
-# 🔹 Dash Callback (Updates Chart)
+# 🔹 Dash Callback (Update Stock Graph)
 @app.callback(
     Output("live-stock-graph", "figure"),
     [Input("interval-component", "n_intervals"),
-    Input("url", "search")]
+     Input("url", "search")]
 )
 def update_graph(n, search):
-    # Default stock symbol
     stock_symbol = "^GSPC"
 
-    # Extract stock symbol from URL (?stock=AAPL)
     if search:
         query_params = search.lstrip("?").split("&")
         params_dict = dict(param.split("=") for param in query_params if "=" in param)
         stock_symbol = params_dict.get("stock", "^GSPC")
 
     stock = yf.Ticker(stock_symbol)
-    data = stock.history(period="1d", interval="1m")  # Fetch recent minute data
+    data = stock.history(period="1d", interval="1m")
     stock_info = stock.info
-    
 
     if data.empty or "currentPrice" not in stock_info:
         return go.Figure()
@@ -86,7 +76,6 @@ def update_graph(n, search):
     {sign}${price_change:.2f} ({sign}{percent_change:.2f}%) Today</span>
     """
 
-
     figure = go.Figure(data=[go.Scatter(
         x=data.index,
         y=data["Close"],
@@ -94,9 +83,9 @@ def update_graph(n, search):
         line=dict(color=line_color, width=2),
         name=stock_symbol
     )])
-    
+
     figure.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',  # Transparent plot background
+        plot_bgcolor='rgba(0,0,0,0)',
         paper_bgcolor='rgba(0,0,0,0)',
         title=title,
         title_x=0.5,
@@ -105,125 +94,44 @@ def update_graph(n, search):
         xaxis=dict(showgrid=True),
         yaxis=dict(showgrid=True)
     )
-    
+
     return figure
-    
 
 
-# 🔹 Flask Route (News Page)
-@server.route("/", methods=["GET", "POST"])
+# 🔹 Home Route
+@server.route("/", methods=["GET"])
 def home():
     stock_symbol = request.args.get("stock", "^GSPC")
-    news_articles = []
-    query = "Google"  # Default
+    return render_template("home.html", stock_symbol=stock_symbol)
 
-    if request.method == "POST":
-        query = request.form.get("query")
 
-    news_articles = get_news(query, count=5)
-    return render_template("home.html", news=news_articles, stock_symbol=stock_symbol)
+# 🔹 News Page Route
 @server.route('/news.html', methods=["GET", "POST"])
 def news():
-    news_articles = []
-    query = "Google"  # Default
-
+    query = "Stock Market"
     if request.method == "POST":
         query = request.form.get("query")
 
-    news_articles = get_news(query, count=5)
+    news_articles = get_news(query, count=8)
     return render_template("news.html", news=news_articles)
 
-# Run Flask + Dash
-if __name__ == "__main__":
-    server.run(debug=True)
-=======
-import datetime
-import time
-import yfinance as yf
-import pandas as pd
-import requests
-from dash import Dash, dcc, html, callback
-from dash.dependencies import Input, Output, State
-import plotly.graph_objs as go
-from flask import Flask, render_template, request, jsonify
-
-# Initialize Flask
-server = Flask(__name__)
-
-# Initialize Dash with Flask as server
-app = Dash(__name__, server=server, routes_pathname_prefix="/dashboard/")
-
-def fetch_news(ticker):
-    stock = yf.Ticker(ticker)
-    news_list = []
-
-    if hasattr(stock, "news") and stock.news:
-        for article in stock.news:
-            news_list.append({
-                "title": article.get("title", "No Title"),
-                "link": article.get("link", "#"),
-                "thumbnail": article.get("thumbnail", "default.jpg"),
-                "summary": article.get("summary", "No summary available.")
-            })
-    return news_list
-
-@server.route('/api/news', methods=["GET"])
-# 🔹 Fetch Stock News
-def get_news():
-    try:
-        ticker = request.args.get("stock", "AAPL")
-        news_articles = fetch_news(ticker)
-        return jsonify(news_articles)
-    except Exception as e:
-        print(f"Error fetching news: {e}")
-        return jsonify([])
+# 🔹 Stock Page Route
+@server.route('/stock', methods=["GET"])
+def stock():
+    stock_symbol = request.args.get("stock", "^GSPC").upper()
+    return render_template("stock.html", stock_symbol=stock_symbol) 
 
 
+# 🔹 AJAX Route: Load More News
+@server.route('/load_more_news', methods=["GET"])
+def load_more_news():
+    query = request.args.get("query", "Stock Market")
+    offset = int(request.args.get("offset", 0))
 
-# 🔹 Dash Layout (Stock Chart + Search Bar)
-app.layout = html.Div([
-    dcc.Location(id="url", refresh=False),
-    dcc.Graph(id="live-stock-graph"),
-    # Interval component to update the graph every 1 second
-    dcc.Interval(id="interval-component", interval=1000, n_intervals=0)
-])
+    more_news = get_news(query, count=8, offset=offset)
+    return jsonify(more_news)
 
-
-# 🔹 Dash Callback (Updates Chart)
-@app.callback(
-    Output("live-stock-graph", "figure"),
-    [Input("interval-component", "n_intervals"),
-    Input("url", "search")]
-)
-def update_graph(n, search):
-    # Default stock symbol
-    stock_symbol = "^GSPC"
-
-    # Extract stock symbol from URL (?stock=AAPL)
-    if search:
-        query_params = search.lstrip("?").split("&")
-        params_dict = dict(param.split("=") for param in query_params if "=" in param)
-        stock_symbol = params_dict.get("stock", "^GSPC")
-
-    stock = yf.Ticker(stock_symbol)
-    data = stock.history(period="1d", interval="1m")  # Fetch recent minute data
-
-    if not data.empty:
-        figure = go.Figure(data=[go.Scatter(
-            x=data.index,
-            y=data["Close"],
-            mode="lines+markers",
-            name=stock_symbol
-        )])
-        figure.update_layout(title=f"Real-Time {stock_symbol} Stock Price",
-            xaxis_title="Time",
-            yaxis_title="Price",
-            xaxis=dict(showgrid=True),
-            yaxis=dict(showgrid=True))
-        return figure
 
 # Run Flask + Dash
 if __name__ == "__main__":
     server.run(debug=True)
-    
->>>>>>> Stashed changes
