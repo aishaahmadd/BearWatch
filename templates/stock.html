@@ -1,17 +1,18 @@
 <!--
 ------THIS IS THE STOCK PAGE------
-11 sections:
+12 sections:
 1. Logo = div id = "logo"
-2. Search Engine = div id = "search"
-3. Buttons (Trends) = div id = "trend buttons"
-4. Graph = div id = "graph"
-5. Headlines = div id = "headlines"
-6. Trending (has graphs... will have to figure out) = div id = "trending"
-7. Buttons (time) = div id = "time buttons"
-8. Stats = div id = "stats"
-9. Stock Information = div id = "information"
-10. Stock Headlines = div id = "stock headline"
-11. Related Stocks = div id = "related stocks"
+2. Stock Name = div id = "stock name"
+3. Search Engine = div id = "search"
+4. Buttons (Trends) = div id = "trend buttons"
+5. Graph = div id = "graph"
+6. Headlines = div id = "headlines"
+7. Trending (has graphs... will have to figure out) = div id = "trending"
+8. Buttons (time) = div id = "time buttons"
+9. Stats = div id = "stats"
+10. Stock Information = div id = "information"
+11. Stock Headlines = div id = "stock headline"
+12. Related Stocks = div id = "related stocks"
 -->
 
 <!DOCTYPE html>
@@ -28,10 +29,17 @@
             <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
         </div>
 
+        <!--STOCK HEADER-->
+        <div id="stock-header">
+            <h1>{{ stock_symbol }} Overview</h1>
+        </div>
+
         <!--SEARCH-->
         <div id="search">
-            <form action="stock.html" method="GET">
-                <input id="stock-input" name="stock" type="text" placeholder="Enter stock symbol" required>
+            <form action="{{ url_for('stock') }}" method="GET">
+                <input id="stock-input" name="stock" type="text" 
+                       placeholder="Enter stock symbol" 
+                       value="{{ stock_symbol }}" required>
                 <button id="submit-button" type="submit">Submit</button>
             </form>
         </div>
