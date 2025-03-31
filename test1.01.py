@@ -115,6 +115,16 @@ def news():
     news_articles = get_news(query, count=8)
     return render_template("news.html", news=news_articles)
 
+# Stock Page Route
+@server.route('/stock.html', methods=["GET", "POST"])
+def stock():
+    stock_symbol = request.args.get("stock")
+    if stock_symbol:
+        # Pass stock symbol to the template
+        return render_template("stock.html", stock_symbol=stock_symbol)
+    else:
+        return "Error: No stock symbol provided", 400
+
 
 # 🔹 AJAX Route: Load More News
 @server.route('/load_more_news', methods=["GET"])
