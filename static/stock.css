@@ -1,15 +1,22 @@
 body {
-    /*background-image: url(backgroundImage.png); */
-    display:grid;
-    grid-template:  "top          top                 top"
-                    "nav          nav                 nav"
-                    "buttons      buttons             buttons"
-                    "graph        related stocks      trending"
-                    "graph        related stocks      trending"
-                    "stats        stats               stats"
-                    "information  information         information"
-                    "headlines    headlines           stock headline";
+    font-family: Arial, sans-serif;
+    background-color: #F2FDFF;
+    padding: 20px;
+    /* text-align: center; */
+
+    /* Grid Layout */
+    display: grid;
+    grid-template-areas: 
+        "top            top                 top"
+        "nav            nav                 nav"
+        "buttons        buttons             buttons"
+        "graph          related-stocks      trending"
+        "graph          related-stocks      trending"
+        "stats          stats               stats"
+        "information    information         information"
+        "headlines      headlines           stock-headline";
 }
+
 
 /* 1. Logo = div id = "logo"
 2. Stock Name = div id = "stock name"
@@ -24,7 +31,7 @@ body {
 11. Stock Headlines = div id = "stock headline"
 12. Related Stocks = div id = "related stocks" */
 
-[id = "logo"]{
+[id="logo"]{
     grid-area: top; 
     text-align: center;
     margin: auto; 
@@ -33,57 +40,57 @@ body {
 }
 
 
-[id = "search"]{
+[id="search"]{
     grid-area: nav;
     text-align: right;
     padding: 10px;
-    font-size: 16px;
+    /* font-size: 16px; */
 }
 
-[id = "submit-button"]{
+[id="submit-button"]{
     padding: 10px;
-    font-size: 16px;
+    /* font-size: 16px; */
 }
 
-[id = "trend buttons"]{
+[id="trend-buttons"]{
     grid-area: buttons;
-    text-align: left;
+    /* text-align: left; */
 }
 
-[id = "graph"]{
+[id="graph"]{
     grid-area: graph;
-    text-align: left;
+    /* text-align: center; */
 }
 
-[id = "headlines"]{
+[id="headlines"]{
     grid-area: headlines;
-    text-align: left;
+    /* text-align: center; */
 }
 
-[id = "stock headline"]{
+[id="stock-headline"]{
     grid-area: stock headline;
-    text-align: center;
+    /* text-align: center; */
 }
 
-[id = "trending"]{
+[id="trending"]{
     grid-area: trending;
-    text-align: center;
+    /* text-align: center; */
 }
-[id = "related stocks"]{
-    grid-area: related stocks;
-    text-align: center;
-}
-
-[id = "time buttons"]{
-    grid-area: time;
-    text-align: left;
-}
-[id = "infomation"]{
-    grid-area: info;
-    text-align: center;
+[id="related-stocks"]{
+    grid-area: related-stocks;
+    /* text-align: center; */
 }
 
-[id = "stats"]{
+[id="time-buttons"]{
+    grid-area: time-buttons;
+    /* text-align: center; */
+}
+[id="information"]{
+    grid-area: information;
+    /* text-align: center; */
+}
+
+[id="stats"]{
     grid-area: stats;
-    text-align: center;
+    /* text-align: center; */
 }

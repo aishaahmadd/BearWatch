@@ -25,8 +25,10 @@
     </head>
     <body>
         <!--LOGO-->
-        <div id = "logo">
-            <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+        <div id="logo">
+            <a href="/">
+                <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+            </a>
         </div>
 
         <!--STOCK HEADER-->
@@ -98,29 +100,6 @@
         <div id = "stats">
             <h2>Stock Statistics</h2>
         </div>
-
-        <!--pass the stock symbol as a URL parameter-->
-        <!-- <script> 
-            // Function to get query parameters from the URL
-            function getQueryParam(name) {
-                const urlParams = new URLSearchParams(window.location.search);
-                return urlParams.get(name);
-            }
-        
-            // Get stock symbol from the URL
-            const stockSymbol = getQueryParam("stock");
-        
-            if (stockSymbol) {
-                // Update the stock graph iframe source dynamically
-                document.getElementById("stock-graph").src = `/dashboard?stock=${stockSymbol}`;
-                
-                // Show the stock symbol on the page
-                const overviewDiv = document.getElementById("overview");
-                overviewDiv.innerHTML = `<h2>Stock Overview: ${stockSymbol.toUpperCase()}</h2>`;
-            } else {
-                document.getElementById("overview").innerHTML = "<h2>No stock selected</h2>";
-            }
-        </script> -->
         
     </body>
 </html>
