@@ -1,3 +1,4 @@
+<<<<<<< Updated upstream
 import datetime
 import yfinance as yf
 import time
@@ -135,3 +136,94 @@ def news():
 # Run Flask + Dash
 if __name__ == "__main__":
     server.run(debug=True)
+=======
+import datetime
+import time
+import yfinance as yf
+import pandas as pd
+import requests
+from dash import Dash, dcc, html, callback
+from dash.dependencies import Input, Output, State
+import plotly.graph_objs as go
+from flask import Flask, render_template, request, jsonify
+
+# Initialize Flask
+server = Flask(__name__)
+
+# Initialize Dash with Flask as server
+app = Dash(__name__, server=server, routes_pathname_prefix="/dashboard/")
+
+def fetch_news(ticker):
+    stock = yf.Ticker(ticker)
+    news_list = []
+
+    if hasattr(stock, "news") and stock.news:
+        for article in stock.news:
+            news_list.append({
+                "title": article.get("title", "No Title"),
+                "link": article.get("link", "#"),
+                "thumbnail": article.get("thumbnail", "default.jpg"),
+                "summary": article.get("summary", "No summary available.")
+            })
+    return news_list
+
+@server.route('/api/news', methods=["GET"])
+# 🔹 Fetch Stock News
+def get_news():
+    try:
+        ticker = request.args.get("stock", "AAPL")
+        news_articles = fetch_news(ticker)
+        return jsonify(news_articles)
+    except Exception as e:
+        print(f"Error fetching news: {e}")
+        return jsonify([])
+
+
+
+# 🔹 Dash Layout (Stock Chart + Search Bar)
+app.layout = html.Div([
+    dcc.Location(id="url", refresh=False),
+    dcc.Graph(id="live-stock-graph"),
+    # Interval component to update the graph every 1 second
+    dcc.Interval(id="interval-component", interval=1000, n_intervals=0)
+])
+
+
+# 🔹 Dash Callback (Updates Chart)
+@app.callback(
+    Output("live-stock-graph", "figure"),
+    [Input("interval-component", "n_intervals"),
+    Input("url", "search")]
+)
+def update_graph(n, search):
+    # Default stock symbol
+    stock_symbol = "^GSPC"
+
+    # Extract stock symbol from URL (?stock=AAPL)
+    if search:
+        query_params = search.lstrip("?").split("&")
+        params_dict = dict(param.split("=") for param in query_params if "=" in param)
+        stock_symbol = params_dict.get("stock", "^GSPC")
+
+    stock = yf.Ticker(stock_symbol)
+    data = stock.history(period="1d", interval="1m")  # Fetch recent minute data
+
+    if not data.empty:
+        figure = go.Figure(data=[go.Scatter(
+            x=data.index,
+            y=data["Close"],
+            mode="lines+markers",
+            name=stock_symbol
+        )])
+        figure.update_layout(title=f"Real-Time {stock_symbol} Stock Price",
+            xaxis_title="Time",
+            yaxis_title="Price",
+            xaxis=dict(showgrid=True),
+            yaxis=dict(showgrid=True))
+        return figure
+
+# Run Flask + Dash
+if __name__ == "__main__":
+    server.run(debug=True)
+    
+>>>>>>> Stashed changes

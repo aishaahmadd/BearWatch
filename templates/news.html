@@ -4,7 +4,11 @@
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>News Page</title>
+<<<<<<< Updated upstream
         <link href="{{ url_for('static', filename='style1.css') }}" rel="stylesheet" type="text/css"/>
+=======
+        <link href="news.css" rel="stylesheet" type="text/css"/>
+>>>>>>> Stashed changes
     </head>
     <body>
         <div>
@@ -14,10 +18,23 @@
             <h2>News</h2>
         </div>
         <div id = "search">
+<<<<<<< Updated upstream
 
         </div>
         <div id = "newsGrid">
             
         </div>
+=======
+            <form id="search-form" action="/" method="GET">
+                <input id="stock-input" name="stock" type="text" placeholder="Enter category" required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+        <div id = "newsGrid"></div>
+        <div id = "load">
+            <button id = "loadMore">Load More...</button>
+        </div>
+        <script src="news.js"></script>
+>>>>>>> Stashed changes
     </body>
 </html>
