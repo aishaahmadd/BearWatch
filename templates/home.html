@@ -36,17 +36,15 @@
 
         <!--TREND BUTTONS-->
         <div id = "trend buttons">
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
-            <button></button>
+            <button>S&P 500</button>
+            <button>Nasdaq</button>
+            <button>Dow Jones</button>
         </div>
 
         <!--GRAPH-->
-        <iframe id="stock-graph" src="/dashboard?stock={{ stock_symbol }}" width="100%" height="600px" style="border:none;"></iframe>
+        <div id="graph">
+            <iframe id="stock-graph" src="/dashboard?stock={{ stock_symbol }}" width="100%" height="600px" style="border:none;"></iframe>
+        </div>
 
         <!--TIME BUTTONS-->
         <div id = "time buttons">
