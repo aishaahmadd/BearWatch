@@ -3,6 +3,7 @@ body {
     background-color: #F2FDFF;
     padding: 20px;
     /* text-align: center; */
+    color: #101935;
 
     /* Grid Layout */
     display: grid;
@@ -33,7 +34,7 @@ body {
 
 [id="logo"]{
     grid-area: top; 
-    text-align: center;
+    text-align: left;
     margin: auto; 
     max-width: 200px;
     margin-bottom: 20px;  
@@ -64,7 +65,7 @@ body {
 
 [id="time-buttons"]{
     grid-area: buttons;
-    text-align: center;
+    text-align: left;
 }
 
 [id="headlines"]{
@@ -89,4 +90,13 @@ body {
 [id="stats"]{
     grid-area: stats;
     /* text-align: center; */
+}
+
+#logo img {
+    max-width: 400px;
+    margin-bottom: 20px;
+}
+
+#stock-header{
+    color: #101935;
 }

@@ -1,13 +1,14 @@
 /* Used to be style1*/
 body {
     font-family: Arial, sans-serif;
-    background-color: #ffffff;
+    background-color: #F2FDFF;
     padding: 20px;
     text-align: center;
+    color: #101935;
 }
 
 #logo img {
-    max-width: 200px;
+    max-width: 400px;
     margin-bottom: 20px;
 }
 
