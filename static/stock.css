@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #F2FDFF;
-    padding: 20px;
+    background-color: #DBCBD8;
+    padding: 0px;
     /* text-align: center; */
     color: #101935;
 
@@ -37,7 +37,7 @@ body {
     text-align: left;
     margin: auto; 
     max-width: 200px;
-    margin-bottom: 20px;  
+    margin-bottom: 0px;  
 }
 
 [id="stock-header"]{
@@ -48,13 +48,13 @@ body {
 [id="search"]{
     grid-area: nav;
     text-align: right;
-    padding: 10px;
+    padding: 0px;
     /* font-size: 16px; */
 }
 
 
 [id="submit-button"]{
-    padding: 10px;
+    padding: 0px;
     /* font-size: 16px; */
 }
 
@@ -94,7 +94,7 @@ body {
 
 #logo img {
     max-width: 400px;
-    margin-bottom: 20px;
+    margin-bottom: 00px;
 }
 
 #stock-header{

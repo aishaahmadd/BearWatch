@@ -29,6 +29,12 @@ def get_news(query="Stock Market", count=8, offset=0):
         print(f"Error fetching news: {e}")
         return []
 
+# json {
+#     "name" : "Raham",
+#     "Array": "1,2,3.4.3"
+# }
+#test routes using postman septretly 
+#typescript should be calling python routes and should be calling some jyson script we can decode or err codes that we can manipulate the js code
 
 # 🔹 Dash Layout (Stock Chart)
 app.layout = html.Div([
