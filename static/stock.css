@@ -1,9 +1,18 @@
 body {
-    font-family: Arial, sans-serif;
-    background-color: #DBCBD8;
+    font-family: 'Times New Roman', Times, serif;
+    /* background-image: url("darkmodebg.png"); Tested out but png doesnt fit full screen :( */
     padding: 0px;
     /* text-align: center; */
-    color: #101935;
+
+
+    /* For Light Mode: */
+    background-color: #F9F5ED;
+    color: #4e4b9f;
+
+
+    /* For Dark Mode: */
+    /* background-color: #1E054D;
+    color: #F9F5ED; */
 
     /* Grid Layout */
     display: grid;

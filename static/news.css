@@ -1,10 +1,16 @@
 /* Used to be style1*/
 body {
-    font-family: Arial, sans-serif;
-    background-color: #F2FDFF;
+    font-family: 'Times New Roman', Times, serif;
     padding: 20px;
     text-align: center;
-    color: #101935;
+
+    /* For Light Mode: */
+    background-color: #F9F5ED;
+    color: #4e4b9f;
+
+    /* For Dark Mode: */
+    /* background-color: #1E054D;
+    color: #F9F5ED; */
 }
 
 #logo img {

@@ -1,9 +1,15 @@
 /*used to be style*/
 body {
-    font-family: Arial, sans-serif;
-    background-color: #9AD4D6;
+    font-family: 'Times New Roman', Times, serif;
     padding: 20px;
-    color: #101935;
+    /* For Light Mode: */
+    background-color: #F9F5ED;
+    color: #4e4b9f;
+
+    /* For Dark Mode: */
+    /* background-color: #1E054D;
+    color: #F9F5ED; */
+
     /*background-image: url(backgroundImage.png); */
     display:grid;
     grid-template:  "top        top       top"
