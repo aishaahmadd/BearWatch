@@ -1,0 +1,116 @@
+body {
+    font-family: 'Times New Roman', Times, serif;
+    /* background-image: url("darkmodebg.png"); Tested out but png doesnt fit full screen :( */
+    padding: 0px;
+    /* text-align: center; */
+
+
+    /* For Light Mode: */
+    background-color: #F9F5ED;
+    color: #4e4b9f;
+
+
+    /* For Dark Mode: */
+    /* background-color: #1E054D;
+    color: #F9F5ED; */
+
+    /* Grid Layout */
+    display: grid;
+    grid-template-areas: 
+        "top            top             top             top                 top"
+        "title          nav             nav             nav                 nav"
+        "buttons        buttons         buttons         buttons             buttons"
+        "graph          graph           graph           related-stocks      trending"
+        "graph          graph           graph           related-stocks      trending"
+        "stats          stats           stats           stats               stats"
+        "information    information     information     information         information"
+        "headlines      headlines       stock-headline  stock-headline     stock-headline";
+}
+
+body.dark-mode {
+    background-color: #1E054D;
+    color: #e0e0e0;
+}
+
+
+/* 1. Logo = div id = "logo"
+2. Stock Name = div id = "stock name"
+3. Search Engine = div id = "search"
+4. Buttons (Trends) = div id = "trend buttons"
+5. Graph = div id = "graph"
+6. Headlines = div id = "headlines"
+7. Trending (has graphs... will have to figure out) = div id = "trending"
+8. Buttons (time) = div id = "time buttons"
+9. Stats = div id = "stats"
+10. Stock Information = div id = "information"
+11. Stock Headlines = div id = "stock headline"
+12. Related Stocks = div id = "related stocks" */
+
+[id="logo"]{
+    grid-area: top; 
+    text-align: left;
+    margin: auto; 
+    max-width: 200px;
+    margin-bottom: 0px;  
+}
+
+[id="stock-header"]{
+    grid-area: title;
+    /* text-align: center; */
+}
+
+[id="search"]{
+    grid-area: nav;
+    text-align: right;
+    padding: 0px;
+    /* font-size: 16px; */
+}
+
+
+[id="submit-button"]{
+    padding: 0px;
+    /* font-size: 16px; */
+}
+
+[id="graph"]{
+    grid-area: graph;
+    /* text-align: center; */
+}
+
+[id="time-buttons"]{
+    grid-area: buttons;
+    text-align: left;
+}
+
+[id="headlines"]{
+    grid-area: headlines;
+    /* text-align: center; */
+}
+
+[id="trending"]{
+    grid-area: trending;
+    /* text-align: center; */
+}
+[id="related-stocks"]{
+    grid-area: related-stocks;
+    /* text-align: center; */
+}
+
+[id="information"]{
+    grid-area: information;
+    /* text-align: center; */
+}
+
+[id="stats"]{
+    grid-area: stats;
+    /* text-align: center; */
+}
+
+#logo img {
+    max-width: 400px;
+    margin-bottom: 00px;
+}
+
+#stock-header{
+    color: #101935;
+}

@@ -1,8 +1,14 @@
-
+/*used to be style*/
 body {
-    background-color: #ffffff;
-    color: #000000;
+    font-family: 'Times New Roman', Times, serif;
+    padding: 20px;
+    /* For Light Mode: */
+    background-color: #F9F5ED;
+    color: #4e4b9f;
 
+    /* For Dark Mode: */
+    /* background-color: #1E054D;
+    color: #F9F5ED; */
     /*background-image: url(backgroundImage.png); */
     display:grid;
     grid-template:  "top        top       top"
@@ -15,32 +21,15 @@ body {
 }
 
 body.dark-mode {
-    background-color: #121212;
+    background-color: #1E054D;
     color: #e0e0e0;
-
-    /*background-image: url(backgroundImage.png); */
-    display:grid;
-    grid-template:  "top        top       top"
-                    "nav        nav       nav"
-                    "buttons    buttons   buttons"
-                    "headlines  graph     trending"
-                    "headlines  time      trending"
-                    "headlines  info      trending"
-                    "headlines  overview  trending";
 }
 
 [id = "logo"]{
-    grid-area: top;
+    grid-area: top; 
     text-align: center;
-    margin: auto;
+    margin: auto;   
 
-}
-
-[id="dark-mode-toggle"]{
-    position: absolute;
-    top: 10px;
-    right: 20px;
-    z-index: 1000;
 }
 
 [id = "search"]{
@@ -87,4 +76,9 @@ body.dark-mode {
 [id = "overview"]{
     grid-area: overview;
     text-align: center;
+}
+
+#logo img {
+    max-width: 500px;
+    margin-bottom: 20px;
 }

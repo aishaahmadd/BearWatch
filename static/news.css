@@ -1,12 +1,25 @@
+/* Used to be style1*/
 body {
-    font-family: Arial, sans-serif;
-    background-color: #ffffff;
+    font-family: 'Times New Roman', Times, serif;
     padding: 20px;
     text-align: center;
+
+    /* For Light Mode: */
+    background-color: #F9F5ED;
+    color: #4e4b9f;
+
+    /* For Dark Mode: */
+    /* background-color: #1E054D;
+    color: #F9F5ED; */
+}
+
+body.dark-mode {
+    background-color: #1E054D;
+    color: #e0e0e0;
 }
 
 #logo img {
-    max-width: 200px;
+    max-width: 400px;
     margin-bottom: 20px;
 }
 
