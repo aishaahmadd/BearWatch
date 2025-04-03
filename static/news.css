@@ -13,6 +13,11 @@ body {
     color: #F9F5ED; */
 }
 
+body.dark-mode {
+    background-color: #1E054D;
+    color: #e0e0e0;
+}
+
 #logo img {
     max-width: 400px;
     margin-bottom: 20px;

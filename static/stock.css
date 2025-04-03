@@ -27,6 +27,11 @@ body {
         "headlines      headlines       stock-headline  stock-headline     stock-headline";
 }
 
+body.dark-mode {
+    background-color: #1E054D;
+    color: #e0e0e0;
+}
+
 
 /* 1. Logo = div id = "logo"
 2. Stock Name = div id = "stock name"

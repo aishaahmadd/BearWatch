@@ -9,7 +9,6 @@ body {
     /* For Dark Mode: */
     /* background-color: #1E054D;
     color: #F9F5ED; */
-
     /*background-image: url(backgroundImage.png); */
     display:grid;
     grid-template:  "top        top       top"
@@ -19,6 +18,11 @@ body {
                     "headlines  time      trending"
                     "headlines  info      trending"
                     "headlines  overview  trending";
+}
+
+body.dark-mode {
+    background-color: #1E054D;
+    color: #e0e0e0;
 }
 
 [id = "logo"]{
