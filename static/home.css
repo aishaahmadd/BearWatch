@@ -1,4 +1,14 @@
+/*used to be style*/
 body {
+    font-family: 'Times New Roman', Times, serif;
+    padding: 20px;
+    /* For Light Mode: */
+    background-color: #F9F5ED;
+    color: #4e4b9f;
+
+    /* For Dark Mode: */
+    /* background-color: #1E054D;
+    color: #F9F5ED; */
     /*background-image: url(backgroundImage.png); */
     display:grid;
     grid-template:  "top        top       top"
@@ -8,6 +18,11 @@ body {
                     "headlines  time      trending"
                     "headlines  info      trending"
                     "headlines  overview  trending";
+}
+
+body.dark-mode {
+    background-color: #1E054D;
+    color: #e0e0e0;
 }
 
 [id = "logo"]{
@@ -61,4 +76,9 @@ body {
 [id = "overview"]{
     grid-area: overview;
     text-align: center;
+}
+
+#logo img {
+    max-width: 500px;
+    margin-bottom: 20px;
 }
