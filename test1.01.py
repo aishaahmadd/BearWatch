@@ -17,7 +17,7 @@ def fetch_stock_data(ticker, pd="1d", i="1m"):
     df = stock.history(period=pd, interval=i)
     return df
 
-def determine_color(stock_symbol):
+def determine_color(stock_symbol, colorblind_mode):
     stock = yf.Ticker(stock_symbol)
     data = fetch_stock_data(stock_symbol)
     current_price = stock.info.get("currentPrice", data["Close"].iloc[-1])
@@ -28,7 +28,11 @@ def determine_color(stock_symbol):
     percent_change = (price_change / prev_close) * 100
 
     # Determine line color
-    line_color = "green" if price_change > 0 else "red"
+    if colorblind_mode:
+        line_color = "blue" if price_change > 0 else "orange"  
+    else:
+        line_color = "green" if price_change > 0 else "red"
+
     sign = "+" if price_change > 0 else ""
     title = f"""
     {stock.info.get('shortName', stock_symbol)} <br>
@@ -38,9 +42,9 @@ def determine_color(stock_symbol):
     return line_color, title
 
 
-def create_graph(stock_symbol):
+def create_graph(stock_symbol, colorblind_mode):
     data = fetch_stock_data(stock_symbol)
-    line_color, title = determine_color(stock_symbol)
+    line_color, title = determine_color(stock_symbol, colorblind_mode)
 
     figure = go.Figure(data=[go.Scatter(
         x=data.index,
@@ -66,6 +70,7 @@ def create_graph(stock_symbol):
 appHome=Dash(__name__, server=server, routes_pathname_prefix="/home/")
 
 appHome.layout = html.Div([
+    dcc.Location(id="url", refresh=False),
     dcc.Tabs(id="tabs", value="S&P 500", children=[
         dcc.Tab(label=name, value=name) for name in home_tickers.keys()
     ]),
@@ -74,11 +79,22 @@ appHome.layout = html.Div([
 
 @appHome.callback(
    Output("tabs-content", "children"),
-    Input("tabs", "value")
+    [Input("tabs", "value"),
+     Input("url", "search")]
 )
-def update_graph(selected_tab):
+def update_graph(selected_tab, search):
+    colorblind_mode = False
+
+    if search:
+        query_params = search.lstrip("?").split("&")
+        params_dict = dict(param.split("=") for param in query_params if "=" in param)
+        if params_dict.get("colorblind","false") == "true":
+            colorblind_mode = True
+        else:
+            colorblind_mode = False
+
     df = fetch_stock_data(home_tickers[selected_tab])
-    line_color, title = determine_color(home_tickers[selected_tab])
+    line_color, title = determine_color(home_tickers[selected_tab], colorblind_mode)
     fig = go.Figure()
     fig.add_trace(
         go.Scatter
@@ -141,13 +157,18 @@ app.layout = html.Div([
 )
 def update_graph(n, search):
     stock_symbol = "^GSPC"
+    colorblind_mode = False
 
     if search:
         query_params = search.lstrip("?").split("&")
         params_dict = dict(param.split("=") for param in query_params if "=" in param)
         stock_symbol = params_dict.get("stock", "^GSPC")
+        if params_dict.get("colorblind","false") == "true":
+            colorblind_mode = True
+        else:
+            colorblind_mode = False
 
-    return create_graph(stock_symbol)
+    return create_graph(stock_symbol, colorblind_mode)
 
 
 # 🔹 Home Route
