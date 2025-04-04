@@ -2,6 +2,7 @@ import yfinance as yf
 from flask import Flask, render_template, request, jsonify
 from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objs as go
+from reccomendationsys_update1 import get_company_info, build_feature_matrix, recommend_stocks, get_tickers_from_finviz
 
 # Initialize Flask
 server = Flask(__name__)
@@ -117,6 +118,22 @@ def get_news(query="Stock Market", count=8, offset=0):
     except Exception as e:
         print(f"Error fetching news: {e}")
         return []
+    
+# 🔹 Fetch Similar Stocks//gotten from owens code
+def get_similar_stocks(stock_symbol):
+    try:
+        input_info = get_company_info(stock_symbol)
+        sector = input_info['Sector']
+        market_cap = input_info['Market Cap']
+
+        if sector != 'N/A':
+            tickers = get_tickers_from_finviz(sector, market_cap)
+            if tickers:
+                df = build_feature_matrix(tickers)
+                return recommend_stocks(stock_symbol, df)
+    except Exception as e:
+        print(f"Error fetching similar stocks: {e}")
+    return []
 
 # json {
 #     "name" : "Raham",
@@ -129,7 +146,11 @@ def get_news(query="Stock Market", count=8, offset=0):
 app.layout = html.Div([
     dcc.Location(id="url", refresh=False),
     dcc.Graph(id="live-stock-graph"),
-    dcc.Interval(id="interval-component", interval=1000, n_intervals=0)  # Auto-update every 1 second
+    dcc.Interval(id="interval-component", interval=1000, n_intervals=0),  # Auto-update every 1 second
+    html.Div(id="recommended-stocks-container", children=[
+    html.H3("Recommended Stocks"),
+    html.Ul(id="recommended-stocks-list")  # List will be updated dynamically
+    ], style={"position": "absolute", "bottom": "20px", "left": "20px", "background-color": "#f1f1f1", "padding": "10px", "display": "none"})
 ])
 
 
@@ -139,7 +160,7 @@ app.layout = html.Div([
     [Input("interval-component", "n_intervals"),
      Input("url", "search")]
 )
-def update_graph(n, search):
+def update_graph(n, search): #added from owen
     stock_symbol = "^GSPC"
 
     if search:
@@ -147,7 +168,70 @@ def update_graph(n, search):
         params_dict = dict(param.split("=") for param in query_params if "=" in param)
         stock_symbol = params_dict.get("stock", "^GSPC")
 
-    return create_graph(stock_symbol)
+    stock = yf.Ticker(stock_symbol)
+    data = stock.history(period="1d", interval="1m")
+    stock_info = stock.info
+
+    if data.empty or "currentPrice" not in stock_info:
+        return go.Figure()
+
+    current_price = stock_info.get("currentPrice", data["Close"].iloc[-1])
+    prev_close = stock_info.get("previousClose", data["Close"].iloc[0])
+
+    # Calculate price change and percentage
+    price_change = current_price - prev_close
+    percent_change = (price_change / prev_close) * 100
+
+    # Determine line color
+    line_color = "green" if price_change > 0 else "red"
+    sign = "+" if price_change > 0 else ""
+
+    title = f"""
+    {stock_info.get('shortName', stock_symbol)} <br>
+    ${current_price:.2f} <span style='color:{line_color};'> <br>
+    {sign}${price_change:.2f} ({sign}{percent_change:.2f}%) Today</span>
+    """
+
+    figure = go.Figure(data=[go.Scatter(
+        x=data.index,
+        y=data["Close"],
+        mode="lines",
+        line=dict(color=line_color, width=2),
+        name=stock_symbol
+    )])
+
+    figure.update_layout(
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        title=title,
+        title_x=0.5,
+        xaxis_title="Time",
+        yaxis_title="Price",
+        xaxis=dict(showgrid=True),
+        yaxis=dict(showgrid=True)
+    )
+
+    return figure
+
+# 🔹 Dash Callback (Get Similar Stocks on Stock Change)
+@app.callback(
+    Output("recommended-stocks-list", "children"),
+    Output("recommended-stocks-container", "style"),
+    Input("url", "search")
+)
+def update_stock_recommendation(search):
+    if search:
+        query_params = search.lstrip("?").split("&")
+        params_dict = dict(param.split("=") for param in query_params if "=" in param)
+        stock_symbol = params_dict.get("stock", "^GSPC")
+        if stock_symbol != "^GSPC":
+            similar_stocks = get_similar_stocks(stock_symbol)
+            if similar_stocks:
+                return [html.Li(stock) for stock in similar_stocks], {"position": "absolute", "bottom": "20px", "left": "20px", "background-color": "#f1f1f1", "padding": "10px", "display": "block"}
+    
+    return [], {"display": "none"}  # Hide if no valid stock is entered #added from owen
+
+
 
 
 # 🔹 Home Route
@@ -172,7 +256,6 @@ def news():
 def stock():
     stock_symbol = request.args.get("stock", "^GSPC").upper()
     return render_template("stock.html", stock_symbol=stock_symbol) 
-
 
 # 🔹 AJAX Route: Load More News
 @server.route('/load_more_news', methods=["GET"])
