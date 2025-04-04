@@ -139,7 +139,7 @@ def get_similar_stocks(stock_symbol):
 #     "name" : "Raham",
 #     "Array": "1,2,3.4.3"
 # }
-#test routes using postman septretly 
+#test routes using postman separately
 #typescript should be calling python routes and should be calling some jyson script we can decode or err codes that we can manipulate the js code
 
 # 🔹 Dash Layout (Stock Chart)
