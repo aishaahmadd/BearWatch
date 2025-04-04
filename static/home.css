@@ -1,16 +1,12 @@
 body {
-<<<<<<< Updated upstream
-=======
     font-family: American Typewriter, serif;
     background-color: #F2FDFF;
     padding: 20px;
     color: #101935;
->>>>>>> Stashed changes
     /*background-image: url(backgroundImage.png); */
     display:grid;
-    grid-template:  "top        top       top"
-                    "nav        nav       nav"
-                    "buttons    buttons   buttons"
+    grid-template:  "side        top       nav"
+                    "headlines  buttons     trending"
                     "headlines  graph     trending"
                     "headlines  time      trending"
                     "headlines  info      trending"
@@ -18,15 +14,25 @@ body {
 }
 
 [id = "logo"]{
-    grid-area: top; 
+    grid-area:top; 
     size: 10%;
-    text-align: center;
-    margin: auto;   
+    text-align:center;
+    width:fit-content;
+    height:fit-content;
+    margin-bottom:0%;   
+    border:0%;
+    padding:0%;
+    white-space: nowrap;
+}
+a{
+    text-decoration: none;
+    color:#101935;
 }
 
 #logo img{
     width:50%;
     height:50%;
+    margin:none;
 }
 
 [id = "search"]{
@@ -83,8 +89,6 @@ body {
 [id = "overview"]{
     grid-area: overview;
     text-align: center;
-<<<<<<< Updated upstream
-=======
 }
 
 #logo img {
@@ -99,5 +103,4 @@ button{
     border-color: black;
     border-radius: 15px;
     padding: 10px;
->>>>>>> Stashed changes
 }
