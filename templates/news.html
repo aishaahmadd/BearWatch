@@ -13,6 +13,7 @@
         <div id = "newsHeadline">
             <h2>News</h2>
         </div>
+<<<<<<< Updated upstream
         <div id = "search">
             <form id="search-form" action="/" method="GET">
                 <input id="stock-input" name="stock" type="text" placeholder="Enter category" required>
@@ -24,5 +25,23 @@
             <button id = "loadMore">Load More...</button>
         </div>
         <script src="news.js"></script>
+=======
+
+        <div id="search">
+            <form id="search-form">
+                <input id="stock-input" name="stock" type="text" placeholder="Enter stock symbol" required>
+                <button type="submit">Search</button>
+            </form>
+        </div>
+
+        <div id="newsGrid"></div>
+
+        <div id="load">
+            <button id="loadMore">Load More...</button>
+        </div>
+
+        <script src="{{ url_for('static', filename='news.js') }}"></script>
+
+>>>>>>> Stashed changes
     </body>
 </html>

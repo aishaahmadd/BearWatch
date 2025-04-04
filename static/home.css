@@ -1,4 +1,11 @@
 body {
+<<<<<<< Updated upstream
+=======
+    font-family: American Typewriter, serif;
+    background-color: #F2FDFF;
+    padding: 20px;
+    color: #101935;
+>>>>>>> Stashed changes
     /*background-image: url(backgroundImage.png); */
     display:grid;
     grid-template:  "top        top       top"
@@ -12,9 +19,14 @@ body {
 
 [id = "logo"]{
     grid-area: top; 
+    size: 10%;
     text-align: center;
     margin: auto;   
+}
 
+#logo img{
+    width:50%;
+    height:50%;
 }
 
 [id = "search"]{
@@ -22,6 +34,16 @@ body {
     text-align: right;
     padding: 10px;
     font-size: 16px;
+}
+
+#search input{
+    border-radius: 5px;
+    border:none;
+}
+
+#search button{
+    font-size: 12px;
+    padding:6px;
 }
 
 [id = "submit-button"]{
@@ -61,4 +83,21 @@ body {
 [id = "overview"]{
     grid-area: overview;
     text-align: center;
+<<<<<<< Updated upstream
+=======
+}
+
+#logo img {
+    max-width: 500px;
+    margin-bottom: 20px;
+}
+
+button{
+    font-family: American Typewriter, serif;
+    background-color:#F2FDFF;
+    color:black;
+    border-color: black;
+    border-radius: 15px;
+    padding: 10px;
+>>>>>>> Stashed changes
 }
