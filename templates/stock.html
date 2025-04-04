@@ -31,6 +31,16 @@
             </a>
         </div>
 
+        <!-- DARK MODE BUTTON -->
+        <div id="dark-mode-toggle">
+            <button id="dark-mode-button">Toggle Dark Mode</button>
+        </div>
+
+        <!-- COLORBLIND MODE BUTTON -->
+        <div id="colorblind-toggle">
+            <button id="colorblind-button">Toggle Colorblind Mode</button>
+        </div>
+
         <!--STOCK HEADER-->
         <div id="stock-header">
             <h1>{{ stock_symbol }} Overview</h1>
@@ -91,6 +101,29 @@
         <div id = "stats">
             <h2>Stock Information</h2>
         </div>
+ 
+        <script>
+            const toggleButton = document.getElementById('dark-mode-button');
         
+            toggleButton.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+            });
+
+
+            const colorblindBtn = document.getElementById('colorblind-button');
+
+            colorblindBtn.addEventListener('click', () => {
+                const iframe = document.getElementById('stock-graph');
+                const src = new URL(iframe.src);
+
+                const currentMode = src.searchParams.get('colorblind') === 'true';
+
+                src.searchParams.set('colorblind', (!currentMode).toString());
+
+                iframe.src = src.toString();
+            });
+
+        </script>
+
     </body>
 </html>
