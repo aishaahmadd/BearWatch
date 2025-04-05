@@ -64,8 +64,8 @@ def create_graph(stock_symbol):
 
     return figure
 
+#  Dash Home Tabs
 appHome=Dash(__name__, server=server, routes_pathname_prefix="/home/")
-
 appHome.layout = html.Div([
     dcc.Tabs(id="tabs", value="S&P 500", children=[
         dcc.Tab(label=name, value=name) for name in home_tickers.keys()
@@ -99,6 +99,7 @@ def update_graph(selected_tab):
 # Initialize Dash
 app = Dash(__name__, server=server, routes_pathname_prefix="/dashboard/")
 
+#  News Fetching Functions
 # 🔹 Fetch Stock News (With Pagination)
 def get_news(query="Stock Market", count=8, offset=0):
     try:
@@ -118,6 +119,34 @@ def get_news(query="Stock Market", count=8, offset=0):
     except Exception as e:
         print(f"Error fetching news: {e}")
         return []
+    
+def get_stock_news(stock_symbol, count=5):
+    try:
+        search_result = yf.Search(stock_symbol, news_count=count)
+        if not search_result or not search_result.news:
+            return []
+        return [{
+            "title": article.get("title", "No Title"),
+            "link": article.get("link", "#")
+        } for article in search_result.news[:count]]
+    except Exception as e:
+        print(f"Stock News Error: {e}")
+        return []
+
+
+def get_latest_financial_news(count=5):
+    try:
+        search_result = yf.Search("Financial Market", news_count=count)
+        if not search_result or not search_result.news:
+            return []
+        return [{
+            "title": article.get("title", "No Title"),
+            "link": article.get("link", "#")
+        } for article in search_result.news[:count]]
+    except Exception as e:
+        print(f"Ticker News Error: {e}")
+        return []
+
     
 # 🔹 Fetch Similar Stocks//gotten from owens code
 def get_similar_stocks(stock_symbol):
@@ -232,8 +261,6 @@ def update_stock_recommendation(search):
     return [], {"display": "none"}  # Hide if no valid stock is entered #added from owen
 
 
-
-
 # 🔹 Home Route
 @server.route("/", methods=["GET"])
 def home():
@@ -251,20 +278,20 @@ def news():
     news_articles = get_news(query, count=8)
     return render_template("news.html", news=news_articles)
 
-# 🔹 Stock Page Route
-@server.route('/stock', methods=["GET", "POST"])
-def stock():
-    stock_symbol = request.args.get("stock", "^GSPC").upper()
-    return render_template("stock.html", stock_symbol=stock_symbol) 
-
-# 🔹 AJAX Route: Load More News
 @server.route('/load_more_news', methods=["GET"])
 def load_more_news():
     query = request.args.get("query", "Stock Market")
     offset = int(request.args.get("offset", 0))
-
     more_news = get_news(query, count=8, offset=offset)
     return jsonify(more_news)
+
+# 🔹 Stock Page Route
+@server.route('/stock', methods=["GET", "POST"])
+def stock():
+    stock_symbol = request.args.get("stock", "^GSPC").upper()
+    stock_news = get_stock_news(stock_symbol, count=5)
+    ticker_news = get_latest_financial_news()
+    return render_template("stock.html", stock_symbol=stock_symbol, stock_news=stock_news, ticker_news=ticker_news) 
 
 
 # Run Flask + Dash

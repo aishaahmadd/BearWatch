@@ -114,3 +114,48 @@ body.dark-mode {
 #stock-header{
     color: #101935;
 }
+
+/* 🔄 Financial News Ticker Styling */
+.ticker-container {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    background-color: #f0f0f0;
+    margin-top: 10px;
+    grid-column: 1 / -1; /* Spans the full width */
+}
+
+
+.ticker {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-left 30s linear infinite;
+}
+
+
+.ticker a {
+    display: inline-block;
+    padding: 0 40px;
+    color: #4e4b9f;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+.ticker a:hover {
+    text-decoration: underline;
+}
+
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
+}

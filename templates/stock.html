@@ -22,6 +22,39 @@
         <meta name="viewport" content="width=device-width">
         <title>BearWatch</title>
         <link href="{{ url_for('static', filename='stock.css') }}" rel="stylesheet" type="text/css"/>
+
+        <!-- news things -->
+        <style>
+            #news-ticker {
+                overflow: hidden;
+                white-space: nowrap;
+                background-color: #f2f2f2;
+                padding: 10px;
+                border-bottom: 2px solid #ccc;
+                font-weight: bold;
+            }
+    
+    
+            #ticker-text {
+                display: inline-block;
+                padding-left: 100%;
+                animation: scroll-left 25s linear infinite;
+            }
+    
+    
+            @keyframes scroll-left {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-100%); }
+            }
+    
+    
+            #ticker-text a {
+                margin-right: 40px;
+                text-decoration: none;
+                color: #333;
+            }
+        </style>
+    
     </head>
     <body>
         <!--LOGO-->
@@ -29,6 +62,15 @@
             <a href="/">
                 <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
             </a>
+        </div>
+
+        <!-- FINANCIAL NEWS TICKER -->
+        <div id="news-ticker">
+            <div id="ticker-text">
+                {% for article in ticker_news %}
+                    <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
+                {% endfor %}
+            </div>
         </div>
 
         <!--STOCK HEADER-->
@@ -67,10 +109,16 @@
             <h2><a href ="news.html">Headlines</a></h2>
         </div>
 
-        <!--STOCK HEADLINES-->
-        <div id = "stock-headlines">
-            <h2><a href ="news.html">Stock Headlines</a></h2>
+        <!-- STOCK HEADLINES -->
+        <div id="stock-headlines">
+            <h2><a href="news.html">Stock Headlines</a></h2>
+            <ul>
+                {% for headline in stock_news %}
+                    <li><a href="{{ headline.link }}" target="_blank">{{ headline.title }}</a></li>
+                {% endfor %}
+            </ul>
         </div>
+
 
         <!--TRENDING-->
         <div id = "trending">
