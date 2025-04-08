@@ -103,27 +103,43 @@
         </div>
  
         <script>
+            
             const toggleButton = document.getElementById('dark-mode-button');
         
             toggleButton.addEventListener('click', () => {
                 document.body.classList.toggle('dark-mode');
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('darkMode', 'true');
+                } else {
+                    localStorage.setItem('darkMode', 'false');
+                }
             });
-
 
             const colorblindBtn = document.getElementById('colorblind-button');
 
             colorblindBtn.addEventListener('click', () => {
                 const iframe = document.getElementById('stock-graph');
                 const src = new URL(iframe.src);
-
                 const currentMode = src.searchParams.get('colorblind') === 'true';
-
                 src.searchParams.set('colorblind', (!currentMode).toString());
-
                 iframe.src = src.toString();
+                localStorage.setItem('colorblindMode', (!currentMode).toString());
+            });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                if (localStorage.getItem('darkMode') === 'true') {
+                    document.body.classList.add('dark-mode');
+                }
+
+                const savedColorblind = localStorage.getItem('colorblindMode');
+                if (savedColorblind === 'true' || savedColorblind === 'false') {
+                    const iframe = document.getElementById('stock-graph');
+                    const src = new URL(iframe.src);
+                    src.searchParams.set('colorblind', savedColorblind);
+                    iframe.src = src.toString();
+                }
             });
 
         </script>
-
     </body>
 </html>
