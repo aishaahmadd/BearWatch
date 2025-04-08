@@ -37,6 +37,14 @@
             <h2>Latest Stock Market News</h2>
         </div>
 
+        <!-- HAMBURGER MENU -->
+        <div id="menu-container">
+            <button id="menu-toggle" aria-label="Open settings menu">☰</button>
+            <div id="menu" class="hidden">
+                <button id="dark-mode-button">Toggle Dark Mode</button>
+            </div>
+        </div>
+
         <div id="search">
             <form action="/news.html" method="POST">
                 <input id="query" name="query" type="text" placeholder="Search stock news" required>
@@ -56,6 +64,36 @@
         <div id="loadMoreContainer">
             <button id="loadMoreButton" onclick="loadMoreNews()">Load More</button>
         </div>
+
+
+        <script>
+
+            const menuToggle = document.getElementById('menu-toggle');
+            const menu = document.getElementById('menu');
+
+            menuToggle.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+
+            const toggleButton = document.getElementById('dark-mode-button');
+        
+            toggleButton.addEventListener('click', () => {
+                document.body.classList.toggle('dark-mode');
+                if (document.body.classList.contains('dark-mode')) {
+                    localStorage.setItem('darkMode', 'true');
+                } else {
+                    localStorage.setItem('darkMode', 'false');
+                }
+            });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                if (localStorage.getItem('darkMode') === 'true') {
+                    document.body.classList.add('dark-mode');
+                }
+            });
+
+        </script>
+
 
     </body>
 </html>

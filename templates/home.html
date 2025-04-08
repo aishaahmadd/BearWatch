@@ -26,14 +26,13 @@
             <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
         </div>
 
-        <!-- DARK MODE BUTTON -->
-        <div id="dark-mode-toggle">
-            <button id="dark-mode-button">Toggle Dark Mode</button>
-        </div>
-
-        <!-- COLORBLIND MODE BUTTON -->
-        <div id="colorblind-toggle">
-            <button id="colorblind-button">Toggle Colorblind Mode</button>
+        <!-- HAMBURGER MENU -->
+        <div id="menu-container">
+            <button id="menu-toggle" aria-label="Open settings menu">☰</button>
+            <div id="menu" class="hidden">
+                <button id="dark-mode-button">Toggle Dark Mode</button>
+                <button id="colorblind-button">Toggle Colorblind Mode</button>
+            </div>
         </div>
 
         <!--SEARCH-->
@@ -82,6 +81,13 @@
 
         <script>
             
+            const menuToggle = document.getElementById('menu-toggle');
+            const menu = document.getElementById('menu');
+
+            menuToggle.addEventListener('click', () => {
+                menu.classList.toggle('hidden');
+            });
+
             const toggleButton = document.getElementById('dark-mode-button');
         
             toggleButton.addEventListener('click', () => {
