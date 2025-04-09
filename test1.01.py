@@ -2,6 +2,9 @@ import yfinance as yf
 from flask import Flask, render_template, request, jsonify
 from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objs as go
+import requests
+
+API_KEY = "enter api key from financialmodelingprep.com (need to make an account)"
 
 # Initialize Flask
 server = Flask(__name__)
@@ -191,9 +194,28 @@ def news():
 # 🔹 Stock Page Route
 @server.route('/stock', methods=["GET", "POST"])
 def stock():
-    stock_symbol = request.args.get("stock", "^GSPC").upper()
-    return render_template("stock.html", stock_symbol=stock_symbol) 
+    query = request.args.get("stock", "").strip()
+    ticker = "^GSPC"
 
+    if query:
+        try:
+            url = f"https://financialmodelingprep.com/api/v3/search?query={query}&limit=10&apikey={API_KEY}"
+            response = requests.get(url)
+            search_results = response.json()
+
+            for stock in search_results:
+                exchange = stock.get('stockExchange', '').lower()
+                if "nasdaq" in exchange or "nyse" in exchange:
+                    ticker = stock['symbol']
+                    break
+
+            if ticker == "^GSPC" and search_results:
+                ticker = search_results[0]['symbol']
+
+        except Exception as e:
+            print(f"Error during stock search: {e}")
+
+    return render_template("stock.html", stock_symbol=ticker)
 
 # 🔹 AJAX Route: Load More News
 @server.route('/load_more_news', methods=["GET"])
