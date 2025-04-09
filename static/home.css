@@ -1,28 +1,24 @@
 body {
     font-family: American Typewriter, serif;
-    background-color: #F2FDFF;
+    background-color: white;
     padding: 20px;
     color: #101935;
     /*background-image: url(backgroundImage.png); */
     display:grid;
-    grid-template:  "side        top       nav"
-                    "headlines  buttons     trending"
+    grid-template:  "nav        top       search"
+                    "headlines  buttons   trending"
                     "headlines  graph     trending"
                     "headlines  time      trending"
                     "headlines  info      trending"
                     "headlines  overview  trending";
+    grid-template-columns: 20% 60% 20%;
+    grid-template-rows: 10% 9% 50% 10% 10% 10% ;
+                    
 }
 
 [id = "logo"]{
-    grid-area:top; 
-    size: 10%;
+    grid-area: top; 
     text-align:center;
-    width:fit-content;
-    height:fit-content;
-    margin-bottom:0%;   
-    border:0%;
-    padding:0%;
-    white-space: nowrap;
 }
 a{
     text-decoration: none;
@@ -36,15 +32,16 @@ a{
 }
 
 [id = "search"]{
-    grid-area: nav;
+    grid-area: search;
     text-align: right;
     padding: 10px;
     font-size: 16px;
 }
 
 #search input{
-    border-radius: 5px;
+    border-radius: 10px;
     border:none;
+    text-align:left;
 }
 
 #search button{
@@ -57,7 +54,7 @@ a{
     font-size: 16px;
 }
 
-[id = "trend buttons"]{
+[id = "trend-buttons"]{
     grid-area: buttons;
     text-align: center;
 }
@@ -77,9 +74,10 @@ a{
     text-align: center;
 }
 
-[id = "time buttons"]{
+[id = "time-buttons"]{
     grid-area: time;
     text-align: center;
+    display:inline;
 }
 [id = "info"]{
     grid-area: info;
@@ -92,8 +90,9 @@ a{
 }
 
 #logo img {
-    max-width: 500px;
-    margin-bottom: 20px;
+    width:30%;
+    height:auto;
+    margin-bottom: 10%;
 }
 
 button{
@@ -101,6 +100,6 @@ button{
     background-color:#F2FDFF;
     color:black;
     border-color: black;
-    border-radius: 15px;
     padding: 10px;
+    float:center;
 }
