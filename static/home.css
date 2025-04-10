@@ -5,13 +5,12 @@ body {
     color: #101935;
     /*background-image: url(backgroundImage.png); */
     display:grid;
-    grid-template:  "nav        top       search"
-                    "headlines  buttons   trending"
-                    "headlines  graph     trending"
-                    "headlines  time      trending"
-                    "headlines  info      trending"
-                    "headlines  overview  trending";
-    grid-template-columns: 20% 60% 20%;
+    grid-template:  "nav        top       top          search"
+                    "headlines  buttons   buttons      trending"
+                    "headlines  graph     graph        trending"
+                    "headlines  time      time         trending"
+                    "info       info      overview     overview";
+    grid-template-columns: 20% 30% 30% 20%;
     grid-template-rows: 10% 9% 50% 10% 10% 10% ;
                     
 }
