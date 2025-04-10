@@ -1,5 +1,5 @@
 body {
-    font-family: American Typewriter, serif;
+    font-family: 'Times New Roman', Times, serif;;
     background-color: white;
     padding: 20px;
     color: #101935;
@@ -40,17 +40,13 @@ a{
 
 #search input{
     border-radius: 10px;
-    border:none;
+    border:#F2FDFF 1px;
     text-align:left;
 }
 
 #search button{
     font-size: 12px;
     padding:6px;
-}
-
-[id = "submit-button"]{
-    padding: 10px;
     font-size: 16px;
 }
 
@@ -96,7 +92,7 @@ a{
 }
 
 button{
-    font-family: American Typewriter, serif;
+    font-family: 'Times New Roman', Times, serif;
     background-color:#F2FDFF;
     color:black;
     border-color: black;

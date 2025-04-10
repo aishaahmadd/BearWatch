@@ -1,47 +1,87 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <title>News Page</title>
-        <link href="{{ url_for('static', filename='news.css') }}" rel="stylesheet" type="text/css"/>
-    </head>
-    <body>
-        <div id = "logo">
-            <a href = "home.html"><img src="BearWatchLogo.png" alt="BearWatch Logo"></a>
-        </div>
-        <div id = "newsHeadline">
-            <h2>News</h2>
-        </div>
-<<<<<<< Updated upstream
-        <div id = "search">
-            <form id="search-form" action="/" method="GET">
-                <input id="stock-input" name="stock" type="text" placeholder="Enter category" required>
-                <button type="submit">Search</button>
-            </form>
-        </div>
-        <div id = "newsGrid"></div>
-        <div id = "load">
-            <button id = "loadMore">Load More...</button>
-        </div>
-        <script src="news.js"></script>
-=======
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Stock News - BearWatch</title>
+    <link href="{{ url_for('static', filename='news.css') }}" rel="stylesheet" type="text/css"/>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let offset = 8;  // start at 8 because first 8 are already rendered
 
-        <div id="search">
-            <form id="search-form">
-                <input id="stock-input" name="stock" type="text" placeholder="Enter stock symbol" required>
-                <button type="submit">Search</button>
-            </form>
-        </div>
 
-        <div id="newsGrid"></div>
+            document.getElementById("loadMoreButton").addEventListener("click", function () {
+                const queryInput = document.getElementById("query");
+                const query = queryInput ? queryInput.value : "Stock Market";
 
-        <div id="load">
-            <button id="loadMore">Load More...</button>
-        </div>
 
-        <script src="{{ url_for('static', filename='news.js') }}"></script>
+                fetch(`/load_more_news?query=${encodeURIComponent(query)}&offset=${offset}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        const newsGrid = document.getElementById('newsGrid');
+                        data.forEach(article => {
+                            let newsItem = document.createElement('div');
+                            newsItem.className = 'news-item';
+                            newsItem.innerHTML = `
+                                <img src="${article.image}" alt="News Image">
+                                <a href="${article.link}" target="_blank">${article.title}</a>`;
+                            newsGrid.appendChild(newsItem);
+                        });
 
->>>>>>> Stashed changes
-    </body>
+
+                        offset += data.length;
+                    })
+                    .catch(error => {
+                        console.error("Failed to load more news:", error);
+                    });
+            });
+        });
+    </script>
+</head>
+<body>
+
+
+    <!-- LOGO -->
+    <div id="logo">
+        <a href="/">
+            <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+        </a>
+    </div>
+
+
+    <!-- HEADLINE -->
+    <div id="newsHeadline">
+        <h1>News</h1>
+    </div>
+
+
+    <!-- SEARCH FORM -->
+    <div id="search">
+        <form action="/news.html" method="POST">
+            <input id="query" name="query" type="text" placeholder="Search stock news" required value="{{ request.form.get('query', 'Stock Market') }}">
+            <button id="submit-button" type="submit">Search</button>
+        </form>
+    </div>
+
+
+    <!-- NEWS GRID -->
+    <div id="newsGrid">
+        {% for article in news %}
+            <a href="{{ article.link }}" target="_blank">
+                <div class="news-item">
+                    <img src="{{ article.image }}" alt="News Image">
+                    <p>{{ article.title }}</p>
+                </div>
+            </a>
+        {% endfor %}
+    </div>
+
+
+    <!-- LOAD MORE BUTTON -->
+    <div id="loadMoreContainer">
+        <button id="loadMoreButton">Load More</button>
+    </div>
+
+
+</body>
 </html>

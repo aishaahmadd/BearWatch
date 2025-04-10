@@ -13,7 +13,7 @@
 -->
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
@@ -28,7 +28,7 @@
 
             <!--SEARCH-->
             <div id="search">
-                <form action="/" method="GET">
+                <form action="/stock" method="GET">
                     <input id="stock-input" name="stock" type="text" placeholder="Enter stock symbol" required>
                     <button id="submit-button" type="submit">Submit</button>
                 </form>
@@ -42,9 +42,9 @@
 
             <!--GRAPH-->
             <div id="graph">
-                <figure>
-                    <iframe id="stock-graph" src="/dashboard?stock={{ stock_symbol }}" width="100%" height="600px" style="border:none;"></iframe>
-                </figure>        
+                <div id="graph">
+                    <iframe id="stock-graph" src="/home" width="100%" height="600px" style="border:none;"></iframe>
+                </div>       
             </div>
 
             <!--TIME BUTTONS-->
@@ -85,9 +85,11 @@
                 {% if trending_stocks %}
                     {% for stock in trending_stocks %}
                         <a href="{{ url_for('stock') }}?stock={{ stock }}">
-                        <div class="trend-line" id="row1">
-                            <h2 id="ticker">{{ stock }}</h2>
-                        </div>
+                            <div class="trend-line" id="row1">
+                                <h2 id="ticker">{{ stock }}</h2>
+                                <p id="cost"></p>
+                                <button id="up-Down">Up</button>
+                            </div>
                         </a>
                     {% endfor %}
                 {% else %}
@@ -97,12 +99,12 @@
 
             <!--INFO-->
             <div id = "info">
-
+                <h2>Info: </h2>
             </div>
 
             <!--OVERVIEW-->
             <div id = "overview">
-
+                <h2>Overview: </h2>
             </div>
     </body>
 </html>
