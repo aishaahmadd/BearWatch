@@ -4,7 +4,7 @@ from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objs as go
 import requests
 
-API_KEY = "enter api key from financialmodelingprep.com (need to make an account)"
+
 
 # Initialize Flask
 server = Flask(__name__)
@@ -194,28 +194,8 @@ def news():
 # 🔹 Stock Page Route
 @server.route('/stock', methods=["GET", "POST"])
 def stock():
-    query = request.args.get("stock", "").strip()
-    ticker = "^GSPC"
-
-    if query:
-        try:
-            url = f"https://financialmodelingprep.com/api/v3/search?query={query}&limit=10&apikey={API_KEY}"
-            response = requests.get(url)
-            search_results = response.json()
-
-            for stock in search_results:
-                exchange = stock.get('stockExchange', '').lower()
-                if "nasdaq" in exchange or "nyse" in exchange:
-                    ticker = stock['symbol']
-                    break
-
-            if ticker == "^GSPC" and search_results:
-                ticker = search_results[0]['symbol']
-
-        except Exception as e:
-            print(f"Error during stock search: {e}")
-
-    return render_template("stock.html", stock_symbol=ticker)
+    stock_symbol = request.args.get("stock", "^GSPC").upper()
+    return render_template("stock.html", stock_symbol=stock_symbol)
 
 # 🔹 AJAX Route: Load More News
 @server.route('/load_more_news', methods=["GET"])
@@ -226,6 +206,30 @@ def load_more_news():
     more_news = get_news(query, count=8, offset=offset)
     return jsonify(more_news)
 
+@server.route('/autocomplete_stock', methods=["GET"])
+def autocomplete_stock():
+    query = request.args.get("query", "").lower()
+    suggestions = []
+
+    if not query:
+        return jsonify(suggestions)
+
+    try:
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        }
+        response = requests.get(f"https://query1.finance.yahoo.com/v1/finance/search?q={query}", headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            for stock in data.get("quotes", [])[:10]:  # limit to 10 suggestions
+                name = stock.get("shortname", stock.get("symbol"))
+                symbol = stock.get("symbol")
+                if name and symbol:
+                    suggestions.append({"name": name, "symbol": symbol})
+    except Exception as e:
+        print(f"Error fetching autocomplete: {e}")
+
+    return jsonify(suggestions)
 
 # Run Flask + Dash
 if __name__ == "__main__":

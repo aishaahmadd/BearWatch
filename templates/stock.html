@@ -46,15 +46,13 @@
         </div>
 
         <!--SEARCH-->
-        <div id="search">
-            <form action="{{ url_for('stock') }}" method="GET">
-                <input id="stock-input" name="stock" type="text" 
-                       placeholder="Enter stock symbol" 
-                       value="{{ stock_symbol }}" required>
-                <button id="submit-button" type="submit">Submit</button>
+        <div id="search" style="position: relative; text-align: right; padding: 10px; font-size: 16px;">
+            <form action="/stock" method="GET" id="search-form" style="display: inline-block; position: relative;">
+                <input id="stock-input" name="stock" type="text" placeholder="Enter stock symbol" required autocomplete="off" style="width: 300px;">
+                <div id="suggestions" class="suggestions-box"></div>
             </form>
         </div>
-
+        
         <!--GRAPH-->
         <div id = "graph">
             <iframe id="stock-graph" src="/dashboard?stock={{ stock_symbol }}" width="100%" height="600px" style="border:none;"></iframe>
@@ -102,16 +100,17 @@
         </div>
  
         <script>
-
+            const stockInput = document.getElementById('stock-input');
+            const suggestionsBox = document.getElementById('suggestions');
             const menuToggle = document.getElementById('menu-toggle');
             const menu = document.getElementById('menu');
-
+            const toggleButton = document.getElementById('dark-mode-button');
+            const colorblindBtn = document.getElementById('colorblind-button');
+            
             menuToggle.addEventListener('click', () => {
                 menu.classList.toggle('hidden');
             });
-
-            const toggleButton = document.getElementById('dark-mode-button');
-        
+            
             toggleButton.addEventListener('click', () => {
                 document.body.classList.toggle('dark-mode');
                 if (document.body.classList.contains('dark-mode')) {
@@ -120,9 +119,7 @@
                     localStorage.setItem('darkMode', 'false');
                 }
             });
-
-            const colorblindBtn = document.getElementById('colorblind-button');
-
+            
             colorblindBtn.addEventListener('click', () => {
                 const iframe = document.getElementById('stock-graph');
                 const src = new URL(iframe.src);
@@ -131,12 +128,11 @@
                 iframe.src = src.toString();
                 localStorage.setItem('colorblindMode', (!currentMode).toString());
             });
-
+            
             window.addEventListener('DOMContentLoaded', () => {
                 if (localStorage.getItem('darkMode') === 'true') {
                     document.body.classList.add('dark-mode');
                 }
-
                 const savedColorblind = localStorage.getItem('colorblindMode');
                 if (savedColorblind === 'true' || savedColorblind === 'false') {
                     const iframe = document.getElementById('stock-graph');
@@ -145,7 +141,45 @@
                     iframe.src = src.toString();
                 }
             });
+            
+            stockInput.addEventListener('input', async function() {
+                const query = stockInput.value.trim();
+                if (query.length === 0) {
+                    suggestionsBox.style.display = 'none';
+                    suggestionsBox.innerHTML = "";
+                    return;
+                }
+            
+                try {
+                    const response = await fetch(`/autocomplete_stock?query=${query}`);
+                    const suggestions = await response.json();
+            
+                    suggestionsBox.innerHTML = "";
+                    
+                    if (suggestions.length === 0) {
+                        suggestionsBox.style.display = 'none';
+                        return;
+                    }
+            
+                    suggestions.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion';
+                        div.textContent = `${item.name} (${item.symbol})`;
+                        div.addEventListener('click', () => {
+                            stockInput.value = item.symbol;
+                            suggestionsBox.style.display = 'none';
+                            suggestionsBox.innerHTML = "";
+                            document.getElementById('search-form').submit();
+                        });
+                        suggestionsBox.appendChild(div);
+                    });
+            
+                    suggestionsBox.style.display = 'block';
+                } catch (error) {
+                    console.error('Error fetching suggestions:', error);
+                }
+            });
+            </script>
 
-        </script>
     </body>
 </html>
