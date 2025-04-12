@@ -4,8 +4,6 @@ from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objs as go
 import requests
 
-
-
 # Initialize Flask
 server = Flask(__name__)
 
