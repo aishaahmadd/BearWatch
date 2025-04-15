@@ -5,54 +5,73 @@ body {
     color: #101935;
     /*background-image: url(backgroundImage.png); */
     display:grid;
-    grid-template:  "nav        top       top          search"
-                    "headlines  buttons   buttons      trending"
-                    "headlines  graph     graph        trending"
-                    "headlines  time      time         trending"
-                    "info       info      overview     overview";
-    grid-template-columns: 20% 30% 30% 20%;
-    grid-template-rows: 10% 9% 50% 10% 10% 10% ;
-                    
+    grid-template:  "nav  top        search    search       search1"
+                    "nav  headlines  graph     graph        trending"
+                    "nav  headlines  time      time         trending"
+                    "nav  info       info      overview     overview";
+    
+    grid-template-columns: var(--nav-width, 10%) 20% 30% 30% 20%;
+    grid-template-rows: 10% 60% 5% 10%;
+    transition: all 0.3s ease;
 }
 
-[id = "logo"]{
+body.nav-hidden {
+    --nav-width: 0%;
+}
+[id="nav"] {
+    grid-area: nav;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    transition: all 0.3s ease;
+}
+body.nav-hidden #nav {
+    width: 0;
+    padding: 0;
+    opacity: 0;
+}
+
+[id="logo"]{
     grid-area: top; 
-    text-align:center;
+    text-align: left;
+}
+
+#logo img {
+    width:75%;
+    height:auto;
+    margin-bottom: 10%;
 }
 a{
     text-decoration: none;
     color:#101935;
 }
 
-#logo img{
-    width:50%;
-    height:50%;
-    margin:none;
-}
-
 [id = "search"]{
     grid-area: search;
-    text-align: right;
+    text-align: left;
     padding: 10px;
     font-size: 16px;
 }
 
 #search input{
+    width:100%;
     border-radius: 10px;
-    border:#F2FDFF 1px;
+    border-color:black;
     text-align:left;
+    padding:5px;
 }
 
-#search button{
-    font-size: 12px;
-    padding:6px;
+[id="search1"]{
+    grid-area:search1;
+    text-align:left;
+    padding: 10px;
     font-size: 16px;
 }
 
-[id = "trend-buttons"]{
-    grid-area: buttons;
-    text-align: center;
+#search1 button{
+    font-size: 12px;
+    padding:6px;
 }
+
 
 [id = "graph"]{
     grid-area: graph;
@@ -71,30 +90,31 @@ a{
 
 [id = "time-buttons"]{
     grid-area: time;
-    text-align: center;
-    display:inline;
+    text-align: right;
 }
+#time-buttons button{
+    border-radius: 0px;
+    float:right;
+    padding:10px;
+}
+
 [id = "info"]{
     grid-area: info;
-    text-align: center;
+    text-align: left;
+    padding-left:30px;
 }
 
 [id = "overview"]{
     grid-area: overview;
-    text-align: center;
-}
-
-#logo img {
-    width:30%;
-    height:auto;
-    margin-bottom: 10%;
+    text-align: left;
+    padding-left:30px;
 }
 
 button{
     font-family: 'Times New Roman', Times, serif;
-    background-color:#F2FDFF;
+    background-color:white;
     color:black;
     border-color: black;
+    border-radius: 5px;
     padding: 10px;
-    float:center;
 }
