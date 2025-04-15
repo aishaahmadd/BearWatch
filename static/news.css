@@ -4,10 +4,10 @@ body {
     padding: 20px;
     text-align: center;
     display: grid;
-    grid-template:"logo  logo  search"
-                  "news  news  news"
-                  "grid  grid  grid"
-                  "load  load  load";
+    grid-template:"nav logo  logo  search"
+                  "nav news  news  news"
+                  "nav grid  grid  grid"
+                  "nav oad  load  load";
     grid-template-rows: 10% 10% 50% 20%;
     grid-template-columns:auto;
 
@@ -23,6 +23,21 @@ body {
 body.dark-mode {
     background-color: #1E054D;
     color: #e0e0e0;
+}
+
+body.nav-hidden {
+    --nav-width: 0%;
+}
+[id="nav"] {
+    grid-area: nav;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    transition: all 0.3s ease;
+}
+body.nav-hidden #nav {
+    width: 0;
+    padding: 0;
+    opacity: 0;
 }
 
 [id="logo"]{
