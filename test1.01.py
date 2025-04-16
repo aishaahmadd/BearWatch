@@ -14,6 +14,7 @@ home_tickers = {
 }
 
 def fetch_stock_data(ticker, pd="1d", i="1m"):
+    
     stock = yf.Ticker(ticker)
     df = stock.history(period=pd, interval=i)
     return df
@@ -39,9 +40,11 @@ def determine_color(stock_symbol):
     return line_color, title
 
 
-def create_graph(stock_symbol):
-    data = fetch_stock_data(stock_symbol)
-    line_color, title = determine_color(stock_symbol)
+def create_graph(stock_symbol, colorblind_mode, pd="1d", i="1m"):
+    data = fetch_stock_data(stock_symbol, pd=pd, i=i)
+    if data.empty:
+        return go.Figure()
+    line_color, title = determine_color(stock_symbol, colorblind_mode)
 
     figure = go.Figure(data=[go.Scatter(
         x=data.index,
@@ -77,9 +80,20 @@ appHome.layout = html.Div([
    Output("tabs-content", "children"),
     Input("tabs", "value")
 )
-def update_graph(selected_tab):
-    df = fetch_stock_data(home_tickers[selected_tab])
-    line_color, title = determine_color(home_tickers[selected_tab])
+def update_graph(selected_tab, search):
+    colorblind_mode = False
+    
+    query_params = search.lstrip("?").split("&")
+    params_dict = dict(param.split("=") for param in query_params if "=" in param)
+    if params_dict.get("colorblind","false") == "true":
+        colorblind_mode = True
+    else:
+        colorblind_mode = False
+    time = params_dict.get("time", "1d")
+
+
+    df = fetch_stock_data(home_tickers[selected_tab], time)
+    line_color, title = determine_color(home_tickers[selected_tab], colorblind_mode)
     fig = go.Figure()
     fig.add_trace(
         go.Scatter
