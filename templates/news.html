@@ -1,61 +1,85 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <title>Stock News - BearWatch</title>
-        <link href="{{ url_for('static', filename='news.css') }}" rel="stylesheet" type="text/css"/>
-        <script>
-            let offset = 0;
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>Stock News - BearWatch</title>
+    <link href="{{ url_for('static', filename='news.css') }}" rel="stylesheet" type="text/css"/>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let offset = 8;  // start at 8 because first 8 are already rendered
 
-            function loadMoreNews() {
-                offset += 8;
-                fetch(`/load_more_news?query=${document.getElementById('query').value}&offset=${offset}`)
+
+            document.getElementById("loadMoreButton").addEventListener("click", function () {
+                const queryInput = document.getElementById("query");
+                const query = queryInput ? queryInput.value : "Stock Market";
+
+
+                fetch(`/load_more_news?query=${encodeURIComponent(query)}&offset=${offset}`)
                     .then(response => response.json())
                     .then(data => {
                         const newsGrid = document.getElementById('newsGrid');
                         data.forEach(article => {
                             let newsItem = document.createElement('div');
                             newsItem.className = 'news-item';
-                            newsItem.innerHTML = `<img src="${article.image}" alt="News Image">
-                                                  <a href="${article.link}" target="_blank">${article.title}</a>`;
+                            newsItem.innerHTML = `
+                                <img src="${article.image}" alt="News Image">
+                                <a href="${article.link}" target="_blank">${article.title}</a>`;
                             newsGrid.appendChild(newsItem);
                         });
+
+
+                        offset += data.length;
+                    })
+                    .catch(error => {
+                        console.error("Failed to load more news:", error);
                     });
-            }
-        </script>
-    </head>
-    <body>
+            });
+        });
+    </script>
+</head>
+<body>
 
-        <div id="logo">
-            <a href="/">
-                <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
-            </a>
-        </div>
 
-        <div id="newsHeadline">
-            <h2>Latest Stock Market News</h2>
-        </div>
+    <!-- LOGO -->
+    <div id="logo">
+        <a href="/">
+            <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+        </a>
+    </div>
 
-        <div id="search">
-            <form action="/news.html" method="POST">
-                <input id="query" name="query" type="text" placeholder="Search stock news" required>
-                <button id="submit-button" type="submit">Search</button>
-            </form>
-        </div>
 
-        <div id="newsGrid">
-            {% for article in news %}
-                <div class="news-item">
-                    <img src="{{ article.image }}" alt="News Image">
-                    <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
-                </div>
-            {% endfor %}
-        </div>
+    <!-- HEADLINE -->
+    <div id="newsHeadline">
+        <h2>Latest Stock Market News</h2>
+    </div>
 
-        <div id="loadMoreContainer">
-            <button id="loadMoreButton" onclick="loadMoreNews()">Load More</button>
-        </div>
 
-    </body>
+    <!-- SEARCH FORM -->
+    <div id="search">
+        <form action="/news.html" method="POST">
+            <input id="query" name="query" type="text" placeholder="Search stock news" required value="{{ request.form.get('query', 'Stock Market') }}">
+            <button id="submit-button" type="submit">Search</button>
+        </form>
+    </div>
+
+
+    <!-- NEWS GRID -->
+    <div id="newsGrid">
+        {% for article in news %}
+            <div class="news-item">
+                <img src="{{ article.image }}" alt="News Image">
+                <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
+            </div>
+        {% endfor %}
+    </div>
+
+
+    <!-- LOAD MORE BUTTON -->
+    <div id="loadMoreContainer">
+        <button id="loadMoreButton">Load More</button>
+    </div>
+
+
+</body>
 </html>
