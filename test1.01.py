@@ -1,7 +1,9 @@
 import yfinance as yf
+import dash
 from flask import Flask, render_template, request, jsonify
 from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objs as go
+from urllib.parse import parse_qs
 from reccomendationsys_update1 import get_company_info, build_feature_matrix, recommend_stocks, get_tickers_from_finviz
 
 # Initialize Flask
@@ -13,9 +15,10 @@ home_tickers = {
     "Dow Jones": "^DJI"
 }
 
-def fetch_stock_data(ticker, pd="1d", i="1m"):
+def fetch_stock_data(ticker, pd="1d"):
+    intervalsForPeriod = {"1d":"1m", "5d":"1h", "1mo":"1h", "3mo":"1d", "ytd":"1d", "1y":"1d", "max":"1d"}
     stock = yf.Ticker(ticker)
-    df = stock.history(period=pd, interval=i)
+    df = stock.history(period=pd, interval=intervalsForPeriod[pd])
     return df
 
 def determine_color(stock_symbol):
@@ -67,6 +70,7 @@ def create_graph(stock_symbol):
 #  Dash Home Tabs
 appHome=Dash(__name__, server=server, routes_pathname_prefix="/home/")
 appHome.layout = html.Div([
+    dcc.Location(id="url", refresh=False),
     dcc.Tabs(id="tabs", value="S&P 500", children=[
         dcc.Tab(label=name, value=name) for name in home_tickers.keys()
     ]),
@@ -75,10 +79,20 @@ appHome.layout = html.Div([
 
 @appHome.callback(
    Output("tabs-content", "children"),
-    Input("tabs", "value")
+    Input("tabs", "value"),
+    Input("url", "search")
+    
 )
-def update_graph(selected_tab):
-    df = fetch_stock_data(home_tickers[selected_tab])
+def update_graph(selected_tab, search):
+    # Default time range
+    time_range = "1d"
+
+    # Parse ?time=1mo
+    if search:
+        query = parse_qs(search.lstrip("?"))
+        time_range = query.get("time", ["1d"])[0]
+    
+    df = fetch_stock_data(home_tickers[selected_tab], time_range)
     line_color, title = determine_color(home_tickers[selected_tab])
     fig = go.Figure()
     fig.add_trace(
@@ -96,7 +110,10 @@ def update_graph(selected_tab):
         yaxis_title="Closing Price")
     return dcc.Graph(figure=fig)
 
-# Initialize Dash
+
+#############################################################################
+# Stock Page Graph
+#############################################################################
 app = Dash(__name__, server=server, routes_pathname_prefix="/dashboard/")
 
 #  News Fetching Functions
@@ -197,8 +214,7 @@ def update_graph(n, search): #added from owen
         params_dict = dict(param.split("=") for param in query_params if "=" in param)
         stock_symbol = params_dict.get("stock", "^GSPC")
 
-    stock = yf.Ticker(stock_symbol)
-    data = stock.history(period="1d", interval="1m")
+    data = fetch_stock_data(stock_symbol)
     stock_info = stock.info
 
     if data.empty or "currentPrice" not in stock_info:
