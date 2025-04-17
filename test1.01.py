@@ -18,9 +18,10 @@ home_tickers = {
     "Dow Jones": "^DJI"
 }
 
-def fetch_stock_data(ticker, pd="1d", i="1m"):
+def fetch_stock_data(ticker, pd="1d"):
+    intervalsForPeriods = {"1d":"1m","5d":"1h", "1mo":"1h", "3mo":"1d","ytd":"1d", "1y":"1d", "max":"1d"}
     stock = yf.Ticker(ticker)
-    df = stock.history(period=pd, interval=i)
+    df = stock.history(period=pd, interval=intervalsForPeriods[pd])
     return df
 
 def determine_color(stock_symbol, colorblind_mode="False"):
@@ -75,6 +76,7 @@ def create_graph(stock_symbol):
 appHome=Dash(__name__, server=server, routes_pathname_prefix="/home/")
 
 appHome.layout = html.Div([
+    dcc.Location(id="url", refresh=False),
     dcc.Tabs(id="tabs", value="S&P 500", children=[
         dcc.Tab(label=name, value=name) for name in home_tickers.keys()
     ]),
@@ -83,10 +85,16 @@ appHome.layout = html.Div([
 
 @appHome.callback(
    Output("tabs-content", "children"),
-    Input("tabs", "value")
+    Input("tabs", "value"),
+    Input("url", "search")
 )
-def update_graph(selected_tab):
-    df = fetch_stock_data(home_tickers[selected_tab])
+def update_graph(selected_tab, search):
+    time_range = "1d"
+    if search:
+        query = parse_qs(search.lstrip("?"))
+        time_range = query.get("time", ["1d"])[0]
+        
+    df = fetch_stock_data(home_tickers[selected_tab], time_range)
     line_color, title = determine_color(home_tickers[selected_tab])
     fig = go.Figure()
     fig.add_trace(
@@ -182,14 +190,15 @@ app.layout = html.Div([
 )
 def update_graph(n, search): #added from owen
     stock_symbol = "^GSPC"
+    time_range = "1d"
 
     if search:
-        query_params = search.lstrip("?").split("&")
-        params_dict = dict(param.split("=") for param in query_params if "=" in param)
-        stock_symbol = params_dict.get("stock", "^GSPC")
+        query = parse_qs(search.lstrip("?"))
+        stock_symbol = query.get("stock", ["^GSPC"])[0]
+        time_range = query.get("time", ["1d"])[0]
 
+    data= fetch_stock_data(stock_symbol, time_range)
     stock = yf.Ticker(stock_symbol)
-    data = stock.history(period="1d", interval="1m")
     stock_info = stock.info
 
     if data.empty or "currentPrice" not in stock_info:
