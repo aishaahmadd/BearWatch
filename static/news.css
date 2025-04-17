@@ -3,10 +3,17 @@ body {
     font-family: 'Times New Roman', Times, serif;
     padding: 20px;
     text-align: center;
+    display: grid;
+    grid-template:"nav logo  logo  search"
+                  "nav news  news  news"
+                  "nav grid  grid  grid"
+                  "nav oad  load  load";
+    grid-template-rows: 10% 10% 50% 20%;
+    grid-template-columns:auto;
 
     /* For Light Mode: */
-    background-color: #F9F5ED;
-    color: #4e4b9f;
+    background-color: white;
+    color: black;
 
     /* For Dark Mode: */
     /* background-color: #1E054D;
@@ -18,41 +25,62 @@ body.dark-mode {
     color: #e0e0e0;
 }
 
+body.nav-hidden {
+    --nav-width: 0%;
+}
+[id="nav"] {
+    grid-area: nav;
+    overflow: hidden;
+    background-color: #f0f0f0;
+    transition: all 0.3s ease;
+}
+body.nav-hidden #nav {
+    width: 0;
+    padding: 0;
+    opacity: 0;
+}
+
+[id="logo"]{
+    grid-area:logo;
+    text-align:left;
+}
+
 #logo img {
-    max-width: 400px;
-    margin-bottom: 20px;
+    width:30%;
+    height:auto;
+    margin-bottom: 10%;
 }
 
 #newsHeadline h2 {
     font-size: 28px;
     margin-bottom: 20px;
+     text-align: left;
 }
 
 #search {
-    margin-bottom: 20px;
+    grid-area: search;
+    text-align: right;
+    padding: 10px;
+    font-size: 16px;
 }
 
 #search input {
-    padding: 10px;
-    font-size: 16px;
-    width: 250px;
-    border: 1px solid #ccc;
+    border-radius: 10px;
+    border:#F2FDFF 1px;
+    text-align:left;
+    
 }
 
 #submit-button {
+    background-color:#F2FDFF;
+    color:black;
+    border-color: black;
     padding: 10px;
-    font-size: 16px;
-    background-color: #007BFF;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-#submit-button:hover {
-    background-color: #0056b3;
+    float:center;
 }
 
 #newsGrid {
+    grid-area: grid;
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 20px;
@@ -78,28 +106,27 @@ body.dark-mode {
     margin-top: 10px;
     font-size: 16px;
     text-decoration: none;
-    color: #007BFF;
-}
-
-.news-item a:hover {
-    text-decoration: underline;
+    color: black;
 }
 
 #loadMoreContainer {
+    grid-area: load;
     margin-top: 20px;
 }
 
 #loadMoreButton {
     padding: 10px 15px;
     font-size: 16px;
-    background-color: #28a745;
+    background-color: black;
     color: white;
-    border: none;
+    border: black 1px;
     cursor: pointer;
 }
 
 #loadMoreButton:hover {
-    background-color: #218838;
+    background-color: black;
+    color:#F2FDFF;
+    border: black 1px;
 }
 
 #menu-container {

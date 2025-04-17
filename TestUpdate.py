@@ -2,7 +2,10 @@ import yfinance as yf
 from flask import Flask, render_template, request, jsonify
 from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objs as go
-from Recommendation import get_company_info, build_feature_matrix, recommend_stocks, get_tickers_from_finviz
+from SimilarStocks import get_similar_stocks
+from StockOverview import get_stock_overview
+from AboutStock import get_stock_about
+from TrendingStocks import get_trending_stocks
 
 # Initialize Flask
 server = Flask(__name__)
@@ -18,7 +21,7 @@ def fetch_stock_data(ticker, pd="1d", i="1m"):
     df = stock.history(period=pd, interval=i)
     return df
 
-def determine_color(stock_symbol, colorblind_mode):
+def determine_color(stock_symbol):
     stock = yf.Ticker(stock_symbol)
     data = fetch_stock_data(stock_symbol)
     current_price = stock.info.get("currentPrice", data["Close"].iloc[-1])
@@ -29,10 +32,7 @@ def determine_color(stock_symbol, colorblind_mode):
     percent_change = (price_change / prev_close) * 100
 
     # Determine line color
-    if colorblind_mode:
-        line_color = "blue" if price_change > 0 else "orange"  
-    else:
-        line_color = "green" if price_change > 0 else "red"
+    line_color = "green" if price_change > 0 else "red"
     sign = "+" if price_change > 0 else ""
     title = f"""
     {stock.info.get('shortName', stock_symbol)} <br>
@@ -42,9 +42,9 @@ def determine_color(stock_symbol, colorblind_mode):
     return line_color, title
 
 
-def create_graph(stock_symbol, colorblind_mode):
+def create_graph(stock_symbol):
     data = fetch_stock_data(stock_symbol)
-    line_color, title = determine_color(stock_symbol, colorblind_mode)
+    line_color, title = determine_color(stock_symbol)
 
     figure = go.Figure(data=[go.Scatter(
         x=data.index,
@@ -67,8 +67,8 @@ def create_graph(stock_symbol, colorblind_mode):
 
     return figure
 
-#  Dash Home Tabs
 appHome=Dash(__name__, server=server, routes_pathname_prefix="/home/")
+
 appHome.layout = html.Div([
     dcc.Tabs(id="tabs", value="S&P 500", children=[
         dcc.Tab(label=name, value=name) for name in home_tickers.keys()
@@ -78,21 +78,11 @@ appHome.layout = html.Div([
 
 @appHome.callback(
    Output("tabs-content", "children"),
-    [Input("tabs", "value"),
-     Input("url", "search")]
+    Input("tabs", "value")
 )
-def update_graph(selected_tab, search):
-    colorblind_mode = False
-
-    if search:
-        query_params = search.lstrip("?").split("&")
-        params_dict = dict(param.split("=") for param in query_params if "=" in param)
-        if params_dict.get("colorblind","false") == "true":
-            colorblind_mode = True
-        else:
-            colorblind_mode = False
+def update_graph(selected_tab):
     df = fetch_stock_data(home_tickers[selected_tab])
-    line_color, title = determine_color(home_tickers[selected_tab], colorblind_mode)
+    line_color, title = determine_color(home_tickers[selected_tab])
     fig = go.Figure()
     fig.add_trace(
         go.Scatter
@@ -112,7 +102,6 @@ def update_graph(selected_tab, search):
 # Initialize Dash
 app = Dash(__name__, server=server, routes_pathname_prefix="/dashboard/")
 
-#  News Fetching Functions
 # 🔹 Fetch Stock News (With Pagination)
 def get_news(query="Stock Market", count=8, offset=0):
     try:
@@ -133,51 +122,7 @@ def get_news(query="Stock Market", count=8, offset=0):
         print(f"Error fetching news: {e}")
         return []
     
-def get_stock_news(stock_symbol, count=5):
-    try:
-        search_result = yf.Search(stock_symbol, news_count=count)
-        if not search_result or not search_result.news:
-            return []
-        return [{
-            "title": article.get("title", "No Title"),
-            "link": article.get("link", "#")
-        } for article in search_result.news[:count]]
-    except Exception as e:
-        print(f"Stock News Error: {e}")
-        return []
 
-
-def get_latest_financial_news(count=5):
-    try:
-        search_result = yf.Search("Financial Market", news_count=count)
-        if not search_result or not search_result.news:
-            return []
-        return [{
-            "title": article.get("title", "No Title"),
-            "link": article.get("link", "#")
-        } for article in search_result.news[:count]]
-    except Exception as e:
-        print(f"Ticker News Error: {e}")
-        return []
-
-    
-# 🔹 Fetch Similar Stocks//gotten from owens code
-def get_similar_stocks(stock_symbol):
-    try:
-        input_info = get_company_info(stock_symbol)
-        sector = input_info['Sector']
-        market_cap = input_info['Market Cap']
-
-        if sector != 'N/A':
-            tickers = get_tickers_from_finviz(sector, market_cap)
-            if tickers:
-                df = build_feature_matrix(tickers)
-                return recommend_stocks(stock_symbol, df)
-    except Exception as e:
-        print(f"Error fetching similar stocks: {e}")
-    return []
-
-# json {
 #     "name" : "Raham",
 #     "Array": "1,2,3.4.3"
 # }
@@ -209,10 +154,6 @@ def update_graph(n, search): #added from owen
         query_params = search.lstrip("?").split("&")
         params_dict = dict(param.split("=") for param in query_params if "=" in param)
         stock_symbol = params_dict.get("stock", "^GSPC")
-        if params_dict.get("colorblind","false") == "true":
-            colorblind_mode = True
-        else:
-            colorblind_mode = False
 
     stock = yf.Ticker(stock_symbol)
     data = stock.history(period="1d", interval="1m")
@@ -229,10 +170,7 @@ def update_graph(n, search): #added from owen
     percent_change = (price_change / prev_close) * 100
 
     # Determine line color
-    if colorblind_mode:
-        line_color = "blue" if price_change > 0 else "orange"  
-    else:
-        line_color = "green" if price_change > 0 else "red"
+    line_color = "green" if price_change > 0 else "red"
     sign = "+" if price_change > 0 else ""
 
     title = f"""
@@ -262,23 +200,7 @@ def update_graph(n, search): #added from owen
 
     return figure
 
-# 🔹 Dash Callback (Get Similar Stocks on Stock Change)
-@app.callback(
-    Output("recommended-stocks-list", "children"),
-    Output("recommended-stocks-container", "style"),
-    Input("url", "search")
-)
-def update_stock_recommendation(search):
-    if search:
-        query_params = search.lstrip("?").split("&")
-        params_dict = dict(param.split("=") for param in query_params if "=" in param)
-        stock_symbol = params_dict.get("stock", "^GSPC")
-        if stock_symbol != "^GSPC":
-            similar_stocks = get_similar_stocks(stock_symbol)
-            if similar_stocks:
-                return [html.Li(stock) for stock in similar_stocks], {"position": "absolute", "bottom": "20px", "left": "20px", "background-color": "#f1f1f1", "padding": "10px", "display": "block"}
-    
-    return [], {"display": "none"}  # Hide if no valid stock is entered #added from owen
+
 
 
 # 🔹 Home Route
@@ -298,20 +220,26 @@ def news():
     news_articles = get_news(query, count=8)
     return render_template("news.html", news=news_articles)
 
-@server.route('/load_more_news', methods=["GET"])
-def load_more_news():
-    query = request.args.get("query", "Stock Market")
-    offset = int(request.args.get("offset", 0))
-    more_news = get_news(query, count=8, offset=offset)
-    return jsonify(more_news)
-
 # 🔹 Stock Page Route
 @server.route('/stock', methods=["GET", "POST"])
 def stock():
     stock_symbol = request.args.get("stock", "^GSPC").upper()
-    stock_news = get_stock_news(stock_symbol, count=5)
-    ticker_news = get_latest_financial_news()
-    return render_template("stock.html", stock_symbol=stock_symbol, stock_news=stock_news, ticker_news=ticker_news) 
+    stock_overview = None
+    if stock_symbol:
+        stock_overview = get_stock_overview(stock_symbol)
+        stock_about = get_stock_about(stock_symbol)
+        trending_stocks = get_trending_stocks()
+        similar_stocks = get_similar_stocks(stock_symbol) # Get similar stocks for the given stock symbol
+    return render_template("stock.html", stock_symbol=stock_symbol, stock_overview=stock_overview, stock_about=stock_about, trending_stocks=trending_stocks,similar_stocks=similar_stocks) 
+
+# 🔹 AJAX Route: Load More News
+@server.route('/load_more_news', methods=["GET"])
+def load_more_news():
+    query = request.args.get("query", "Stock Market")
+    offset = int(request.args.get("offset", 0))
+
+    more_news = get_news(query, count=8, offset=offset)
+    return jsonify(more_news)
 
 
 # Run Flask + Dash

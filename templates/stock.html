@@ -22,6 +22,39 @@
         <meta name="viewport" content="width=device-width">
         <title>BearWatch</title>
         <link href="{{ url_for('static', filename='stock.css') }}" rel="stylesheet" type="text/css"/>
+
+        <!-- news things -->
+        <style>
+            #news-ticker {
+                overflow: hidden;
+                white-space: nowrap;
+                background-color: #f2f2f2;
+                padding: 10px;
+                border-bottom: 2px solid #ccc;
+                font-weight: bold;
+            }
+    
+    
+            #ticker-text {
+                display: inline-block;
+                padding-left: 100%;
+                animation: scroll-left 25s linear infinite;
+            }
+    
+    
+            @keyframes scroll-left {
+                0% { transform: translateX(0); }
+                100% { transform: translateX(-100%); }
+            }
+    
+    
+            #ticker-text a {
+                margin-right: 40px;
+                text-decoration: none;
+                color: #333;
+            }
+        </style>
+    
     </head>
     <body>
         <!--LOGO-->
@@ -40,19 +73,32 @@
             </div>
         </div>
 
+        <!--SEARCH-->
+        <div id="search">
+            <form action="{{ url_for('stock') }}" method="GET">
+                <input id="stock-input" name="stock" type="text" 
+                       placeholder="Enter stock symbol" 
+                       value="{{ stock_symbol }}" required>
+                <button id="submit-button" type="submit">Submit</button>
+            </form>
+        </div>
+
+        <!-- FINANCIAL NEWS TICKER -->
+        <div id="news-ticker">
+            <a href="news.html">
+                <div id="ticker-text">
+                    {% for article in ticker_news %}
+                        <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
+                    {% endfor %}
+                </div>
+            </a>
+        </div>
+
         <!--STOCK HEADER-->
         <div id="stock-header">
             <h1>{{ stock_symbol }} Overview</h1>
         </div>
 
-        <!--SEARCH-->
-        <div id="search" style="position: relative; text-align: right; padding: 10px; font-size: 16px;">
-            <form action="/stock" method="GET" id="search-form" style="display: inline-block; position: relative;">
-                <input id="stock-input" name="stock" type="text" placeholder="Enter stock symbol" required autocomplete="off" style="width: 300px;">
-                <div id="suggestions" class="suggestions-box"></div>
-            </form>
-        </div>
-        
         <!--GRAPH-->
         <div id = "graph">
             <iframe id="stock-graph" src="/dashboard?stock={{ stock_symbol }}" width="100%" height="600px" style="border:none;"></iframe>
@@ -69,15 +115,22 @@
             <button>ALL</button>
         </div>
 
-        <!--HEADLINES-->
+        <!--HEADLINES
         <div id = "headlines">
             <h2><a href ="news.html">Headlines</a></h2>
         </div>
+        -->
 
-        <!--STOCK HEADLINES-->
-        <div id = "stock-headlines">
-            <h2><a href ="news.html">Stock Headlines</a></h2>
+        <!-- STOCK HEADLINES -->
+        <div id="stock-headlines">
+            <h2><a href="news.html">Stock Headlines</a></h2>
+            <ul>
+                {% for headline in stock_news %}
+                    <li><a href="{{ headline.link }}" target="_blank">{{ headline.title }}</a></li>
+                {% endfor %}
+            </ul>
         </div>
+
 
         <!--TRENDING-->
         <div id = "trending">
@@ -85,8 +138,9 @@
         </div>
 
         <!--Related Stocks-->
-        <div id = "related-stocks">
+        <div id = "recommended-stocks">
             <h2>Recommended Stocks</h2>
+                <ul id="recommended-stocks-list"></ul>
         </div>
 
         <!--INFO-->
@@ -98,7 +152,8 @@
         <div id = "stats">
             <h2>Stock Information</h2>
         </div>
- 
+        
+
         <script>
             const stockInput = document.getElementById('stock-input');
             const suggestionsBox = document.getElementById('suggestions');
