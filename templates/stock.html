@@ -113,6 +113,10 @@
             <h2><a href ="news.html">Stock Headlines</a></h2>
         </div>
 
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
         <!--TRENDING STOCKS-->
         <div id="trending">
             <h2>Trending Stocks</h2>
@@ -155,8 +159,11 @@
             {% endif %}
         </div>
 
+<<<<<<< Updated upstream
 
 
+=======
+>>>>>>> Stashed changes
         <!--Related Stocks-->
         <div id="related-stocks">
             <h2>Related Stocks</h2>
@@ -165,6 +172,7 @@
                     {% for stock in related_stocks %}
                         <button type="button" class="related-stock-button" 
                                 onclick="window.location.href='{{ url_for('stock') }}?stock={{ stock.ticker }}'"
+<<<<<<< Updated upstream
 
                                 style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
                             <!-- Left side: Ticker and Price -->
@@ -200,6 +208,42 @@
             {% endif %}
         </div>
 
+=======
+
+                                style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
+                            <!-- Left side: Ticker and Price -->
+                            <div class="stock-info" style="flex-grow: 1;">
+                                <div class="stock-ticker">
+                                    <strong>{{ stock.ticker }}</strong>
+                                </div>
+                                <div class="stock-price">
+                                    ${{ "%.2f"|format(stock.price) if stock.price != 'N/A' else 'N/A' }}
+                                </div>
+                            </div>
+                            <!-- Right side: Price Change and Percentage -->
+                            <div class="stock-change-info">
+                                {% if stock.change != 'N/A' %}
+                                    {% if stock.change > 0 %}
+                                        <span style="background-color:green; color:white; padding:5px 10px; border-radius:5px;">
+                                            {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                        </span>
+                                    {% else %}
+                                        <span style="background-color:red; color:white; padding:5px 10px; border-radius:5px;">
+                                            {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <span style="padding:5px 10px;">N/A</span>
+                                {% endif %}
+                            </div>
+                        </button>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No related stocks found.</p>
+            {% endif %}
+        </div>
+>>>>>>> Stashed changes
 
         <!--Stats-->
         <div id = "stats">

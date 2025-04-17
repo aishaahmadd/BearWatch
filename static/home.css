@@ -79,6 +79,176 @@ body.dark-mode {
 }
 
 #logo img {
+<<<<<<< Updated upstream
     max-width: 500px;
     margin-bottom: 20px;
+=======
+    width: 75%;
+    height: auto;
+    margin-bottom: 10%;
+}
+
+a {
+    text-decoration: none;
+    color: #4e4b9f;
+}
+
+#search {
+    grid-area: search;
+    text-align: left;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#search input {
+    width: 100%;
+    border-radius: 10px;
+    border-color: black;
+    text-align: left;
+    padding: 5px;
+}
+
+#search1 {
+    grid-area: search1;
+    text-align: left;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#search1 button {
+    font-size: 12px;
+    padding: 6px;
+}
+
+#search-wrapper {
+    position: relative;
+    width: 100%;
+}
+
+.suggestions-box {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    background: #F9F5ED;
+    border: 1px solid #ccc;
+    z-index: 1000;
+    display: none;
+    font-size: 16px;
+    box-sizing: border-box;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 4px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+}
+
+.suggestion {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion:hover {
+    background: #eee;
+}
+
+#graph {
+    grid-area: graph;
+    text-align: center;
+}
+/* ------------------------------- */
+
+#headlines {
+    grid-area: headlines;
+    text-align: center;
+}
+
+#trending {
+    grid-area: trending;
+    text-align: center;
+}
+
+#time-buttons {
+    grid-area: time;
+    text-align: right;
+}
+
+#time-buttons button {
+    border-radius: 0px;
+    float: right;
+    padding: 10px;
+}
+
+#info {
+    grid-area: info;
+    text-align: left;
+    padding-left: 30px;
+}
+
+#overview {
+    grid-area: overview;
+    text-align: left;
+    padding-left: 30px;
+}
+
+button {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: white;
+    color: black;
+    border-color: black;
+    border-radius: 5px;
+    padding: 10px;
+}
+
+#menu-container {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    width: 50px;
+}
+
+#menu-toggle {
+    font-size: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+}
+
+body.dark-mode #menu-toggle {
+    color: white;
+}
+
+#menu {
+    position: absolute;
+    top: 50px;
+    left: 0;
+    width: 180px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    padding: 10px;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+}
+
+#menu.hidden {
+    display: none;
+}
+
+#menu button {
+    margin: 5px 0;
+    padding: 10px;
+    font-size: 16px;
+    background-color: #eee;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    text-align: center;
+}
+
+#menu button:hover {
+    background-color: #ddd;
+>>>>>>> Stashed changes
 }

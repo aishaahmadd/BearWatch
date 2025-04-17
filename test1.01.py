@@ -7,6 +7,7 @@ from RelatedStocks import get_related_stocks
 from StockOverview import get_stock_overview
 from AboutStock import get_stock_about
 from TrendingStocks import get_trending_stocks
+from urllib.parse import parse_qs
 
 # Initialize Flask
 server = Flask(__name__)
@@ -22,7 +23,7 @@ def fetch_stock_data(ticker, pd="1d", i="1m"):
     df = stock.history(period=pd, interval=i)
     return df
 
-def determine_color(stock_symbol):
+def determine_color(stock_symbol, colorblind_mode="False"):
     stock = yf.Ticker(stock_symbol)
     data = fetch_stock_data(stock_symbol)
     current_price = stock.info.get("currentPrice", data["Close"].iloc[-1])
@@ -33,7 +34,10 @@ def determine_color(stock_symbol):
     percent_change = (price_change / prev_close) * 100
 
     # Determine line color
-    line_color = "green" if price_change > 0 else "red"
+    if colorblind_mode:
+        line_color = "blue" if price_change > 0 else "orange"
+    else:
+        line_color = "green" if price_change > 0 else "red"
     sign = "+" if price_change > 0 else ""
     title = f"""
     {stock.info.get('shortName', stock_symbol)} <br>
@@ -135,7 +139,6 @@ def get_stock_news(stock_symbol, count=5):
         print(f"Stock News Error: {e}")
         return []
 
-
 def get_latest_financial_news(count=5):
     try:
         search_result = yf.Search("Financial Market", news_count=count)
@@ -150,6 +153,9 @@ def get_latest_financial_news(count=5):
         return []
     
 
+        return []
+
+# json {
 #     "name" : "Raham",
 #     "Array": "1,2,3.4.3"
 # }
@@ -205,6 +211,8 @@ def update_graph(n, search): #added from owen
     ${current_price:.2f} <span style='color:{line_color};'> <br>
     {sign}${price_change:.2f} ({sign}{percent_change:.2f}%) Today</span>
     """
+    line_color, title = determine_color(stock_symbol)
+
 
     figure = go.Figure(data=[go.Scatter(
         x=data.index,
