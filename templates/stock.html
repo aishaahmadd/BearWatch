@@ -22,6 +22,38 @@
         <meta name="viewport" content="width=device-width">
         <title>BearWatch</title>
         <link href="{{ url_for('static', filename='stock.css') }}" rel="stylesheet" type="text/css"/>
+                <!-- news things -->
+                <style>
+                    #news-ticker {
+                        overflow: hidden;
+                        white-space: nowrap;
+                        background-color: #f2f2f2;
+                        padding: 10px;
+                        border-bottom: 2px solid #ccc;
+                        font-weight: bold;
+                    }
+            
+            
+                    #ticker-text {
+                        display: inline-block;
+                        padding-left: 100%;
+                        animation: scroll-left 25s linear infinite;
+                    }
+            
+            
+                    @keyframes scroll-left {
+                        0% { transform: translateX(0); }
+                        100% { transform: translateX(-100%); }
+                    }
+            
+            
+                    #ticker-text a {
+                        margin-right: 40px;
+                        text-decoration: none;
+                        color: #333;
+                    }
+       
+                </style>
     </head>
     <body>
         <!--LOGO-->
@@ -30,16 +62,15 @@
                 <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
             </a>
         </div>
-
-        <!-- DARK MODE BUTTON -->
-        <div id="dark-mode-toggle">
-            <button id="dark-mode-button">Toggle Dark Mode</button>
+        <!-- FINANCIAL NEWS TICKER -->
+        <div id="news-ticker">
+            <div id="ticker-text">
+                {% for article in ticker_news %}
+                    <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
+                {% endfor %}
+            </div>
         </div>
 
-        <!-- COLORBLIND MODE BUTTON -->
-        <div id="colorblind-toggle">
-            <button id="colorblind-button">Toggle Colorblind Mode</button>
-        </div>
 
         <!--STOCK HEADER-->
         <div id="stock-header">
@@ -63,13 +94,13 @@
         
         <!--TIME BUTTONS-->
         <div id = "time-buttons">
-            <button>1D</button>
-            <button>1W</button>
-            <button>1M</button>
-            <button>3M</button>
-            <button>YTD</button>
-            <button>1Y</button>
-            <button>ALL</button>
+            <button data-value="1d">1D</button>
+            <button data-value="5d">1W</button>
+            <button data-value="1mo">1M</button>
+            <button data-value="3mo">3M</button>
+            <button data-value="ytd">YTD</button>
+            <button data-value="1y">1Y</button>
+            <button data-value="max">ALL</button>
         </div>
 
         <!--HEADLINES-->
@@ -82,48 +113,230 @@
             <h2><a href ="news.html">Stock Headlines</a></h2>
         </div>
 
-        <!--TRENDING-->
-        <div id = "trending">
+        <!--TRENDING STOCKS-->
+        <div id="trending">
             <h2>Trending Stocks</h2>
+            {% if trending_stocks %}
+                <div id="trending-container">
+                    {% for stock in trending_stocks %}
+                        <button type="button" class="trending-stock-button" 
+                                onclick="window.location.href='{{ url_for('stock') }}?stock={{ stock.ticker }}'"
+                                style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
+                            <!-- Left side: Ticker and Price -->
+                            <div class="stock-info" style="flex-grow: 1;">
+                                <div class="stock-ticker">
+                                    <strong>{{ stock.ticker }}</strong>
+                                </div>
+                                <div class="stock-price">
+                                    ${{ "%.2f"|format(stock.price) if stock.price != 'N/A' else 'N/A' }}
+                                </div>
+                            </div>
+                            <!-- Right side: Price Change and Percentage -->
+                            <div class="stock-change-info">
+                                {% if stock.change != 'N/A' %}
+                                    {% if stock.change > 0 %}
+                                        <span style="background-color:green; color:white; padding:5px 10px; border-radius:5px;">
+                                            {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                        </span>
+                                    {% else %}
+                                        <span style="background-color:red; color:white; padding:5px 10px; border-radius:5px;">
+                                            {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <span style="padding:5px 10px;">N/A</span>
+                                {% endif %}
+                            </div>
+                        </button>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No trending stocks found.</p>
+            {% endif %}
         </div>
+
+
 
         <!--Related Stocks-->
-        <div id = "related-stocks">
-            <h2>Recommended Stocks</h2>
+        <div id="related-stocks">
+            <h2>Related Stocks</h2>
+            {% if related_stocks %}
+                <div id="related-stocks-container">
+                    {% for stock in related_stocks %}
+                        <button type="button" class="related-stock-button" 
+                                onclick="window.location.href='{{ url_for('stock') }}?stock={{ stock.ticker }}'"
+
+                                style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
+                            <!-- Left side: Ticker and Price -->
+                            <div class="stock-info" style="flex-grow: 1;">
+                                <div class="stock-ticker">
+                                    <strong>{{ stock.ticker }}</strong>
+                                </div>
+                                <div class="stock-price">
+                                    ${{ "%.2f"|format(stock.price) if stock.price != 'N/A' else 'N/A' }}
+                                </div>
+                            </div>
+                            <!-- Right side: Price Change and Percentage -->
+                            <div class="stock-change-info">
+                                {% if stock.change != 'N/A' %}
+                                    {% if stock.change > 0 %}
+                                        <span style="background-color:green; color:white; padding:5px 10px; border-radius:5px;">
+                                            {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                        </span>
+                                    {% else %}
+                                        <span style="background-color:red; color:white; padding:5px 10px; border-radius:5px;">
+                                            {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <span style="padding:5px 10px;">N/A</span>
+                                {% endif %}
+                            </div>
+                        </button>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No related stocks found.</p>
+            {% endif %}
         </div>
 
-        <!--INFO-->
-        <div id = "information">
-            <h2>Stock Overview</h2>
-        </div>
 
         <!--Stats-->
         <div id = "stats">
-            <h2>Stock Information</h2>
+            <h2>About {{ stock_symbol }}</h2>
+            {% if stock_about %}
+                <p>{{ stock_about }}</p>
+            {% else %}
+                {% if stock_symbol %}
+                    <p>No about information found for {{ stock_symbol }}.</p>
+                {% else %}
+                    <p>Please enter a stock symbol to view its information.</p>
+                {% endif %}
+            {% endif %}
         </div>
- 
+        <!--INFO-->
+        <div id="information">
+            <h2>Stock Overview</h2>
+            {% if stock_overview %}
+                <table id="overview-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, value in stock_overview.items() %}
+                            <tr>
+                                <td><strong>{{ key }}</strong></td>
+                                <td>{{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                {% if stock_symbol %}
+                    <p>Could not retrieve overview information for {{ stock_symbol }}.</p>
+                {% else %}
+                    <p>Please enter a stock symbol to view its overview.</p>
+                {% endif %}
+            {% endif %}
+        </div>
+        <!--SCRIPT TO HANDLE BUTTON CLICKS-->
         <script>
-            const toggleButton = document.getElementById('dark-mode-button');
-        
-            toggleButton.addEventListener('click', () => {
-                document.body.classList.toggle('dark-mode');
+            const iframe = document.getElementById("stock-graph");
+            const buttons = document.querySelectorAll("#time-buttons button");
+
+            buttons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const timeValue = button.getAttribute("data-value");
+
+                    // Preserve other query parameters like colorblind
+                    const url = new URL(iframe.src, window.location.origin);
+                    url.searchParams.set("time", timeValue);
+
+                    iframe.src = url.toString();
+                });
             });
-
-
-            const colorblindBtn = document.getElementById('colorblind-button');
-
-            colorblindBtn.addEventListener('click', () => {
-                const iframe = document.getElementById('stock-graph');
-                const src = new URL(iframe.src);
-
-                const currentMode = src.searchParams.get('colorblind') === 'true';
-
-                src.searchParams.set('colorblind', (!currentMode).toString());
-
-                iframe.src = src.toString();
-            });
-
         </script>
 
+        <!-- SCRIPT FROM ACCESSIBILITY -->
+        <script>
+            const stockInput = document.getElementById('stock-input');
+            const suggestionsBox = document.getElementById('suggestions');
+            const darkModeLink = document.getElementById('dark-mode-button');
+            const colorblindLink = document.getElementById('colorblind-button');
+
+            if (darkModeLink) {
+                darkModeLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.body.classList.toggle('dark-mode');
+                    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode').toString());
+                });
+            }
+
+            if (colorblindLink) {
+                colorblindLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const iframe = document.getElementById('stock-graph');
+                    const src = new URL(iframe.src);
+                    const currentMode = src.searchParams.get('colorblind') === 'true';
+                    src.searchParams.set('colorblind', (!currentMode).toString());
+                    iframe.src = src.toString();
+                    localStorage.setItem('colorblindMode', (!currentMode).toString());
+                });
+            }
+
+            window.addEventListener('DOMContentLoaded', () => {
+                if (localStorage.getItem('darkMode') === 'true') {
+                    document.body.classList.add('dark-mode');
+                }
+
+                const savedColorblind = localStorage.getItem('colorblindMode');
+                if (savedColorblind === 'true' || savedColorblind === 'false') {
+                    const iframe = document.getElementById('stock-graph');
+                    const src = new URL(iframe.src);
+                    src.searchParams.set('colorblind', savedColorblind);
+                    iframe.src = src.toString();
+                }
+            });
+
+            stockInput.addEventListener('input', async function () {
+                const query = stockInput.value.trim();
+                if (query.length === 0) {
+                    suggestionsBox.style.display = 'none';
+                    suggestionsBox.innerHTML = "";
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/autocomplete_stock?query=${query}`);
+                    const suggestions = await response.json();
+                    suggestionsBox.innerHTML = "";
+
+                    if (suggestions.length === 0) {
+                        suggestionsBox.style.display = 'none';
+                        return;
+                    }
+
+                    suggestions.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion';
+                        div.textContent = `${item.name} (${item.symbol})`;
+                        div.addEventListener('click', () => {
+                            stockInput.value = item.symbol;
+                            suggestionsBox.style.display = 'none';
+                            suggestionsBox.innerHTML = "";
+                            document.getElementById('search-form').submit();
+                        });
+                        suggestionsBox.appendChild(div);
+                    });
+
+                    suggestionsBox.style.display = 'block';
+                } catch (error) {
+                    console.error('Error fetching suggestions:', error);
+                }
+            });
+        </script>
+        
     </body>
 </html>
