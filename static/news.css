@@ -1,62 +1,84 @@
-/* Used to be style1*/
 body {
     font-family: 'Times New Roman', Times, serif;
     padding: 20px;
     text-align: center;
     display: grid;
-    grid-template:"nav logo  logo  search"
-                  "nav news  news  news"
-                  "nav grid  grid  grid"
-                  "nav oad  load  load";
+    grid-template:
+        "nav logo  logo  search"
+        "nav news  news  news"
+        "nav grid  grid  grid"
+        "nav oad  load  load";
     grid-template-rows: 10% 10% 50% 20%;
-    grid-template-columns:auto;
+    grid-template-columns: auto;
     transition: all 0.3s ease;
-
-    /* For Light Mode: */
     background-color: white;
     color: black;
-
-    /* For Dark Mode: */
-    /* background-color: #1E054D;
-    color: #F9F5ED; */
 }
 
-html.dark-mode, body.dark-mode {
+html.dark-mode,
+body.dark-mode {
     background-color: #1E054D;
     color: #e0e0e0;
 }
 
+body.dark-mode #nav {
+    background-color: #2A1C5A;
+}
 
 body.nav-hidden {
     --nav-width: 0%;
 }
-[id="nav"] {
+
+#nav {
     grid-area: nav;
     overflow: hidden;
     background-color: #f0f0f0;
     transition: all 0.3s ease;
+    z-index: 1;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
 }
+
 body.nav-hidden #nav {
     width: 0;
     padding: 0;
     opacity: 0;
 }
 
-[id="logo"]{
-    grid-area:logo;
-    text-align:left;
+#nav a h3 {
+    margin: 10px 0;
+    font-family: 'Times New Roman', Times, serif;
+    color: #101935;
+    text-decoration: none;
+}
+
+body.dark-mode #nav a h3 {
+    color: #e0e0e0;
+}
+
+a {
+    text-decoration: none;
+    color: #101935;
+}
+
+#logo {
+    grid-area: logo;
+    text-align: left;
 }
 
 #logo img {
-    width:30%;
-    height:auto;
+    width: 30%;
+    height: auto;
     margin-bottom: 10%;
 }
 
 #newsHeadline h2 {
     font-size: 28px;
     margin-bottom: 20px;
-     text-align: left;
+    text-align: left;
 }
 
 #search {
@@ -68,17 +90,16 @@ body.nav-hidden #nav {
 
 #search input {
     border-radius: 10px;
-    border:#F2FDFF 1px;
-    text-align:left;
-    
+    border: #F2FDFF 1px;
+    text-align: left;
 }
 
 #submit-button {
-    background-color:#F2FDFF;
-    color:black;
+    background-color: #F2FDFF;
+    color: black;
     border-color: black;
     padding: 10px;
-    float:center;
+    float: center;
 }
 
 #newsGrid {
@@ -127,7 +148,7 @@ body.nav-hidden #nav {
 
 #loadMoreButton:hover {
     background-color: black;
-    color:#F2FDFF;
+    color: #F2FDFF;
     border: black 1px;
 }
 
@@ -135,7 +156,7 @@ body.nav-hidden #nav {
     position: absolute;
     top: 20px;
     left: 20px;
-    width: 50px; 
+    width: 50px;
 }
 
 #menu-toggle {
@@ -153,16 +174,16 @@ body.dark-mode #menu-toggle {
     position: absolute;
     top: 50px;
     left: 0;
-    width: 180px; 
+    width: 180px;
     background-color: #fff;
     border: 1px solid #ccc;
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
     z-index: 1000;
     display: flex;
     flex-direction: column;
-    align-items: stretch; 
+    align-items: stretch;
 }
 
 #menu.hidden {
@@ -177,17 +198,9 @@ body.dark-mode #menu-toggle {
     border: none;
     cursor: pointer;
     border-radius: 5px;
-    text-align: center; 
+    text-align: center;
 }
 
 #menu button:hover {
     background-color: #ddd;
 }
-
-#nav {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
-}
-
