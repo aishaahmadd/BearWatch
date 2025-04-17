@@ -95,13 +95,13 @@
         
         <!--TIME BUTTONS-->
         <div id = "time-buttons">
-            <button>1D</button>
-            <button>1W</button>
-            <button>1M</button>
-            <button>3M</button>
-            <button>YTD</button>
-            <button>1Y</button>
-            <button>ALL</button>
+            <button data-value="1d">1D</button>
+            <button data-value="5d">1W</button>
+            <button data-value="1mo">1M</button>
+            <button data-value="3mo">3M</button>
+            <button data-value="ytd">YTD</button>
+            <button data-value="1y">1Y</button>
+            <button data-value="max">ALL</button>
         </div>
 
         <!--HEADLINES-->
@@ -143,6 +143,24 @@
         <div id = "stats">
             <h2>Stock Information</h2>
         </div>
+
+        <!--SCRIPT TO HANDLE BUTTON CLICKS-->
+        <script>
+            const iframe = document.getElementById("stock-graph");
+            const buttons = document.querySelectorAll("#time-buttons button");
+
+            buttons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const timeValue = button.getAttribute("data-value");
+
+                    // Preserve other query parameters like colorblind
+                    const url = new URL(iframe.src, window.location.origin);
+                    url.searchParams.set("time", timeValue);
+
+                    iframe.src = url.toString();
+                });
+            });
+        </script>
         
     </body>
 </html>

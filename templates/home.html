@@ -41,18 +41,18 @@
 
         <!--GRAPH-->
         <div id="graph">
-            <iframe id="stock-graph" src="/home" width="100%" height="600px" style="border:none;"></iframe>
+            <iframe id="stock-graph" src="/home?time=1d" width="100%" height="600px" style="border:none;"></iframe>
         </div>
 
         <!--TIME BUTTONS-->
-        <div id = "time buttons">
-            <button>1D</button>
-            <button>1W</button>
-            <button>1M</button>
-            <button>3M</button>
-            <button>YTD</button>
-            <button>1Y</button>
-            <button>ALL</button>
+        <div id = "time-buttons">
+            <button data-value="1d">1D</button>
+            <button data-value="5d">1W</button>
+            <button data-value="1mo">1M</button>
+            <button data-value="3mo">3M</button>
+            <button data-value="ytd">YTD</button>
+            <button data-value="1y">1Y</button>
+            <button data-value="max">ALL</button>
         </div>
 
         <!--HEADLINES-->
@@ -80,6 +80,24 @@
         
             toggleButton.addEventListener('click', () => {
                 document.body.classList.toggle('dark-mode');
+            });
+        </script>
+
+        <!--SCRIPT TO HANDLE BUTTON CLICKS-->
+        <script>
+            const iframe = document.getElementById("stock-graph");
+            const buttons = document.querySelectorAll("#time-buttons button");
+
+            buttons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const timeValue = button.getAttribute("data-value");
+
+                    // Preserve other query parameters like colorblind
+                    const url = new URL(iframe.src, window.location.origin);
+                    url.searchParams.set("time", timeValue);
+
+                    iframe.src = url.toString();
+                });
             });
         </script>
     </body>
