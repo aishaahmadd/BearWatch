@@ -181,3 +181,32 @@ body.dark-mode #menu-toggle {
 #menu button:hover {
     background-color: #ddd;
 }
+
+#nav {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 10px;
+}
+
+#nav a, #nav .nav-toggle {
+    width: 100%;
+    text-decoration: none;
+    padding: 10px;
+    margin: 5px 0;
+    cursor: pointer;
+    background-color: transparent;
+    border: none;
+}
+
+#nav a h3, #nav .nav-toggle h3 {
+    margin: 0;
+    color: #101935;
+    transition: background-color 0.2s ease;
+}
+
+#nav a:hover h3, #nav .nav-toggle:hover h3 {
+    background-color: #ddd;
+    width: 100%;
+    padding-left: 5px;
+}

@@ -1,4 +1,5 @@
 import yfinance as yf
+import requests
 from flask import Flask, render_template, request, jsonify
 from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objs as go
@@ -70,6 +71,7 @@ def create_graph(stock_symbol, colorblind_mode):
 #  Dash Home Tabs
 appHome=Dash(__name__, server=server, routes_pathname_prefix="/home/")
 appHome.layout = html.Div([
+    dcc.Location(id="url", refresh=False),
     dcc.Tabs(id="tabs", value="S&P 500", children=[
         dcc.Tab(label=name, value=name) for name in home_tickers.keys()
     ]),
@@ -312,6 +314,33 @@ def stock():
     stock_news = get_stock_news(stock_symbol, count=5)
     ticker_news = get_latest_financial_news()
     return render_template("stock.html", stock_symbol=stock_symbol, stock_news=stock_news, ticker_news=ticker_news) 
+
+
+@server.route('/autocomplete_stock', methods=["GET"])
+def autocomplete_stock():
+    query = request.args.get("query", "").lower()
+    suggestions = []
+
+    if not query:
+        return jsonify(suggestions)
+
+    try:
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        }
+        response = requests.get(f"https://query1.finance.yahoo.com/v1/finance/search?q={query}", headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            for stock in data.get("quotes", [])[:10]:  # limit to 10 suggestions
+                name = stock.get("shortname", stock.get("symbol"))
+                symbol = stock.get("symbol")
+                if name and symbol:
+                    suggestions.append({"name": name, "symbol": symbol})
+    except Exception as e:
+        print(f"Error fetching autocomplete: {e}")
+
+    return jsonify(suggestions)
+
 
 
 # Run Flask + Dash

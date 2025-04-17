@@ -24,7 +24,7 @@ body {
                          "information information      stats      stats";
     grid-template-columns: 55% 15% 15% 15%;
     grid-template-rows: 10% 3% 5% 5% 50% 10%;
-
+    transition: all 0.3s ease;
 }
 
 body.dark-mode {
@@ -230,20 +230,41 @@ body.dark-mode #menu-toggle {
     background-color: #ddd;
 }
 
+#search {
+    grid-area: search;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#search-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    max-width: 400px; 
+}
+
 .suggestions-box {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
     background: white;
     border: 1px solid #ccc;
+    z-index: 10000;
+    display: none;
+    font-size: 16px;
+    box-sizing: border-box;
     max-height: 200px;
     overflow-y: auto;
-    width: 300px;
-    box-sizing: border-box;
-    font-size: 16px;
-    display: none;
-    position: absolute;
-    top: 100%;
-    left: 0;
-    z-index: 1000;
+    border-radius: 4px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
 }
+
 
 .suggestion {
     padding: 8px;
