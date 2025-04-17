@@ -10,6 +10,7 @@ body {
                   "nav oad  load  load";
     grid-template-rows: 10% 10% 50% 20%;
     grid-template-columns:auto;
+    transition: all 0.3s ease;
 
     /* For Light Mode: */
     background-color: white;
@@ -20,10 +21,11 @@ body {
     color: #F9F5ED; */
 }
 
-body.dark-mode {
+html.dark-mode, body.dark-mode {
     background-color: #1E054D;
     color: #e0e0e0;
 }
+
 
 body.nav-hidden {
     --nav-width: 0%;
@@ -189,24 +191,3 @@ body.dark-mode #menu-toggle {
     padding: 10px;
 }
 
-#nav a, #nav .nav-toggle {
-    width: 100%;
-    text-decoration: none;
-    padding: 10px;
-    margin: 5px 0;
-    cursor: pointer;
-    background-color: transparent;
-    border: none;
-}
-
-#nav a h3, #nav .nav-toggle h3 {
-    margin: 0;
-    color: #101935;
-    transition: background-color 0.2s ease;
-}
-
-#nav a:hover h3, #nav .nav-toggle:hover h3 {
-    background-color: #ddd;
-    width: 100%;
-    padding-left: 5px;
-}
