@@ -4,7 +4,7 @@ from flask import Flask, render_template, request, jsonify
 from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objs as go
 from urllib.parse import parse_qs
-from reccomendationsys_update1 import get_company_info, build_feature_matrix, recommend_stocks, get_tickers_from_finviz
+from Recommendation import get_company_info, build_feature_matrix, recommend_stocks, get_tickers_from_finviz
 
 # Initialize Flask
 server = Flask(__name__)
@@ -80,9 +80,9 @@ appHome.layout = html.Div([
 @appHome.callback(
    Output("tabs-content", "children"),
     Input("tabs", "value"),
-    Input("url", "search")
-    
+    Input("url", "search") 
 )
+
 def update_graph(selected_tab, search):
     # Default time range
     time_range = "1d"
@@ -222,7 +222,25 @@ def update_graph(n, search): #added from owen
     if data.empty or "currentPrice" not in stock_info:
         return go.Figure()
 
-    line_color, title = determine_color(stock_symbol)
+    # line_color, title = determine_color(stock_symbol)
+
+    # ADDED FROM ACCESSIBILITY 
+    current_price = stock_info.get("currentPrice", data["Close"].iloc[-1])
+    prev_close = stock_info.get("previousClose", data["Close"].iloc[0])
+
+    # Calculate price change and percentage
+    price_change = current_price - prev_close
+    percent_change = (price_change / prev_close) * 100
+
+    # Determine line color
+    line_color = "green" if price_change > 0 else "red"
+    sign = "+" if price_change > 0 else ""
+
+    title = f"""
+    {stock_info.get('shortName', stock_symbol)} <br>
+    ${current_price:.2f} <span style='color:{line_color};'> <br>
+    {sign}${price_change:.2f} ({sign}{percent_change:.2f}%) Today</span>
+    """
 
     figure = go.Figure(data=[go.Scatter(
         x=data.index,
@@ -292,9 +310,13 @@ def load_more_news():
 @server.route('/stock', methods=["GET", "POST"])
 def stock():
     stock_symbol = request.args.get("stock", "^GSPC").upper()
-    stock_news = get_stock_news(stock_symbol, count=5)
-    ticker_news = get_latest_financial_news()
-    return render_template("stock.html", stock_symbol=stock_symbol, stock_news=stock_news, ticker_news=ticker_news) 
+    stock_overview = None
+    if stock_symbol:
+        stock_overview = get_stock_overview(stock_symbol)
+        stock_about = get_stock_about(stock_symbol)
+        trending_stocks = get_trending_stocks()
+        similar_stocks = get_similar_stocks(stock_symbol) # Get similar stocks for the given stock symbol
+    return render_template("stock.html", stock_symbol=stock_symbol, stock_overview=stock_overview, stock_about=stock_about, trending_stocks=trending_stocks,similar_stocks=similar_stocks)
 
 
 # Run Flask + Dash
