@@ -24,7 +24,7 @@ def fetch_stock_data(ticker, pd="1d"):
     df = stock.history(period=pd, interval=intervalsForPeriods[pd])
     return df
 
-def determine_color(stock_symbol, colorblind_mode="False"):
+def determine_color(stock_symbol):
     stock = yf.Ticker(stock_symbol)
     data = fetch_stock_data(stock_symbol)
     current_price = stock.info.get("currentPrice", data["Close"].iloc[-1])
@@ -35,10 +35,7 @@ def determine_color(stock_symbol, colorblind_mode="False"):
     percent_change = (price_change / prev_close) * 100
 
     # Determine line color
-    if colorblind_mode:
-        line_color = "blue" if price_change > 0 else "orange"
-    else:
-        line_color = "green" if price_change > 0 else "red"
+    line_color = "green" if price_change > 0 else "red"
     sign = "+" if price_change > 0 else ""
     title = f"""
     {stock.info.get('shortName', stock_symbol)} <br>
@@ -92,6 +89,7 @@ def update_graph(selected_tab, search):
     time_range = "1d"
     if search:
         query = parse_qs(search.lstrip("?"))
+        print("Query:", query)
         time_range = query.get("time", ["1d"])[0]
         
     df = fetch_stock_data(home_tickers[selected_tab], time_range)
@@ -147,6 +145,7 @@ def get_stock_news(stock_symbol, count=5):
         print(f"Stock News Error: {e}")
         return []
 
+
 def get_latest_financial_news(count=5):
     try:
         search_result = yf.Search("Financial Market", news_count=count)
@@ -161,9 +160,6 @@ def get_latest_financial_news(count=5):
         return []
     
 
-        return []
-
-# json {
 #     "name" : "Raham",
 #     "Array": "1,2,3.4.3"
 # }
@@ -195,7 +191,7 @@ def update_graph(n, search): #added from owen
     if search:
         query = parse_qs(search.lstrip("?"))
         stock_symbol = query.get("stock", ["^GSPC"])[0]
-        time_range = query.get("time", ["1d"])[0]
+        time_range = query.get("time", ["1d"])[0].lower()
 
     data= fetch_stock_data(stock_symbol, time_range)
     stock = yf.Ticker(stock_symbol)
@@ -220,8 +216,6 @@ def update_graph(n, search): #added from owen
     ${current_price:.2f} <span style='color:{line_color};'> <br>
     {sign}${price_change:.2f} ({sign}{percent_change:.2f}%) Today</span>
     """
-    line_color, title = determine_color(stock_symbol)
-
 
     figure = go.Figure(data=[go.Scatter(
         x=data.index,
@@ -251,7 +245,8 @@ def update_graph(n, search): #added from owen
 @server.route("/", methods=["GET"])
 def home():
     #stock_symbol = request.args.get("stock", "^GSPC")
-    return render_template("home.html")
+    trending_stocks = get_trending_stocks()
+    return render_template("home.html", trending_stocks=trending_stocks)
 
 
 # 🔹 News Page Route
