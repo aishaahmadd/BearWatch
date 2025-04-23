@@ -6,8 +6,8 @@ body {
 
 
     /* For Light Mode: */
-    background-color: #F9F5ED;
-    color: #4e4b9f;
+    background-color: white;
+    color: black;
 
 
     /* For Dark Mode: */
@@ -16,15 +16,15 @@ body {
 
     /* Grid Layout */
     display: grid;
-    grid-template-areas: 
-        "top            top             top             top                 top"
-        "title          nav             nav             nav                 nav"
-        "buttons        buttons         buttons         buttons             buttons"
-        "graph          graph           graph           related-stocks      trending"
-        "graph          graph           graph           related-stocks      trending"
-        "stats          stats           stats           stats               stats"
-        "information    information     information     information         information"
-        "headlines      headlines       stock-headline  stock-headline     stock-headline";
+    grid-template-areas: "top         top              search     search"
+                         "newsTicker  newsTicker       newsTicker newsTicker"
+                         "title       related-stocks   trending   headlines"
+                         "buttons     related-stocks   trending   headlines"
+                         "graph       related-stocks   trending   headliens"
+                         "information information      stats      stats";
+    grid-template-columns: 55% 15% 15% 15%;
+    grid-template-rows: 10% 3% 5% 5% 50% 10%;
+
 }
 
 body.dark-mode {
@@ -49,27 +49,40 @@ body.dark-mode {
 [id="logo"]{
     grid-area: top; 
     text-align: left;
-    margin: auto; 
-    max-width: 200px;
-    margin-bottom: 0px;  
+}
+
+#logo img {
+    width:30%;
+    height:auto;
+    margin-bottom: 10%;
+}
+
+[id = "search"]{
+    grid-area: search;
+    text-align: right;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#search input{
+    border-radius: 10px;
+    border:#F2FDFF 1px;
+    text-align:left;
+}
+
+#search button{
+    font-size: 12px;
+    padding:6px;
+    font-size: 16px;
+}
+
+[id="news-ticker"]{
+    grid-area:newsTicker;
 }
 
 [id="stock-header"]{
     grid-area: title;
     /* text-align: center; */
-}
-
-[id="search"]{
-    grid-area: nav;
-    text-align: right;
-    padding: 0px;
-    /* font-size: 16px; */
-}
-
-
-[id="submit-button"]{
-    padding: 0px;
-    /* font-size: 16px; */
 }
 
 [id="graph"]{
@@ -82,16 +95,11 @@ body.dark-mode {
     text-align: left;
 }
 
-[id="headlines"]{
-    grid-area: headlines;
-    /* text-align: center; */
-}
-
 [id="trending"]{
     grid-area: trending;
     /* text-align: center; */
 }
-[id="related-stocks"]{
+[id="recommended-stocks"]{
     grid-area: related-stocks;
     /* text-align: center; */
 }
@@ -113,4 +121,57 @@ body.dark-mode {
 
 #stock-header{
     color: #101935;
+}
+
+/* 🔄 Financial News Ticker Styling */
+.ticker-container {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    box-sizing: border-box;
+    border-top: 1px solid #ccc;
+    border-bottom: 1px solid #ccc;
+    padding: 10px 0;
+    background-color: #f0f0f0;
+    margin-top: 10px;
+    grid-column: 1 / -1; /* Spans the full width */
+}
+
+
+.ticker {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-left 30s linear infinite;
+}
+
+
+.ticker a {
+    display: inline-block;
+    padding: 0 40px;
+    color: #4e4b9f;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+
+.ticker a:hover {
+    text-decoration: underline;
+}
+
+button{
+    font-family: 'Times New Roman', Times, serif;
+    background-color:#F2FDFF;
+    color:black;
+    border-color: black;
+    padding: 10px;
+    float:center;
+}
+
+@keyframes scroll-left {
+    0% {
+        transform: translateX(100%);
+    }
+    100% {
+        transform: translateX(-100%);
+    }
 }

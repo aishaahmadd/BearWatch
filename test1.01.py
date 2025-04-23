@@ -89,10 +89,11 @@ def update_graph(selected_tab, search):
     time_range = "1d"
     if search:
         query = parse_qs(search.lstrip("?"))
-        print("Query:", query)
-        time_range = query.get("time", ["1d"])[0]
         
-    df = fetch_stock_data(home_tickers[selected_tab], time_range)
+        time_range = query.get("time", ["1d"])[0]
+    ticker = home_tickers[selected_tab]
+        
+    df = fetch_stock_data(ticker, time_range)
     line_color, title = determine_color(home_tickers[selected_tab])
     fig = go.Figure()
     fig.add_trace(

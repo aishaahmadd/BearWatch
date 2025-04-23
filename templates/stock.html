@@ -179,19 +179,36 @@
         </div>
 
 
-        <!--Stats-->
-        <div id = "stats">
+        <div id="stats">
             <h2>About {{ stock_symbol }}</h2>
+          
             {% if stock_about %}
+              {# Check if the text ends with “[Read More]” #}
+              {% if "[Read more]" in stock_about %}
+                {# Split into the description and the marker #}
+                {% set parts = stock_about.split('[Read more]') %}
+                <p>
+                  {{ parts[0] }}{# everything before “[Read More]” #}
+                  <a href="https://stockanalysis.com/stocks/{{ stock_symbol|lower }}/company/"
+                     target="_blank"
+                     rel="noopener">
+                    [Read More]
+                  </a>
+                </p>
+              {% else %}
+                {# Fallback: no marker found, just print the text #}
                 <p>{{ stock_about }}</p>
+              {% endif %}
+          
             {% else %}
-                {% if stock_symbol %}
-                    <p>No about information found for {{ stock_symbol }}.</p>
-                {% else %}
-                    <p>Please enter a stock symbol to view its information.</p>
-                {% endif %}
+              {% if stock_symbol %}
+                <p>No about information found for {{ stock_symbol }}.</p>
+              {% else %}
+                <p>Please enter a stock symbol to view its information.</p>
+              {% endif %}
             {% endif %}
-        </div>
+          </div>
+          
         <!--INFO-->
         <div id="information">
             <h2>Stock Overview</h2>
@@ -318,3 +335,4 @@
         
     </body>
 </html>
+
