@@ -7,8 +7,8 @@ body {
     grid-template:"nav logo  logo  search"
                   "nav news  news  news"
                   "nav grid  grid  grid"
-                  "nav oad  load  load";
-    grid-template-rows: 10% 10% 50% 20%;
+                  "nav load  load  load";
+    grid-template-rows: 10% 10% auto auto;
     grid-template-columns:auto;
 
     /* For Light Mode: */
@@ -54,7 +54,14 @@ body.nav-hidden #nav {
 #newsHeadline h2 {
     font-size: 28px;
     margin-bottom: 20px;
-     text-align: left;
+    margin-right:50px;
+}
+
+#newsHeadline {
+    grid-area: news;
+    text-align: left;
+    padding: 10px;
+    font-size: 16px;
 }
 
 #search {
