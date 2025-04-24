@@ -127,7 +127,8 @@ def get_stock_news(stock_symbol, count=5):
             return []
         return [{
             "title": article.get("title", "No Title"),
-            "link": article.get("link", "#")
+            "link": article.get("link", "#"),
+            "image": article.get("thumbnail", {}).get("resolutions", [{}])[0].get("url", "https://via.placeholder.com/70")
         } for article in search_result.news[:count]]
     except Exception as e:
         print(f"Stock News Error: {e}")
