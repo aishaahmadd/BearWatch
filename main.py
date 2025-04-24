@@ -132,7 +132,19 @@ def get_stock_news(stock_symbol, count=5):
     except Exception as e:
         print(f"Stock News Error: {e}")
         return []
-
+def get_main_news(query="Stock Market", count=4):
+    try:
+        search_result = yf.Search(query, news_count=count)
+        if not search_result or not search_result.news:
+            return []
+        return [{
+            "title": article.get("title", "No Title"),
+            "link": article.get("link", "#"),
+            "image": article.get("thumbnail", {}).get("resolutions", [{}])[0].get("url", "https://via.placeholder.com/70")
+        } for article in search_result.news[:count]]
+    except Exception as e:
+        print(f"Stock News Error: {e}")
+        return []
 
 def get_latest_financial_news(count=5):
     try:
@@ -265,7 +277,8 @@ def update_stock_recommendation(search):
 @server.route("/", methods=["GET"])
 def home():
     #stock_symbol = request.args.get("stock", "^GSPC")
-    return render_template("home.html")
+    home_news = get_main_news(query="Stock Market", count=4)
+    return render_template("home.html", home_news=home_news)
 
 
 # 🔹 News Page Route
