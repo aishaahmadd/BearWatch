@@ -20,6 +20,19 @@ body.nav-hidden {
     --nav-width: 0%;
 }
 
+[id="nav"] {
+    grid-area: nav;
+    overflow: hidden;
+    background-color: #4ebbff;
+    transition: all 0.3s ease;
+}
+
+body.nav-hidden #nav {
+    width: 0;
+    padding: 0;
+    opacity: 0;
+}
+
 body.dark-mode {
     background-color: #1E054D;
     color: #e0e0e0;
@@ -74,7 +87,7 @@ a {
     color: #4e4b9f;
 }
 
-#search {
+[id = "search"]{
     grid-area: search;
     text-align: left;
     padding: 10px;
@@ -89,9 +102,9 @@ a {
     padding: 5px;
 }
 
-#search1 {
-    grid-area: search1;
-    text-align: left;
+[id="search1"]{
+    grid-area:search1;
+    text-align:left;
     padding: 10px;
     font-size: 16px;
 }
@@ -135,4 +148,76 @@ a {
 #graph {
     grid-area: graph;
     text-align: center;
+}
+
+[id = "headlines"]{
+    grid-area: headlines;
+    text-align: center;
+}
+
+[id = "trending"]{
+    grid-area: trending;
+    text-align: center;
+}
+
+[id = "time-buttons"]{
+    grid-area: time;
+    text-align: right;
+}
+#time-buttons button{
+    border-radius: 0px;
+    float:right;
+    padding:10px;
+}
+
+[id = "info"]{
+    grid-area: info;
+    text-align: left;
+    padding-left:30px;
+}
+
+[id = "overview"]{
+    grid-area: overview;
+    text-align: left;
+    padding-left:30px;
+}
+
+button{
+    font-family: 'Times New Roman', Times, serif;
+    background-color:white;
+    color:black;
+    border-color: black;
+    border-radius: 5px;
+    padding: 10px;
+}
+.headline-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 10px;
+    padding: 10px;
+}
+
+.headline-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.headline-img {
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+    margin-right: 10px;
+}
+
+.headline-title {
+    color: #4e4b9f;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.headline-title:hover {
+    text-decoration: underline;
 }
