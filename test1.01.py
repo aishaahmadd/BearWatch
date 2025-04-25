@@ -1,5 +1,6 @@
 import yfinance as yf
 import dash
+import requests
 from flask import Flask, render_template, request, jsonify
 from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objs as go
@@ -98,10 +99,7 @@ def update_graph(selected_tab, search):
     if search:
         query = parse_qs(search.lstrip("?"))
         time_range = query.get("time", ["1d"])[0]
-        if query.get("colorblind","false") == "true":
-            colorblind_mode = True
-        else:
-            colorblind_mode = False
+        colorblind_mode = query.get("colorblind", ["false"])[0] == "true"
     
     df = fetch_stock_data(home_tickers[selected_tab], time_range)
     line_color, title = determine_color(home_tickers[selected_tab], colorblind_mode)
@@ -217,10 +215,7 @@ def update_graph(n, search): #added from owen
         query = parse_qs(search.lstrip("?"))
         stock_symbol = query.get("stock", ["^GSPC"])[0]
         time_range = query.get("time", ["1d"])[0]
-        if query.get("colorblind","false") == "true":
-            colorblind_mode = True
-        else:
-            colorblind_mode = False
+        colorblind_mode = query.get("colorblind", ["false"])[0] == "true"
 
     data = fetch_stock_data(stock_symbol, time_range)
     stock = yf.Ticker(stock_symbol)

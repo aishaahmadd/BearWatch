@@ -6,10 +6,10 @@ body {
 
     display: grid;
     grid-template:
-        "nav logo  logo  search"
-        "nav news  news  news"
-        "nav grid  grid  grid"
-        "nav oad  load  load";
+        "logo  logo  search"
+        "news  news  news"
+        "grid  grid  grid"
+        "load  load  load";
     grid-template-rows: 10% 10% auto auto;
     grid-template-columns: auto;
     transition: all 0.3s ease;
@@ -23,31 +23,49 @@ body.dark-mode {
     color: #e0e0e0;
 }
 
-body.dark-mode #nav {
-    background-color: #2A1C5A;
-}
-
-body.nav-hidden {
-    --nav-width: 0%;
-}
-
-[id="nav"] {
-    grid-area: nav;
-    overflow: hidden;
-    background-color: #f0f0f0;
-    transition: all 0.3s ease;
-    /* z-index: 1;
+#logo {
+    grid-area: logo;
+    text-align: left;
     position: relative;
+    cursor: pointer;
+}
+
+#logo img {
+    width: 30%;
+    height: auto;
+    margin-bottom: 10%;
+}
+
+
+#nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 30%;
+    margin-top: 8px;
+    background-color: #f0f0f0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 10px; */
+    z-index: 1000;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top;
+    pointer-events: auto;
 }
 
-body.nav-hidden #nav {
-    width: 0;
-    padding: 0;
+#nav.hidden {
     opacity: 0;
+    transform: scaleY(0);
+    pointer-events: none;
+}
+
+body.dark-mode #nav {
+    background-color: #2A1C5A;
 }
 
 #nav a h3 {
@@ -57,37 +75,12 @@ body.nav-hidden #nav {
     text-decoration: none;
 }
 
+#nav a h3:hover {
+    text-decoration: underline;
+}
+
 body.dark-mode #nav a h3 {
     color: #e0e0e0;
-}
-
-a {
-    text-decoration: none;
-    color: #101935;
-}
-
-[id="logo"] {
-    grid-area: logo;
-    text-align: left;
-}
-
-#logo img {
-    width: 30%;
-    height: auto;
-    margin-bottom: 10%;
-}
-
-#newsHeadline h2 {
-    font-size: 28px;
-    margin-bottom: 20px;
-    margin-right:50px;
-}
-
-#newsHeadline {
-    grid-area: news;
-    text-align: left;
-    padding: 10px;
-    font-size: 16px;
 }
 
 #search {
@@ -109,6 +102,19 @@ a {
     border-color: black;
     padding: 10px;
     float: center;
+}
+
+#newsHeadline {
+    grid-area: news;
+    text-align: left;
+    padding: 10px;
+    font-size: 16px;
+}
+
+#newsHeadline h2 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    margin-right:50px;
 }
 
 #newsGrid {
@@ -161,55 +167,3 @@ a {
     border: black 1px;
 }
 
-#menu-container {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 50px;
-}
-
-#menu-toggle {
-    font-size: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-body.dark-mode #menu-toggle {
-    color: white;
-}
-
-#menu {
-    position: absolute;
-    top: 50px;
-    left: 0;
-    width: 180px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-}
-
-#menu.hidden {
-    display: none;
-}
-
-#menu button {
-    margin: 5px 0;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #eee;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    text-align: center;
-}
-
-#menu button:hover {
-    background-color: #ddd;
-}

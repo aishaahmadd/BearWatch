@@ -5,66 +5,23 @@
     <meta name="viewport" content="width=device-width">
     <title>Stock News - BearWatch</title>
     <link href="{{ url_for('static', filename='news.css') }}" rel="stylesheet" type="text/css"/>
-    
-    
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            let offset = 8;  // start at 8 because first 8 are already rendered
-
-
-            document.getElementById("loadMoreButton").addEventListener("click", function () {
-                const queryInput = document.getElementById("query");
-                const query = queryInput ? queryInput.value : "Stock Market";
-
-
-                fetch(`/load_more_news?query=${encodeURIComponent(query)}&offset=${offset}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const newsGrid = document.getElementById('newsGrid');
-                        data.forEach(article => {
-                            let newsItem = document.createElement('div');
-                            newsItem.className = 'news-item';
-                            newsItem.innerHTML = `
-                                <img src="${article.image}" alt="News Image">
-                                <a href="${article.link}" target="_blank">${article.title}</a>`;
-                            newsGrid.appendChild(newsItem);
-                        });
-
-
-                        offset += data.length;
-                    })
-                    .catch(error => {
-                        console.error("Failed to load more news:", error);
-                    });
-            });
-        });
-
-        window.addEventListener("DOMContentLoaded", () => {
-                const logo = document.getElementById("BearLogo");
-                logo.addEventListener("click", () => {
-                    document.body.classList.toggle("nav-hidden");
-                });
-            });
-    </script>
 </head>
 <body>
 
     <!-- LOGO -->
     <div id="logo">
-        <img id="BearLogo" src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
-    </div>
-
-    <div id="nav">
-        <a href="/"><h3>Home</h3></a>
-        <a href="news.html"><h3>News</h3></a>
-        <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
+        <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+        <div id="nav" class="hidden">
+            <a href="/"><h3>Home</h3></a>
+            <a href="news.html"><h3>News</h3></a>
+            <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
+        </div>
     </div>
 
     <!-- HEADLINE -->
     <div id="newsHeadline">
         <h2>Latest Stock Market News</h2>
     </div>
-
 
     <!-- SEARCH FORM -->
     <div id="search">
@@ -73,7 +30,6 @@
             <button id="submit-button" type="submit">Search</button>
         </form>
     </div>
-
 
     <!-- NEWS GRID -->
     <div id="newsGrid">
@@ -87,7 +43,6 @@
         {% endfor %}
     </div>
 
-
     <!-- LOAD MORE BUTTON -->
     <div id="loadMoreContainer">
         <button id="loadMoreButton">Load More</button>
@@ -95,12 +50,14 @@
 
     <script>
         window.addEventListener("DOMContentLoaded", () => {
-            const logo = document.getElementById("BearLogo");
-            if (logo) {
-                logo.addEventListener("click", () => {
-                    document.body.classList.toggle("nav-hidden");
-                });
-            }
+            const logoDiv = document.getElementById("logo");
+            const logoImage = logoDiv.querySelector("img");
+            const nav = document.getElementById("nav");
+
+            logoImage.addEventListener("click", (e) => {
+                e.stopPropagation();
+                nav.classList.toggle("hidden");
+            });
 
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.classList.add('dark-mode');

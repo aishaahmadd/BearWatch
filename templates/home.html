@@ -21,25 +21,29 @@
         <link href="{{ url_for('static', filename='home.css') }}" rel="stylesheet" type="text/css"/>
         <script>
             window.addEventListener("DOMContentLoaded", () => {
-                const logo = document.getElementById("BearLogo");
-                logo.addEventListener("click", () => {
-                    document.body.classList.toggle("nav-hidden");
+                const logo = document.getElementById("logo");
+                const nav = document.getElementById("nav");
+                const logoImage = logo.querySelector("img"); 
+
+                logoImage.addEventListener("click", (e) => {
+                    e.stopPropagation(); 
+                    nav.classList.toggle("hidden");
                 });
             });
         </script>
     </head>
 
     <body>
-        <div id="nav">
-            <a href="/"><h3>Home</h3></a>
-            <a href="news.html"><h3>News</h3></a>
-            <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
-            <a href="#" id="colorblind-button"><h3>Colorblind Mode</h3></a>
-        </div>
 
         <!--LOGO-->
         <div id = "logo">
-            <img id="BearLogo" src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+            <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+            <div id="nav" class="hidden">
+                <a href="/"><h3>Home</h3></a>
+                <a href="news.html"><h3>News</h3></a>
+                <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
+                <a href="#" id="colorblind-button"><h3>Colorblind Mode</h3></a>
+            </div>
         </div>
 
         <!-- DARK MODE BUTTON
@@ -91,7 +95,7 @@
             <div id="trending-container">
                 {% for stock in trending_stocks %}
                     <button type="button" class="trending-stock-button" 
-                            onclick="window.location.href= '{{ url_for('stock') }}?stock={{ stock.ticker }}'"
+                            onclick="window.location.href='/stock?stock={{ stock.ticker }}'"
                             style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
                         <!-- Left side: Ticker and Price -->
                         <div class="stock-info" style="flex-grow: 1;">

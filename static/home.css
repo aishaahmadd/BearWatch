@@ -7,79 +7,85 @@ body {
     color: #4e4b9f;
     display:grid;
     grid-template:
-        "nav  top        search    search       search1"
-        "nav  headlines  graph     graph        trending"
-        "nav  headlines  time      time         trending"
-        "nav  info       info      overview     overview";
-    grid-template-columns: var(--nav-width, 10%) 20% 30% 30% 20%;
+        "top        search    search       search1"
+        "headlines  graph     graph        trending"
+        "headlines  time      time         trending"
+        "info       info      overview     overview";
+    grid-template-columns: 20% 30% 30% 20%;
     grid-template-rows: 10% 60% 5% 10%;
     transition: all 0.3s ease;
 }
 
-body.nav-hidden {
-    --nav-width: 0%;
-}
-
-[id="nav"] {
-    grid-area: nav;
-    overflow: hidden;
-    background-color: #4ebbff;
-    transition: all 0.3s ease;
-}
-
-body.nav-hidden #nav {
-    width: 0;
-    padding: 0;
-    opacity: 0;
-}
 
 body.dark-mode {
     background-color: #1E054D;
     color: #e0e0e0;
 }
 
-body.dark-mode #nav {
-    background-color: #2A1C5A;
-}
-
 #nav {
-    grid-area: nav;
-    overflow: hidden;
-    background-color: #f0f0f0;
-    transition: all 0.3s ease;
-    z-index: 1;
-    position: relative;
+    position: absolute;
+    top: 100%;
+    margin-top: 8px;
+    left: 0;
+    width: 75%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+    padding: 10px;
     display: flex;
     flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
+    z-index: 1000;
+    min-width: 160px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 1;              
+    transform: scaleY(1);     
+    transform-origin: top;
+    pointer-events: auto;
 }
 
-body.nav-hidden #nav {
-    width: 0;
-    padding: 0;
+#nav.hidden {
     opacity: 0;
+    transform: scaleY(0);
+    pointer-events: none;
+}
+
+
+
+body.dark-mode #nav {
+    background-color: #2A1C5A;
+    border-color: #444;
 }
 
 #nav a h3 {
     margin: 10px 0;
-    font-family: 'Times New Roman', Times, serif;
     color: #4e4b9f;
     text-decoration: none;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+    text-align: left;
 }
+
+#nav a h3:hover {
+    text-decoration: underline;
+}
+
 body.dark-mode #nav a h3 {
     color: #e0e0e0;
 }
 
-[id="logo"]{
-    grid-area: top; 
+#logo {
+    position: relative;
+    grid-area: top;
     text-align: left;
+    cursor: pointer;
 }
 
 #logo img {
     width: 75%;
     height: auto;
     margin-bottom: 10%;
+    cursor: pointer;
 }
 
 a {
@@ -87,7 +93,7 @@ a {
     color: #4e4b9f;
 }
 
-[id = "search"]{
+#search {
     grid-area: search;
     text-align: left;
     padding: 10px;
@@ -102,7 +108,7 @@ a {
     padding: 5px;
 }
 
-[id="search1"]{
+#search1 {
     grid-area:search1;
     text-align:left;
     padding: 10px;
@@ -150,33 +156,34 @@ a {
     text-align: center;
 }
 
-[id = "headlines"]{
+#headlines {
     grid-area: headlines;
     text-align: center;
 }
 
-[id = "trending"]{
+#trending {
     grid-area: trending;
     text-align: center;
 }
 
-[id = "time-buttons"]{
+#time-buttons {
     grid-area: time;
     text-align: right;
 }
+
 #time-buttons button{
     border-radius: 0px;
     float:right;
     padding:10px;
 }
 
-[id = "info"]{
+#info {
     grid-area: info;
     text-align: left;
     padding-left:30px;
 }
 
-[id = "overview"]{
+#overview {
     grid-area: overview;
     text-align: left;
     padding-left:30px;
