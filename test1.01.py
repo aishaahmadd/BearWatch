@@ -144,7 +144,22 @@ def get_stock_news(stock_symbol, count=5):
             return []
         return [{
             "title": article.get("title", "No Title"),
-            "link": article.get("link", "#")
+            "link": article.get("link", "#"),
+            "image": article.get("thumbnail", {}).get("resolutions", [{}])[0].get("url", "https://via.placeholder.com/70")
+        } for article in search_result.news[:count]]
+    except Exception as e:
+        print(f"Stock News Error: {e}")
+        return []
+    
+def get_main_news(query="Stock Market", count=4):
+    try:
+        search_result = yf.Search(query, news_count=count)
+        if not search_result or not search_result.news:
+            return []
+        return [{
+            "title": article.get("title", "No Title"),
+            "link": article.get("link", "#"),
+            "image": article.get("thumbnail", {}).get("resolutions", [{}])[0].get("url", "https://via.placeholder.com/70")
         } for article in search_result.news[:count]]
     except Exception as e:
         print(f"Stock News Error: {e}")
@@ -286,7 +301,8 @@ def update_stock_recommendation(search):
 @server.route("/", methods=["GET"])
 def home():
     #stock_symbol = request.args.get("stock", "^GSPC")
-    return render_template("home.html")
+    home_news = get_main_news(query="Stock Market", count=4)
+    return render_template("home.html", home_news=home_news)
 
 
 # 🔹 News Page Route
@@ -316,7 +332,9 @@ def stock():
         stock_about = get_stock_about(stock_symbol)
         trending_stocks = get_trending_stocks()
         similar_stocks = get_similar_stocks(stock_symbol) # Get similar stocks for the given stock symbol
-    return render_template("stock.html", stock_symbol=stock_symbol, stock_overview=stock_overview, stock_about=stock_about, trending_stocks=trending_stocks,similar_stocks=similar_stocks)
+        stock_news = get_stock_news(stock_symbol, count=5)
+        ticker_news = get_latest_financial_news()
+    return render_template("stock.html", stock_symbol=stock_symbol, stock_overview=stock_overview, stock_about=stock_about, trending_stocks=trending_stocks,similar_stocks=similar_stocks, stock_news=stock_news, ticker_news=ticker_news)
 
 
 # Run Flask + Dash
