@@ -24,7 +24,7 @@ def fetch_stock_data(ticker, pd="1d"):
     df = stock.history(period=pd, interval=intervalsForPeriod[pd])
     return df
 
-def determine_color(stock_symbol):
+def determine_color(stock_symbol, colorblind_mode = False):
     stock = yf.Ticker(stock_symbol)
     data = fetch_stock_data(stock_symbol)
     current_price = stock.info.get("currentPrice", data["Close"].iloc[-1])
@@ -35,7 +35,10 @@ def determine_color(stock_symbol):
     percent_change = (price_change / prev_close) * 100
 
     # Determine line color
-    line_color = "green" if price_change > 0 else "red"
+    if colorblind_mode:
+        line_color = "blue" if price_change > 0 else "orange"  
+    else:
+        line_color = "green" if price_change > 0 else "red"
     sign = "+" if price_change > 0 else ""
     title = f"""
     {stock.info.get('shortName', stock_symbol)} <br>
@@ -45,9 +48,9 @@ def determine_color(stock_symbol):
     return line_color, title
 
 
-def create_graph(stock_symbol):
+def create_graph(stock_symbol, colorblind_mode):
     data = fetch_stock_data(stock_symbol)
-    line_color, title = determine_color(stock_symbol)
+    line_color, title = determine_color(stock_symbol, colorblind_mode)
 
     figure = go.Figure(data=[go.Scatter(
         x=data.index,
@@ -88,15 +91,20 @@ appHome.layout = html.Div([
 
 def update_graph(selected_tab, search):
     # Default time range
+    colorblind_mode = False
     time_range = "1d"
 
     # Parse ?time=1mo
     if search:
         query = parse_qs(search.lstrip("?"))
         time_range = query.get("time", ["1d"])[0]
+        if query.get("colorblind","false") == "true":
+            colorblind_mode = True
+        else:
+            colorblind_mode = False
     
     df = fetch_stock_data(home_tickers[selected_tab], time_range)
-    line_color, title = determine_color(home_tickers[selected_tab])
+    line_color, title = determine_color(home_tickers[selected_tab], colorblind_mode)
     fig = go.Figure()
     fig.add_trace(
         go.Scatter
@@ -183,29 +191,6 @@ def get_latest_financial_news(count=5):
         return []
 
     
-# # 🔹 Fetch Similar Stocks//gotten from owens code
-# def get_similar_stocks(stock_symbol):
-#     try:
-#         input_info = get_company_info(stock_symbol)
-#         sector = input_info['Sector']
-#         market_cap = input_info['Market Cap']
-
-#         if sector != 'N/A':
-#             tickers = get_tickers_from_finviz(sector, market_cap)
-#             if tickers:
-#                 df = build_feature_matrix(tickers)
-#                 return recommend_stocks(stock_symbol, df)
-#     except Exception as e:
-#         print(f"Error fetching similar stocks: {e}")
-#     return []
-
-# json {
-#     "name" : "Raham",
-#     "Array": "1,2,3.4.3"
-# }
-#test routes using postman separately
-#typescript should be calling python routes and should be calling some jyson script we can decode or err codes that we can manipulate the js code
-
 # 🔹 Dash Layout (Stock Chart)
 app.layout = html.Div([
     dcc.Location(id="url", refresh=False),
@@ -232,6 +217,10 @@ def update_graph(n, search): #added from owen
         query = parse_qs(search.lstrip("?"))
         stock_symbol = query.get("stock", ["^GSPC"])[0]
         time_range = query.get("time", ["1d"])[0]
+        if query.get("colorblind","false") == "true":
+            colorblind_mode = True
+        else:
+            colorblind_mode = False
 
     data = fetch_stock_data(stock_symbol, time_range)
     stock = yf.Ticker(stock_symbol)
@@ -251,7 +240,10 @@ def update_graph(n, search): #added from owen
     percent_change = (price_change / prev_close) * 100
 
     # Determine line color
-    line_color = "green" if price_change > 0 else "red"
+    if colorblind_mode:
+        line_color = "blue" if price_change > 0 else "orange"  
+    else:
+        line_color = "green" if price_change > 0 else "red"
     sign = "+" if price_change > 0 else ""
 
     title = f"""
@@ -287,18 +279,6 @@ def update_graph(n, search): #added from owen
     Output("recommended-stocks-container", "style"),
     Input("url", "search")
 )
-# def update_stock_recommendation(search):
-#     if search:
-#         query_params = search.lstrip("?").split("&")
-#         params_dict = dict(param.split("=") for param in query_params if "=" in param)
-#         stock_symbol = params_dict.get("stock", "^GSPC")
-#         if stock_symbol != "^GSPC":
-#             similar_stocks = get_similar_stocks(stock_symbol)
-#             if similar_stocks:
-#                 return [html.Li(stock) for stock in similar_stocks], {"position": "absolute", "bottom": "20px", "left": "20px", "background-color": "#f1f1f1", "padding": "10px", "display": "block"}
-    
-#     return [], {"display": "none"}  # Hide if no valid stock is entered #added from owen
-
 
 # 🔹 Home Route
 @server.route("/", methods=["GET"])
@@ -323,7 +303,7 @@ def news():
 def load_more_news():
     query = request.args.get("query", "Stock Market")
     offset = int(request.args.get("offset", 0))
-    
+
     more_news = get_news(query, count=8, offset=offset)
     return jsonify(more_news)
 
@@ -339,6 +319,31 @@ def stock():
         trending_stocks = get_trending_stocks()
         related_stocks = get_related_stocks(stock_symbol) # Get similar stocks for the given stock symbol
     return render_template("stock.html", stock_symbol=stock_symbol, stock_overview=stock_overview, stock_about=stock_about, trending_stocks=trending_stocks, related_stocks=related_stocks, stock_news=stock_news, ticker_news=ticker_news)
+
+@server.route('/autocomplete_stock', methods=["GET"])
+def autocomplete_stock():
+    query = request.args.get("query", "").lower()
+    suggestions = []
+
+    if not query:
+        return jsonify(suggestions)
+
+    try:
+        headers = {
+            "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+        }
+        response = requests.get(f"https://query1.finance.yahoo.com/v1/finance/search?q={query}", headers=headers)
+        if response.status_code == 200:
+            data = response.json()
+            for stock in data.get("quotes", [])[:10]:  # limit to 10 suggestions
+                name = stock.get("shortname", stock.get("symbol"))
+                symbol = stock.get("symbol")
+                if name and symbol:
+                    suggestions.append({"name": name, "symbol": symbol})
+    except Exception as e:
+        print(f"Error fetching autocomplete: {e}")
+
+    return jsonify(suggestions)
 
 
 # Run Flask + Dash
