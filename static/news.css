@@ -10,7 +10,7 @@ body {
         "nav news  news  news"
         "nav grid  grid  grid"
         "nav oad  load  load";
-    grid-template-rows: 10% 10% 50% 20%;
+    grid-template-rows: 10% 10% auto auto;
     grid-template-columns: auto;
     transition: all 0.3s ease;
     background-color: #F9F5ED;
@@ -31,17 +31,17 @@ body.nav-hidden {
     --nav-width: 0%;
 }
 
-#nav {
+[id="nav"] {
     grid-area: nav;
     overflow: hidden;
     background-color: #f0f0f0;
     transition: all 0.3s ease;
-    z-index: 1;
+    /* z-index: 1;
     position: relative;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    padding: 10px;
+    padding: 10px; */
 }
 
 body.nav-hidden #nav {
@@ -66,7 +66,7 @@ a {
     color: #101935;
 }
 
-#logo {
+[id="logo"] {
     grid-area: logo;
     text-align: left;
 }
@@ -80,7 +80,14 @@ a {
 #newsHeadline h2 {
     font-size: 28px;
     margin-bottom: 20px;
+    margin-right:50px;
+}
+
+#newsHeadline {
+    grid-area: news;
     text-align: left;
+    padding: 10px;
+    font-size: 16px;
 }
 
 #search {
