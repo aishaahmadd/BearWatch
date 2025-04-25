@@ -84,22 +84,46 @@
             </ul>
         </div>
 
-        <!--TRENDING-->
-        <div id = "trending">
-            <h2>Trending</h2>
-            {% if trending_stocks %}
+        <!--TRENDING STOCKS-->
+        <div id="trending">
+        <h2>Trending Stocks</h2>
+        {% if trending_stocks %}
+            <div id="trending-container">
                 {% for stock in trending_stocks %}
-                    <a href="{{ url_for('stock') }}?stock={{ stock }}">
-                        <div class="trend-line" id="row1">
-                            <h2 id="ticker">{{ stock }}</h2>
-                            <p id="cost"></p>
-                            <button id="up-Down">Up</button>
+                    <button type="button" class="trending-stock-button" 
+                            onclick="window.location.href= '{{ url_for('stock') }}?stock={{ stock.ticker }}'"
+                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
+                        <!-- Left side: Ticker and Price -->
+                        <div class="stock-info" style="flex-grow: 1;">
+                            <div class="stock-ticker">
+                                <strong>{{ stock.ticker }}</strong>
+                            </div>
+                            <div class="stock-price">
+                                ${{ "%.2f"|format(stock.price) if stock.price != 'N/A' else 'N/A' }}
+                            </div>
                         </div>
-                    </a>
+                        <!-- Right side: Price Change and Percentage -->
+                        <div class="stock-change-info">
+                            {% if stock.change != 'N/A' %}
+                                {% if stock.change > 0 %}
+                                    <span style="background-color:green; color:white; padding:5px 10px; border-radius:5px;">
+                                        {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                    </span>
+                                {% else %}
+                                    <span style="background-color:red; color:white; padding:5px 10px; border-radius:5px;">
+                                        {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                    </span>
+                                {% endif %}
+                            {% else %}
+                                <span style="padding:5px 10px;">N/A</span>
+                            {% endif %}
+                        </div>
+                    </button>
                 {% endfor %}
-            {% else %}
-                <p>No trending stocks found.</p>
-            {% endif %}
+            </div>
+        {% else %}
+            <p>No trending stocks found.</p>
+        {% endif %}
         </div>
 
         <!--INFO-->
