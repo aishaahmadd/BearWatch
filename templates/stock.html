@@ -118,6 +118,7 @@
             <ul>
                 {% for headline in stock_news %}
                     <li><a href="{{ headline.link }}" target="_blank">{{ headline.title }}</a></li>
+                    <img src="{{ headline.image }}" alt="News Image" class="headline-img">
                 {% endfor %}
             </ul>
         </div>
