@@ -4,7 +4,10 @@ from flask import Flask, render_template, request, jsonify
 from dash import Dash, dcc, html, Input, Output
 import plotly.graph_objs as go
 from urllib.parse import parse_qs
-from Recommendation import get_company_info, build_feature_matrix, recommend_stocks, get_tickers_from_finviz
+from RelatedStocks import get_related_stocks
+from StockOverview import get_stock_overview
+from AboutStock import get_stock_about
+from TrendingStocks import get_trending_stocks
 
 # Initialize Flask
 server = Flask(__name__)
@@ -180,21 +183,21 @@ def get_latest_financial_news(count=5):
         return []
 
     
-# 🔹 Fetch Similar Stocks//gotten from owens code
-def get_similar_stocks(stock_symbol):
-    try:
-        input_info = get_company_info(stock_symbol)
-        sector = input_info['Sector']
-        market_cap = input_info['Market Cap']
+# # 🔹 Fetch Similar Stocks//gotten from owens code
+# def get_similar_stocks(stock_symbol):
+#     try:
+#         input_info = get_company_info(stock_symbol)
+#         sector = input_info['Sector']
+#         market_cap = input_info['Market Cap']
 
-        if sector != 'N/A':
-            tickers = get_tickers_from_finviz(sector, market_cap)
-            if tickers:
-                df = build_feature_matrix(tickers)
-                return recommend_stocks(stock_symbol, df)
-    except Exception as e:
-        print(f"Error fetching similar stocks: {e}")
-    return []
+#         if sector != 'N/A':
+#             tickers = get_tickers_from_finviz(sector, market_cap)
+#             if tickers:
+#                 df = build_feature_matrix(tickers)
+#                 return recommend_stocks(stock_symbol, df)
+#     except Exception as e:
+#         print(f"Error fetching similar stocks: {e}")
+#     return []
 
 # json {
 #     "name" : "Raham",
@@ -284,17 +287,17 @@ def update_graph(n, search): #added from owen
     Output("recommended-stocks-container", "style"),
     Input("url", "search")
 )
-def update_stock_recommendation(search):
-    if search:
-        query_params = search.lstrip("?").split("&")
-        params_dict = dict(param.split("=") for param in query_params if "=" in param)
-        stock_symbol = params_dict.get("stock", "^GSPC")
-        if stock_symbol != "^GSPC":
-            similar_stocks = get_similar_stocks(stock_symbol)
-            if similar_stocks:
-                return [html.Li(stock) for stock in similar_stocks], {"position": "absolute", "bottom": "20px", "left": "20px", "background-color": "#f1f1f1", "padding": "10px", "display": "block"}
+# def update_stock_recommendation(search):
+#     if search:
+#         query_params = search.lstrip("?").split("&")
+#         params_dict = dict(param.split("=") for param in query_params if "=" in param)
+#         stock_symbol = params_dict.get("stock", "^GSPC")
+#         if stock_symbol != "^GSPC":
+#             similar_stocks = get_similar_stocks(stock_symbol)
+#             if similar_stocks:
+#                 return [html.Li(stock) for stock in similar_stocks], {"position": "absolute", "bottom": "20px", "left": "20px", "background-color": "#f1f1f1", "padding": "10px", "display": "block"}
     
-    return [], {"display": "none"}  # Hide if no valid stock is entered #added from owen
+#     return [], {"display": "none"}  # Hide if no valid stock is entered #added from owen
 
 
 # 🔹 Home Route
@@ -302,7 +305,8 @@ def update_stock_recommendation(search):
 def home():
     #stock_symbol = request.args.get("stock", "^GSPC")
     home_news = get_main_news(query="Stock Market", count=4)
-    return render_template("home.html", home_news=home_news)
+    trending_stocks = get_trending_stocks()
+    return render_template("home.html", home_news=home_news, trending_stocks=trending_stocks)
 
 
 # 🔹 News Page Route
@@ -319,6 +323,7 @@ def news():
 def load_more_news():
     query = request.args.get("query", "Stock Market")
     offset = int(request.args.get("offset", 0))
+    
     more_news = get_news(query, count=8, offset=offset)
     return jsonify(more_news)
 
@@ -326,15 +331,14 @@ def load_more_news():
 @server.route('/stock', methods=["GET", "POST"])
 def stock():
     stock_symbol = request.args.get("stock", "^GSPC").upper()
-    stock_overview = None
+    stock_news = get_stock_news(stock_symbol, count=5)
+    ticker_news = get_latest_financial_news()
     if stock_symbol:
         stock_overview = get_stock_overview(stock_symbol)
         stock_about = get_stock_about(stock_symbol)
         trending_stocks = get_trending_stocks()
-        similar_stocks = get_similar_stocks(stock_symbol) # Get similar stocks for the given stock symbol
-        stock_news = get_stock_news(stock_symbol, count=5)
-        ticker_news = get_latest_financial_news()
-    return render_template("stock.html", stock_symbol=stock_symbol, stock_overview=stock_overview, stock_about=stock_about, trending_stocks=trending_stocks,similar_stocks=similar_stocks, stock_news=stock_news, ticker_news=ticker_news)
+        related_stocks = get_related_stocks(stock_symbol) # Get similar stocks for the given stock symbol
+    return render_template("stock.html", stock_symbol=stock_symbol, stock_overview=stock_overview, stock_about=stock_about, trending_stocks=trending_stocks, related_stocks=related_stocks, stock_news=stock_news, ticker_news=ticker_news)
 
 
 # Run Flask + Dash
