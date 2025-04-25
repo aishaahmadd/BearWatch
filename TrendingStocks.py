@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 import requests
+import yfinance as yf
 
 def get_trending_stocks():
     
@@ -19,7 +20,7 @@ def get_trending_stocks():
         # Trending stocks are in table rows <tr> inside <table class="table"> or similar
         table = soup.find('table')
     
-        top_stocks = []
+        trending = []
     
         if table:
             rows = table.find_all('tr')[1:]  # Skip the header row
@@ -30,8 +31,19 @@ def get_trending_stocks():
                     ticker_tag = cols[1].find('a')
                     if ticker_tag:
                         ticker = ticker_tag.text.strip()
-                        top_stocks.append(ticker)
-            return top_stocks
+                        # Fetch price data using yfinance (using yf.Ticker)
+                        ticker_obj = yf.Ticker(ticker)
+                        info = ticker_obj.info
+                        price = info.get("regularMarketPrice", 'N/A')
+                        change = info.get("regularMarketChange", 'N/A')
+                        change_percent = info.get("regularMarketChangePercent", 'N/A')
+                        trending.append({
+                            "ticker": ticker,
+                            "price": price,
+                            "change": change,
+                            "change_percent": change_percent
+                        })
+            return trending
         else:
             print("Trending stocks table not found.")
     else:
