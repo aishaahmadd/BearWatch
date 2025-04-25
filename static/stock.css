@@ -44,7 +44,7 @@ button {
     grid-area: information;
 }
 
-#logo {
+[id="logo"] {
     grid-area: top;
     text-align: left;
 }
