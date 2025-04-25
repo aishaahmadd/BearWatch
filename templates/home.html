@@ -13,23 +13,39 @@
 -->
 
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width">
         <title>BearWatch</title>
         <link href="{{ url_for('static', filename='home.css') }}" rel="stylesheet" type="text/css"/>
+        <script>
+            window.addEventListener("DOMContentLoaded", () => {
+                const logo = document.getElementById("BearLogo");
+                logo.addEventListener("click", () => {
+                    document.body.classList.toggle("nav-hidden");
+                });
+            });
+        </script>
     </head>
+
     <body>
-        <!--LOGO-->
-        <div id = "logo">
-            <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+        <div id="nav">
+            <a href="/"><h3>Home</h3></a>
+            <a href="news.html"><h3>News</h3></a>
+            <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
+            <a href="#" id="colorblind-button"><h3>Colorblind Mode</h3></a>
         </div>
 
-        <!-- DARK MODE BUTTON -->
+        <!--LOGO-->
+        <div id = "logo">
+            <img id="BearLogo" src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+        </div>
+
+        <!-- DARK MODE BUTTON
         <div id="dark-mode-toggle">
             <button id="dark-mode-button">Toggle Dark Mode</button>
-        </div>
+        </div> -->
 
         <!-- COLORBLIND MODE BUTTON -->
         <div id="colorblind-toggle">
@@ -38,9 +54,11 @@
 
         <!--SEARCH-->
         <div id="search">
-            <form action="/stock" method="GET">
-                <input id="stock-input" name="stock" type="text" placeholder="Enter stock symbol" required>
-                <button id="submit-button" type="submit">Submit</button>
+            <form id="search-form" action="/stock" method="GET">
+                <div id="search-wrapper">
+                    <input id="stock-input" name="stock" type="text" placeholder="Enter stock symbol" value="{{ stock_symbol }}" required autocomplete="off">
+                    <div id="suggestions" class="suggestions-box"></div>
+                </div>
             </form>
         </div>
 
@@ -50,24 +68,67 @@
         </div>
 
         <!--TIME BUTTONS-->
-        <div id = "time buttons">
-            <button>1D</button>
-            <button>1W</button>
-            <button>1M</button>
-            <button>3M</button>
-            <button>YTD</button>
-            <button>1Y</button>
-            <button>ALL</button>
+        <div id = "time-buttons">
+            <button data-value="1d">1D</button>
+            <button data-value="5d">1W</button>
+            <button data-value="1mo">1M</button>
+            <button data-value="3mo">3M</button>
+            <button data-value="ytd">YTD</button>
+            <button data-value="1y">1Y</button>
+            <button data-value="max">ALL</button>
         </div>
 
         <!--HEADLINES-->
         <div id = "headlines">
-            <h2><a href ="news.html">Headlines</a></h2>
+            <h2><a href="news.html">Headlines</a></h2>
+            <ul>
+                {% for headline in home_news %}
+                    <li><a href="{{ headline.link }}" target="_blank">{{ headline.title }}</a></li>
+                    <img src="{{ headline.image }}" alt="News Image" class="headline-img">
+                {% endfor %}
+            </ul>
         </div>
 
-        <!--TRENDING-->
-        <div id = "trending">
-            <h2>Trending</h2>
+        <!--TRENDING STOCKS-->
+        <div id="trending">
+        <h2>Trending Stocks</h2>
+        {% if trending_stocks %}
+            <div id="trending-container">
+                {% for stock in trending_stocks %}
+                    <button type="button" class="trending-stock-button" 
+                            onclick="window.location.href= '{{ url_for('stock') }}?stock={{ stock.ticker }}'"
+                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
+                        <!-- Left side: Ticker and Price -->
+                        <div class="stock-info" style="flex-grow: 1;">
+                            <div class="stock-ticker">
+                                <strong>{{ stock.ticker }}</strong>
+                            </div>
+                            <div class="stock-price">
+                                ${{ "%.2f"|format(stock.price) if stock.price != 'N/A' else 'N/A' }}
+                            </div>
+                        </div>
+                        <!-- Right side: Price Change and Percentage -->
+                        <div class="stock-change-info">
+                            {% if stock.change != 'N/A' %}
+                                {% if stock.change > 0 %}
+                                    <span style="background-color:green; color:white; padding:5px 10px; border-radius:5px;">
+                                        {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                    </span>
+                                {% else %}
+                                    <span style="background-color:red; color:white; padding:5px 10px; border-radius:5px;">
+                                        {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                    </span>
+                                {% endif %}
+                            {% else %}
+                                <span style="padding:5px 10px;">N/A</span>
+                            {% endif %}
+                        </div>
+                    </button>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No trending stocks found.</p>
+        {% endif %}
         </div>
 
         <!--INFO-->
@@ -80,11 +141,100 @@
 
         </div>
 
+        <!--SCRIPT TO HANDLE BUTTON CLICKS-->
         <script>
-            const toggleButton = document.getElementById('dark-mode-button');
-        
-            toggleButton.addEventListener('click', () => {
-                document.body.classList.toggle('dark-mode');
+            const iframe = document.getElementById("stock-graph");
+            const buttons = document.querySelectorAll("#time-buttons button");
+
+            buttons.forEach(button => {
+                button.addEventListener("click", () => {
+                    const timeValue = button.getAttribute("data-value");
+
+                    // Preserve other query parameters like colorblind
+                    const url = new URL(iframe.src, window.location.origin);
+                    url.searchParams.set("time", timeValue);
+
+                    iframe.src = url.toString();
+                });
+            });
+        </script>
+
+        <!-- SCRIPT FROM ACCESSIBILITY -->
+        <script>
+            const stockInput = document.getElementById('stock-input');
+            const suggestionsBox = document.getElementById('suggestions');
+            const darkModeLink = document.getElementById('dark-mode-button');
+            const colorblindLink = document.getElementById('colorblind-button');
+
+            if (darkModeLink) {
+                darkModeLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.body.classList.toggle('dark-mode');
+                    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode').toString());
+                });
+            }
+
+            if (colorblindLink) {
+                colorblindLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const iframe = document.getElementById('stock-graph');
+                    const src = new URL(iframe.src);
+                    const currentMode = src.searchParams.get('colorblind') === 'true';
+                    src.searchParams.set('colorblind', (!currentMode).toString());
+                    iframe.src = src.toString();
+                    localStorage.setItem('colorblindMode', (!currentMode).toString());
+                });
+            }
+
+            window.addEventListener('DOMContentLoaded', () => {
+                if (localStorage.getItem('darkMode') === 'true') {
+                    document.body.classList.add('dark-mode');
+                }
+
+                const savedColorblind = localStorage.getItem('colorblindMode');
+                if (savedColorblind === 'true' || savedColorblind === 'false') {
+                    const iframe = document.getElementById('stock-graph');
+                    const src = new URL(iframe.src);
+                    src.searchParams.set('colorblind', savedColorblind);
+                    iframe.src = src.toString();
+                }
+            });
+
+            stockInput.addEventListener('input', async function () {
+                const query = stockInput.value.trim();
+                if (query.length === 0) {
+                    suggestionsBox.style.display = 'none';
+                    suggestionsBox.innerHTML = "";
+                    return;
+                }
+
+                try {
+                    const response = await fetch(`/autocomplete_stock?query=${query}`);
+                    const suggestions = await response.json();
+                    suggestionsBox.innerHTML = "";
+
+                    if (suggestions.length === 0) {
+                        suggestionsBox.style.display = 'none';
+                        return;
+                    }
+
+                    suggestions.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion';
+                        div.textContent = `${item.name} (${item.symbol})`;
+                        div.addEventListener('click', () => {
+                            stockInput.value = item.symbol;
+                            suggestionsBox.style.display = 'none';
+                            suggestionsBox.innerHTML = "";
+                            document.getElementById('search-form').submit();
+                        });
+                        suggestionsBox.appendChild(div);
+                    });
+
+                    suggestionsBox.style.display = 'block';
+                } catch (error) {
+                    console.error('Error fetching suggestions:', error);
+                }
             });
 
             const colorblindBtn = document.getElementById('colorblind-button');
