@@ -71,8 +71,8 @@ body.dark-mode #nav a h3 {
     color: #e0e0e0;
 }
 
-#logo {
-    grid-area: top;
+[id="logo"]{
+    grid-area: top; 
     text-align: left;
 }
 
