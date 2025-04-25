@@ -124,25 +124,150 @@
         </div>
 
 
-        <!--TRENDING-->
-        <div id = "trending">
+        <!--TRENDING STOCKS-->
+        <div id="trending">
             <h2>Trending Stocks</h2>
+            {% if trending_stocks %}
+                <div id="trending-container">
+                    {% for stock in trending_stocks %}
+                        <button type="button" class="trending-stock-button" 
+                                onclick="window.location.href='{{ url_for('stock') }}?stock={{ stock.ticker }}'"
+                                style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
+                            <!-- Left side: Ticker and Price -->
+                            <div class="stock-info" style="flex-grow: 1;">
+                                <div class="stock-ticker">
+                                    <strong>{{ stock.ticker }}</strong>
+                                </div>
+                                <div class="stock-price">
+                                    ${{ "%.2f"|format(stock.price) if stock.price != 'N/A' else 'N/A' }}
+                                </div>
+                            </div>
+                            <!-- Right side: Price Change and Percentage -->
+                            <div class="stock-change-info">
+                                {% if stock.change != 'N/A' %}
+                                    {% if stock.change > 0 %}
+                                        <span style="background-color:green; color:white; padding:5px 10px; border-radius:5px;">
+                                            {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                        </span>
+                                    {% else %}
+                                        <span style="background-color:red; color:white; padding:5px 10px; border-radius:5px;">
+                                            {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <span style="padding:5px 10px;">N/A</span>
+                                {% endif %}
+                            </div>
+                        </button>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No trending stocks found.</p>
+            {% endif %}
         </div>
 
-        <!--Recommended Stocks-->
-        <div id="recommended-stocks">
-            <h2>Recommended Stocks</h2>
-            <ul id="recommended-stocks-list"></ul>
+
+        <!--Related Stocks-->
+        <div id="related-stocks">
+            <h2>Related Stocks</h2>
+            {% if related_stocks %}
+                <div id="related-stocks-container">
+                    {% for stock in related_stocks %}
+                        <button type="button" class="related-stock-button" 
+                                onclick="window.location.href='{{ url_for('stock') }}?stock={{ stock.ticker }}'"
+
+                                style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
+                            <!-- Left side: Ticker and Price -->
+                            <div class="stock-info" style="flex-grow: 1;">
+                                <div class="stock-ticker">
+                                    <strong>{{ stock.ticker }}</strong>
+                                </div>
+                                <div class="stock-price">
+                                    ${{ "%.2f"|format(stock.price) if stock.price != 'N/A' else 'N/A' }}
+                                </div>
+                            </div>
+                            <!-- Right side: Price Change and Percentage -->
+                            <div class="stock-change-info">
+                                {% if stock.change != 'N/A' %}
+                                    {% if stock.change > 0 %}
+                                        <span style="background-color:green; color:white; padding:5px 10px; border-radius:5px;">
+                                            {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                        </span>
+                                    {% else %}
+                                        <span style="background-color:red; color:white; padding:5px 10px; border-radius:5px;">
+                                            {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
+                                        </span>
+                                    {% endif %}
+                                {% else %}
+                                    <span style="padding:5px 10px;">N/A</span>
+                                {% endif %}
+                            </div>
+                        </button>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No related stocks found.</p>
+            {% endif %}
         </div>
+
 
         <!--INFO-->
-        <div id = "information">
+        <div id="information">
             <h2>Stock Overview</h2>
+            {% if stock_overview %}
+                <table id="overview-table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for key, value in stock_overview.items() %}
+                            <tr>
+                                <td><strong>{{ key }}</strong></td>
+                                <td>{{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            {% else %}
+                {% if stock_symbol %}
+                    <p>Could not retrieve overview information for {{ stock_symbol }}.</p>
+                {% else %}
+                    <p>Please enter a stock symbol to view its overview.</p>
+                {% endif %}
+            {% endif %}
         </div>
 
         <!--Stats-->
-        <div id = "stats">
-            <h2>Stock Information</h2>
+        <div id="stats">
+            <h2>About {{ stock_symbol }}</h2>
+          
+            {% if stock_about %}
+              {# Check if the text ends with “[Read More]” #}
+              {% if "[Read more]" in stock_about %}
+                {# Split into the description and the marker #}
+                {% set parts = stock_about.split('[Read more]') %}
+                <p>
+                  {{ parts[0] }}{# everything before “[Read More]” #}
+                  <a href="https://stockanalysis.com/stocks/{{ stock_symbol|lower }}/company/"
+                     target="_blank"
+                     rel="noopener">
+                    [Read More]
+                  </a>
+                </p>
+              {% else %}
+                {# Fallback: no marker found, just print the text #}
+                <p>{{ stock_about }}</p>
+              {% endif %}
+          
+            {% else %}
+              {% if stock_symbol %}
+                <p>No about information found for {{ stock_symbol }}.</p>
+              {% else %}
+                <p>Please enter a stock symbol to view its information.</p>
+              {% endif %}
+            {% endif %}
         </div>
 
         <!--SCRIPT TO HANDLE BUTTON CLICKS-->
