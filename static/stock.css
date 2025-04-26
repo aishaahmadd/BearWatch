@@ -1,30 +1,31 @@
+/* ========== Reset & Layout Adjustments ========== */
+
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+body > div {
+    padding-top: 2px;
+}
+
+/* ========== Base Styles & Grid ========== */
+
 body {
     font-family: 'Times New Roman', Times, serif;
-    /* background-image: url("darkmodebg.png"); Tested out but png doesnt fit full screen :( */
-    padding: 0px;
-    /* text-align: center; */
-
-
-    /* For Light Mode: */
     background-color: white;
     color: black;
-
-
-    /* For Dark Mode: */
-    /* background-color: #1E054D;
-    color: #F9F5ED; */
-
-    /* Grid Layout */
+    padding: 0;
     display: grid;
-    grid-template-areas: "top         top              search     search"
-                         "newsTicker  newsTicker       newsTicker newsTicker"
-                         "title       related-stocks   trending   headlines"
-                         "buttons     related-stocks   trending   headlines"
-                         "graph       related-stocks   trending   headliens"
-                         "information information      stats      stats";
+    grid-template-areas:
+        "top         top              search     search"
+        "newsTicker  related-stocks   trending   headlines"        /* new code: changed row 2 */
+        "title       related-stocks   trending   headlines"
+        "buttons     related-stocks   trending   headlines"
+        "graph       stats           stats      stats"             /* new code: changed row 5 */
+        "information information     information information";      /* new code: changed row 6 */
     grid-template-columns: 55% 15% 15% 15%;
-    grid-template-rows: 10% 3% 5% 5% 50% 10%;
-
+    grid-template-rows: 6% 2% 4% 4% 25% 10%;                       /* new code: updated row heights */
 }
 
 body.dark-mode {
@@ -32,98 +33,78 @@ body.dark-mode {
     color: #e0e0e0;
 }
 
+/* ========== Logo ========== */
 
-/* 1. Logo = div id = "logo"
-2. Stock Name = div id = "stock name"
-3. Search Engine = div id = "search"
-4. Buttons (Trends) = div id = "trend buttons"
-5. Graph = div id = "graph"
-6. Headlines = div id = "headlines"
-7. Trending (has graphs... will have to figure out) = div id = "trending"
-8. Buttons (time) = div id = "time buttons"
-9. Stats = div id = "stats"
-10. Stock Information = div id = "information"
-11. Stock Headlines = div id = "stock headline"
-12. Related Stocks = div id = "related stocks" */
-
-[id="logo"]{
-    grid-area: top; 
+#logo {
+    grid-area: top;
     text-align: left;
 }
 
 #logo img {
-    width:30%;
-    height:auto;
-    margin-bottom: 10%;
+    max-width: 200px;
+    height: auto;
+    margin-bottom: 5px;
 }
 
-[id = "search"]{
+/* ========== Search ========== */
+
+#search {
     grid-area: search;
-    text-align: right;
+    text-align: left;                                              /* new code: changed from right */
     padding: 10px;
     font-size: 16px;
+    grid-column: 2 / -1;                                           /* new code: span columns 2–end */
 }
 
-#search input{
+#search-wrapper {
+    display: flex;                                                 /* new code */
+    align-items: center;                                           /* new code */
+    gap: 5px;                                                      /* new code */
+}
+
+#search input {
+    width: 100%;                                                   /* new code */
     border-radius: 10px;
-    border:#F2FDFF 1px;
-    text-align:left;
-}
-
-#search button{
-    font-size: 12px;
-    padding:6px;
-    font-size: 16px;
-}
-
-[id="news-ticker"]{
-    grid-area:newsTicker;
-}
-
-[id="stock-header"]{
-    grid-area: title;
-    /* text-align: center; */
-}
-
-[id="graph"]{
-    grid-area: graph;
-    /* text-align: center; */
-}
-
-[id="time-buttons"]{
-    grid-area: buttons;
+    border-color: black;                                           /* new code */
     text-align: left;
+    padding: 5px;                                                  /* new code */
 }
 
-[id="trending"]{
-    grid-area: trending;
-    /* text-align: center; */
-}
-[id="recommended-stocks"]{
-    grid-area: related-stocks;
-    /* text-align: center; */
+[id="search1"] {
+    grid-area: search1;                                            /* new code: new area for alternate search */
+    text-align: left;                                              /* new code */
+    padding: 10px;                                                 /* new code */
+    font-size: 16px;                                               /* new code */
 }
 
-[id="information"]{
-    grid-area: information;
-    /* text-align: center; */
+#stock-input {
+    flex: 1;                                                       /* new code */
+    min-width: 0;                                                  /* new code */
 }
 
-[id="stats"]{
-    grid-area: stats;
-    /* text-align: center; */
+.suggestions-box {
+    position: absolute;                                            /* new code */
+    top: 100%;                                                     /* new code */
+    left: 0;                                                       /* new code */
+    width: 100%;                                                   /* new code */
+    background: white;                                             /* new code */
+    border: 1px solid #ccc;                                        /* new code */
+    box-sizing: border-box;                                        /* new code */
+    z-index: 10;                                                   /* new code */
 }
 
-#logo img {
-    max-width: 400px;
-    margin-bottom: 00px;
+#search button {
+    font-size: 16px;
+    padding: 6px;
+    flex: 0 0 auto;                                                /* new code */
 }
 
-#stock-header{
-    color: #101935;
+#submit-button {
+    flex: 0 0 auto;                                                /* new code */
 }
 
-/* 🔄 Financial News Ticker Styling */
+/* ========== News Ticker ========== */
+
 .ticker-container {
     width: 100%;
     overflow: hidden;
@@ -134,16 +115,14 @@ body.dark-mode {
     padding: 10px 0;
     background-color: #f0f0f0;
     margin-top: 10px;
-    grid-column: 1 / -1; /* Spans the full width */
+    grid-column: 1 / -1;
 }
-
 
 .ticker {
     display: inline-block;
     white-space: nowrap;
     animation: scroll-left 30s linear infinite;
 }
-
 
 .ticker a {
     display: inline-block;
@@ -153,25 +132,60 @@ body.dark-mode {
     font-weight: bold;
 }
 
-
 .ticker a:hover {
     text-decoration: underline;
 }
 
-button{
-    font-family: 'Times New Roman', Times, serif;
-    background-color:#F2FDFF;
-    color:black;
-    border-color: black;
-    padding: 10px;
-    float:center;
+@keyframes scroll-left {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
 }
 
-@keyframes scroll-left {
-    0% {
-        transform: translateX(100%);
-    }
-    100% {
-        transform: translateX(-100%);
-    }
+/* ========== Grid Areas & Spacing ========== */
+
+#stock-header     { grid-area: title; color: #101935; margin-top: -5px; }
+#graph            { grid-area: graph; margin-top: -20px; }
+#time-buttons     { grid-area: buttons; text-align: left; }
+#headlines        { grid-area: headlines; margin-top: -20px; }
+#stock-headlines  { grid-area: headlines; margin-top: -20px; }
+#trending         { grid-area: trending; margin-top: -20px; }
+#related-stocks   { grid-area: related-stocks; margin-top: -20px; }
+#information      { grid-area: information; margin-top: -10px; }
+
+/* updated code: push the About (stats) section much lower */
+#stats {
+    grid-area: stats;
+    margin-top: 240px;
+}
+
+/* ========== Stock Overview Section Spacing ========== */
+/* updated code: move the Overview section down and add inner padding */
+#information {
+    grid-area: information;
+    margin-top: 50px;
+    padding-top: 10px;
+}
+
+/* ========== Stock Overview Column Spacing ========== */
+/* new code: allow spacing between cells */
+#overview-table {
+    border-collapse: separate;
+    border-spacing: 48px 6px;
+}
+
+/* ========== Button Base Styles ========== */
+
+button {
+    font-family: 'Times New Roman', Times, serif;
+    background-color: #F2FDFF;
+    color: black;
+    border: 1px solid black;
+    padding: 10px;
+}
+
+/* ========== Hover Effects ========== */
+
+.trending-stock-button:hover,
+.similar-stock-button:hover {
+    background-color: #e0e0e0 !important;
 }

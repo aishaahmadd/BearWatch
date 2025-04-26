@@ -209,33 +209,45 @@
             {% endif %}
           </div>
           
-        <!--INFO-->
+        <!--INFO-- >
+        <!-- ONLY Part changed on stock.html 4/26-->
         <div id="information">
             <h2>Stock Overview</h2>
             {% if stock_overview %}
-                <table id="overview-table">
-                    <thead>
-                        <tr>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for key, value in stock_overview.items() %}
-                            <tr>
-                                <td><strong>{{ key }}</strong></td>
-                                <td>{{ value }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+              {# Turn the dict into a list of (key,value) pairs #}
+              {% set items = stock_overview.items() | list %}
+              {# Compute how many columns we need (4 rows per column) #}
+              {% set cols = (items|length // 4) + (1 if items|length % 4 else 0) %}
+          
+              <table id="overview-table">
+                <tr>
+                  {# Header per column #}
+                  {% for c in range(cols) %}
+                    <th></th>
+                  {% endfor %}
+                </tr>
+          
+                {# 4 rows total #}
+                {% for row in range(4) %}
+                <tr>
+                  {% for c in range(cols) %}
+                    {% set idx = c * 4 + row %}
+                    {% if idx < items|length %}
+                      <td><strong>{{ items[idx][0] }}</strong></td>
+                      <td>{{ items[idx][1] }}</td>
+                    {% else %}
+                      <td></td><td></td>
+                    {% endif %}
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </table>
+          
             {% else %}
-                {% if stock_symbol %}
-                    <p>Could not retrieve overview information for {{ stock_symbol }}.</p>
-                {% else %}
-                    <p>Please enter a stock symbol to view its overview.</p>
-                {% endif %}
+              <p>Please enter a stock symbol to view its overview.</p>
             {% endif %}
-        </div>
+          </div>
+          
         <!--SCRIPT TO HANDLE BUTTON CLICKS-->
         <script>
             const iframe = document.getElementById("stock-graph");
