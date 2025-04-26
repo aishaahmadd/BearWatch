@@ -2,7 +2,7 @@ body {
     font-family: 'Times New Roman', Times, serif;
     padding: 20px;
     background-color: #F9F5ED;
-    color: #4e4b9f;
+    color: #311f6b;
     display: grid;
     grid-template:
         "top        search    search       search1"
@@ -71,7 +71,7 @@ body.dark-mode #nav {
 #nav a h3 {
     margin: 10px 0;
     /* nav bar text color */
-    color: #4e4b9f; 
+    color: #311f6b; 
     text-decoration: none;
     font-family: 'Times New Roman', Times, serif;
     font-size: 18px;
@@ -90,7 +90,7 @@ body.dark-mode #nav a h3 {
 /* --- General Links --- */
 a {
     text-decoration: none;
-    color: #4e4b9f;
+    color: #311f6b;
 }
 
 /* --- Search Section --- */
@@ -197,16 +197,16 @@ button {
     font-family: 'Times New Roman', Times, serif;
     /* time buttons */
     background-color: #f0ede7;
-    color: black;
+    color: #311f6b;
     border-color: black;
-    border-radius: 5px;
+    border-radius: 2px;
     padding: 10px;
     cursor: pointer; 
 }
 button:hover {
     /* Make the button look different when the user hovers over it */
     background-color: #f7f4f1;    /* button color */
-    color: black;
+    color: #311f6b;
     
 }
 
@@ -234,7 +234,7 @@ button:hover {
 }
 
 .headline-title {
-    color: #4e4b9f;
+    color: #311f6b;
     font-weight: 600;
     text-decoration: none;
 }
