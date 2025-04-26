@@ -53,6 +53,7 @@ def create_graph(stock_symbol, colorblind_mode):
     data = fetch_stock_data(stock_symbol)
     line_color, title = determine_color(stock_symbol, colorblind_mode)
 
+
     figure = go.Figure(data=[go.Scatter(
         x=data.index,
         y=data["Close"],
@@ -69,7 +70,8 @@ def create_graph(stock_symbol, colorblind_mode):
         xaxis_title="Time",
         yaxis_title="Price",
         xaxis=dict(showgrid=True),
-        yaxis=dict(showgrid=True)
+        yaxis=dict(showgrid=True),
+        font_family="Cambria"
     )
 
     return figure

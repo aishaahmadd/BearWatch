@@ -157,7 +157,7 @@ a {
 #graph {
     grid-area: graph;
     text-align: center;
-    font-family: Cambria, Georgia, serif;
+    /* --ag-font-family: Cambria, Georgia, serif; */
 }
 
 #headlines {
