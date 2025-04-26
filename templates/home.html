@@ -78,7 +78,7 @@
             <div id="trending-container">
                 {% for stock in trending_stocks %}
                     <button type="button" class="trending-stock-button" 
-                            onclick="window.location.href='{{ url_for('stock') }}?stock={{ stock.ticker }}'"
+                            onclick="window.location.href= '{{ url_for('stock') }}?stock={{ stock.ticker }}'"
                             style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
                         <!-- Left side: Ticker and Price -->
                         <div class="stock-info" style="flex-grow: 1;">
