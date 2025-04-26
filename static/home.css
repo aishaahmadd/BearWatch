@@ -195,11 +195,19 @@ a {
 /* --- Buttons --- */
 button {
     font-family: 'Times New Roman', Times, serif;
-    background-color: white;
+    /* time buttons */
+    background-color: #f0ede7;
     color: black;
     border-color: black;
     border-radius: 5px;
     padding: 10px;
+    cursor: pointer; 
+}
+button:hover {
+    /* Make the button look different when the user hovers over it */
+    background-color: #f7f4f1;    /* button color */
+    color: black;
+    
 }
 
 /* --- Headlines List --- */
