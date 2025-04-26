@@ -6,6 +6,7 @@
     <title>Stock News - BearWatch</title>
     <link href="{{ url_for('static', filename='news.css') }}" rel="stylesheet" type="text/css"/>
 </head>
+
 <body>
 
     <!-- LOGO -->
@@ -48,22 +49,25 @@
         <button id="loadMoreButton">Load More</button>
     </div>
 
+    <!-- SCRIPTS -->
     <script>
-        window.addEventListener("DOMContentLoaded", () => {
-            const logoDiv = document.getElementById("logo");
-            const logoImage = logoDiv.querySelector("img");
-            const nav = document.getElementById("nav");
+        window.addEventListener('DOMContentLoaded', () => {
+            const logoDiv = document.getElementById('logo');
+            const logoImage = logoDiv.querySelector('img');
+            const nav = document.getElementById('nav');
+            const darkModeLink = document.getElementById('dark-mode-button');
+            const loadMoreButton = document.getElementById('loadMoreButton');
+            let offset = 8;
 
-            logoImage.addEventListener("click", (e) => {
+            logoImage.addEventListener('click', (e) => {
                 e.stopPropagation();
-                nav.classList.toggle("hidden");
+                nav.classList.toggle('hidden');
             });
 
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.classList.add('dark-mode');
             }
 
-            const darkModeLink = document.getElementById('dark-mode-button');
             if (darkModeLink) {
                 darkModeLink.addEventListener('click', (e) => {
                     e.preventDefault();
@@ -73,11 +77,9 @@
                 });
             }
 
-            let offset = 8;
-            const loadMoreButton = document.getElementById("loadMoreButton");
             if (loadMoreButton) {
-                loadMoreButton.addEventListener("click", () => {
-                    const queryInput = document.getElementById("query");
+                loadMoreButton.addEventListener('click', () => {
+                    const queryInput = document.getElementById('query');
                     const query = queryInput ? queryInput.value : "Stock Market";
 
                     fetch(`/load_more_news?query=${encodeURIComponent(query)}&offset=${offset}`)
@@ -85,24 +87,28 @@
                         .then(data => {
                             const newsGrid = document.getElementById('newsGrid');
                             data.forEach(article => {
-                                let newsItem = document.createElement('div');
+                                const link = document.createElement('a');
+                                link.href = article.link;
+                                link.target = "_blank";
+
+                                const newsItem = document.createElement('div');
                                 newsItem.className = 'news-item';
                                 newsItem.innerHTML = `
                                     <img src="${article.image}" alt="News Image">
-                                    <a href="${article.link}" target="_blank">${article.title}</a>`;
-                                newsGrid.appendChild(newsItem);
+                                    <p>${article.title}</p>`;
+
+                                link.appendChild(newsItem);
+                                newsGrid.appendChild(link);
                             });
                             offset += data.length;
                         })
                         .catch(error => {
-                            console.error("Failed to load more news:", error);
+                            console.error('Failed to load more news:', error);
                         });
                 });
             }
         });
     </script>
 
-
 </body>
 </html>
-

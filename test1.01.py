@@ -268,13 +268,6 @@ def update_graph(n, search): #added from owen
 
     return figure
 
-# 🔹 Dash Callback (Get Similar Stocks on Stock Change)
-@app.callback(
-    Output("recommended-stocks-list", "children"),
-    Output("recommended-stocks-container", "style"),
-    Input("url", "search")
-)
-
 # 🔹 Home Route
 @server.route("/", methods=["GET"])
 def home():
