@@ -10,7 +10,7 @@ body {
         "headlines  time      time         trending"
         "info       info      overview     overview";
     grid-template-columns: 20% 30% 30% 20%;
-    grid-template-rows: 10% 64% 5% 10%;
+    grid-template-rows: 10% 64% 5% 5%;
     transition: all 0.3s ease;
 }
 
@@ -248,4 +248,7 @@ button:hover {
 .trending-stock-button {
     background-color: #f0ede7; 
 }
-  
+
+body {
+    overflow-y: hidden;  /* Disables scrolling */
+}
