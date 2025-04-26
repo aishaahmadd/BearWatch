@@ -15,8 +15,8 @@ body {
 }
 
 body.dark-mode {
-    background-color: #1E054D;
-    color: #e0e0e0;
+    background-color: #1C1D21;
+    color: #7289da;
 }
 
 /* --- Logo --- */
@@ -41,8 +41,8 @@ body.dark-mode {
     margin-top: 8px;
     left: 0;
     width: 75%;
-    background-color: white;
-    border: 1px solid #ccc;
+    background-color: #f0ede7;
+    border: 1px solid #f0ede9;
     border-radius: 8px;
     box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
     padding: 10px;
@@ -70,7 +70,8 @@ body.dark-mode #nav {
 
 #nav a h3 {
     margin: 10px 0;
-    color: #4e4b9f;
+    /* nav bar text color */
+    color: #4e4b9f; 
     text-decoration: none;
     font-family: 'Times New Roman', Times, serif;
     font-size: 18px;
@@ -82,7 +83,8 @@ body.dark-mode #nav {
 }
 
 body.dark-mode #nav a h3 {
-    color: #e0e0e0;
+    /* nav bar dark modetext color */
+    color: #8888f2;
 }
 
 /* --- General Links --- */
@@ -130,7 +132,7 @@ a {
     top: calc(100% + 4px);
     left: 0;
     width: 100%;
-    background: #F9F5ED;
+    background: #f0ede7;
     border: 1px solid #ccc;
     z-index: 1000;
     display: none;
