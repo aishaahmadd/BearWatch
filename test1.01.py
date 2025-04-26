@@ -53,7 +53,6 @@ def create_graph(stock_symbol, colorblind_mode):
     data = fetch_stock_data(stock_symbol)
     line_color, title = determine_color(stock_symbol, colorblind_mode)
 
-
     figure = go.Figure(data=[go.Scatter(
         x=data.index,
         y=data["Close"],
@@ -69,12 +68,24 @@ def create_graph(stock_symbol, colorblind_mode):
         title_x=0.5,
         xaxis_title="Time",
         yaxis_title="Price",
-        xaxis=dict(showgrid=True),
-        yaxis=dict(showgrid=True),
-        font_family="Cambria"
+        xaxis=dict(
+            showgrid=True,
+            title_font=dict(family="Cambria, Georgia, serif"),  # X-axis title
+            tickfont=dict(family="Cambria, Georgia, serif")     # X-axis ticks
+        ),
+        yaxis=dict(
+            showgrid=True,
+            title_font=dict(family="Cambria, Georgia, serif"),  # Y-axis title
+            tickfont=dict(family="Cambria, Georgia, serif")     # Y-axis ticks
+        ),
+        font_family="Cambria, Georgia, serif",  # Global fallback
+        hoverlabel=dict(
+            font_family="Cambria, Georgia, serif"  # Hover text
+        )
     )
 
     return figure
+
 
 #  Dash Home Tabs
 appHome=Dash(__name__, server=server, routes_pathname_prefix="/home/")
