@@ -68,20 +68,6 @@ def create_graph(stock_symbol, colorblind_mode):
         title_x=0.5,
         xaxis_title="Time",
         yaxis_title="Price",
-        xaxis=dict(
-            showgrid=True,
-            title_font=dict(family="Cambria, Georgia, serif"),  # X-axis title
-            tickfont=dict(family="Cambria, Georgia, serif")     # X-axis ticks
-        ),
-        yaxis=dict(
-            showgrid=True,
-            title_font=dict(family="Cambria, Georgia, serif"),  # Y-axis title
-            tickfont=dict(family="Cambria, Georgia, serif")     # Y-axis ticks
-        ),
-        font_family="Cambria, Georgia, serif",  # Global fallback
-        hoverlabel=dict(
-            font_family="Cambria, Georgia, serif"  # Hover text
-        )
     )
 
     return figure
@@ -129,7 +115,8 @@ def update_graph(selected_tab, search):
         paper_bgcolor='rgba(0,0,0,0)',
         title=title, 
         xaxis_title="Date", 
-        yaxis_title="Closing Price")
+        yaxis_title="Closing Price"
+        )
     return dcc.Graph(figure=fig)
 
 
