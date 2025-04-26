@@ -65,7 +65,7 @@
                 {% for stock in trending_stocks %}
                     <button type="button" class="trending-stock-button"
                             onclick="window.location.href='/stock?stock={{ stock.ticker }}'"
-                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
+                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; margin-bottom: 10px; width: 100%; text-align: left;">
                         <div class="stock-info" style="flex-grow: 1;">
                             <div class="stock-ticker"><strong>{{ stock.ticker }}</strong></div>
                             <div class="stock-price">
