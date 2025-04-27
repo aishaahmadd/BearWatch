@@ -51,6 +51,9 @@ body.dark-mode {
     width: 100%;
     max-width: 900px;
     position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 #search input {
@@ -179,4 +182,30 @@ body.dark-mode #nav a h3 {
     background-color: black;
     color: #F2FDFF;
     border: black 1px;
+}
+
+.suggestions-box {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    width: 100%;
+    background: white;
+    border: 1px solid #ccc;
+    z-index: 10000;
+    display: none;
+    font-size: 16px;
+    box-sizing: border-box;
+    max-height: 200px;
+    overflow-y: auto;
+    border-radius: 4px;
+    box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
+}
+
+.suggestion {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion:hover {
+    background: #eee;
 }

@@ -280,10 +280,10 @@ def home():
 # 🔹 News Page Route
 @server.route('/news.html', methods=["GET", "POST"])
 def news():
-    query = "Stock Market"
     if request.method == "POST":
-        query = request.form.get("query")
-
+        query = request.form.get("query", "Stock Market")
+    else:
+        query = request.args.get("query", "Stock Market")
     news_articles = get_news(query, count=8)
     return render_template("news.html", news=news_articles)
 
