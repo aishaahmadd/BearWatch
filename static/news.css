@@ -4,10 +4,10 @@ body {
     text-align: center;
     display: grid;
     grid-template:
-        "logo  logo  search"
-        "news  news  news"
-        "grid  grid  grid"
-        "load  load  load";
+        "top-bar top-bar top-bar"
+        "news    news    news"
+        "grid    grid    grid"
+        "load    load    load";
     grid-template-rows: 10% 10% auto auto;
     grid-template-columns: auto;
     transition: all 0.3s ease;
@@ -21,34 +21,63 @@ body.dark-mode {
     color: #e0e0e0;
 }
 
-/* --- Logo --- */
+/* --- Top Bar --- */
+#top-bar {
+    grid-area: top-bar;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 40px;
+    position: relative;
+}
+
 #logo {
-    grid-area: logo;
     text-align: left;
     position: relative;
     cursor: pointer;
 }
 
 #logo img {
-    width: 23%;
+    width: 300px;
     height: auto;
     margin-bottom: 10%;
+}
+
+#search {
+    flex-grow: 1;
+    padding-top: 0px;  
+    margin-top: -25px; 
+}
+
+#search-wrapper {
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+}
+
+#search input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid black;
+    text-align: left;
 }
 
 /* --- Navigation --- */
 #nav {
     position: absolute;
-    top: 100%;
-    left: 0;
-    width: 30%;
-    margin-top: 8px;
-    background-color: #f0f0f0;
+    top: 65px; 
+    left: 40px; 
+    width: 250px; 
+    background-color: white;
     border: 1px solid #ccc;
     border-radius: 8px;
     box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
     padding: 10px;
     display: flex;
     flex-direction: column;
+    gap: 8px; /* spacing between nav links */
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
     opacity: 1;
@@ -67,11 +96,17 @@ body.dark-mode #nav {
     background-color: #2A1C5A;
 }
 
+#nav a {
+    text-decoration: none;
+}
+
 #nav a h3 {
     margin: 10px 0;
-    font-family: 'Times New Roman', Times, serif;
-    color: #101935;
+    color: #4e4b9f;
     text-decoration: none;
+    font-family: 'Times New Roman', Times, serif;
+    font-size: 18px;
+    text-align: left;
 }
 
 #nav a h3:hover {
@@ -80,22 +115,6 @@ body.dark-mode #nav {
 
 body.dark-mode #nav a h3 {
     color: #e0e0e0;
-}
-
-/* --- Search Section --- */
-#search {
-    grid-area: search;
-    text-align: left;
-    padding: 10px;
-    font-size: 16px;
-}
-
-#search input {
-    width: 100%;
-    border-radius: 10px;
-    border-color: black;
-    text-align: left;
-    padding: 5px;
 }
 
 /* --- News Section --- */

@@ -8,27 +8,31 @@
 </head>
 
 <body>
-
-    <!-- LOGO -->
-    <div id="logo">
-        <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+    <div id="top-bar">
+        <!-- LOGO -->
+        <div id="logo">
+            <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+        </div>
+        <!-- SEARCH FORM -->
+        <div id="search">
+            <form id="search-form" action="/news.html" method="POST">
+                <div id="search-wrapper">
+                    <input id="query" name="query" type="text" placeholder="Search stock news" required value="{{ request.form.get('query', 'Stock Market') }}" autocomplete="off">
+                </div>
+            </form>
+        </div>
+        <!-- NAV -->
         <div id="nav" class="hidden">
             <a href="/"><h3>Home</h3></a>
             <a href="news.html"><h3>News</h3></a>
             <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
+            <a href="#" id="colorblind-button"><h3>Colorblind Mode</h3></a>
         </div>
     </div>
 
     <!-- HEADLINE -->
     <div id="newsHeadline">
         <h2>Latest Stock Market News</h2>
-    </div>
-
-    <!-- SEARCH FORM -->
-    <div id="search">
-        <form action="/news.html" method="POST">
-            <input id="query" name="query" type="text" placeholder="Search stock news" required value="{{ request.form.get('query', 'Stock Market') }}">
-        </form>
     </div>
 
     <!-- NEWS GRID -->

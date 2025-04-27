@@ -5,10 +5,10 @@ body {
     color: #4e4b9f;
     display: grid;
     grid-template:
-        "top        search    search       search1"
-        "headlines  graph     graph        trending"
-        "headlines  time      time         trending"
-        "info       info      overview     overview";
+        "top-bar    top-bar   top-bar    top-bar"
+        "headlines  graph     graph      trending"
+        "headlines  time      time       trending"
+        "info       info      overview   overview";
     grid-template-columns: 20% 30% 30% 20%;
     grid-template-rows: 10% 60% 5% 10%;
     transition: all 0.3s ease;
@@ -19,28 +19,55 @@ body.dark-mode {
     color: #e0e0e0;
 }
 
-/* --- Logo --- */
-#logo {
+/* --- Top Bar --- */
+#top-bar {
+    grid-area: top-bar;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 40px;
     position: relative;
-    grid-area: top;
+}
+
+#logo {
     text-align: left;
+    position: relative;
     cursor: pointer;
 }
 
 #logo img {
-    width: 75%;
+    width: 300px;
     height: auto;
     margin-bottom: 10%;
-    cursor: pointer;
+}
+
+#search {
+    flex-grow: 1;
+    padding-top: 0px;  
+    margin-top: -25px; 
+}
+
+#search-wrapper {
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+}
+
+#search input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid black;
+    text-align: left;
 }
 
 /* --- Navigation --- */
 #nav {
     position: absolute;
-    top: 100%;
-    margin-top: 8px;
-    left: 0;
-    width: 75%;
+    top: 65px; 
+    left: 40px; 
+    width: 250px; 
     background-color: white;
     border: 1px solid #ccc;
     border-radius: 8px;
@@ -48,8 +75,8 @@ body.dark-mode {
     padding: 10px;
     display: flex;
     flex-direction: column;
+    gap: 8px; /* spacing between nav links */
     z-index: 1000;
-    min-width: 160px;
     transition: transform 0.3s ease, opacity 0.3s ease;
     opacity: 1;
     transform: scaleY(1);
@@ -89,39 +116,6 @@ body.dark-mode #nav a h3 {
 a {
     text-decoration: none;
     color: #4e4b9f;
-}
-
-/* --- Search Section --- */
-#search {
-    grid-area: search;
-    text-align: left;
-    padding: 10px;
-    font-size: 16px;
-}
-
-#search input {
-    width: 100%;
-    border-radius: 10px;
-    border-color: black;
-    text-align: left;
-    padding: 5px;
-}
-
-#search1 {
-    grid-area: search1;
-    text-align: left;
-    padding: 10px;
-    font-size: 16px;
-}
-
-#search1 button {
-    font-size: 12px;
-    padding: 6px;
-}
-
-#search-wrapper {
-    position: relative;
-    width: 100%;
 }
 
 /* --- Autocomplete Suggestions --- */
