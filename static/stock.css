@@ -42,13 +42,11 @@ body.dark-mode {
 #logo img {
     width: 300px;
     height: auto;
-    margin-bottom: 10%;
 }
 
 #search {
     flex-grow: 1;
-    padding-top: 0px;  
-    margin-top: -25px; 
+    padding-top: 0px;   
 }
 
 #search-wrapper {
@@ -69,8 +67,8 @@ body.dark-mode {
 /* --- Navigation --- */
 #nav {
     position: absolute;
-    top: 65px; 
-    left: 40px; 
+    top: 100px; 
+    left: 20px; 
     width: 250px; 
     background-color: white;
     border: 1px solid #ccc;
@@ -92,6 +90,11 @@ body.dark-mode {
     opacity: 0;
     transform: scaleY(0);
     pointer-events: none;
+}
+
+a {
+    text-decoration: none;
+    color: #4e4b9f;
 }
 
 #nav a h3 {

@@ -12,6 +12,13 @@
         <!-- LOGO -->
         <div id="logo">
             <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+            <!-- NAV -->
+            <div id="nav" class="hidden">
+                <a href="/"><h3>Home</h3></a>
+                <a href="news.html"><h3>News</h3></a>
+                <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
+                <a href="#" id="colorblind-button"><h3>Colorblind Mode</h3></a>
+            </div>
         </div>
         <!-- SEARCH -->
         <div id="search">
@@ -21,13 +28,6 @@
                     <div id="suggestions" class="suggestions-box"></div>
                 </div>
             </form>
-        </div>
-        <!-- NAV -->
-        <div id="nav" class="hidden">
-            <a href="/"><h3>Home</h3></a>
-            <a href="news.html"><h3>News</h3></a>
-            <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
-            <a href="#" id="colorblind-button"><h3>Colorblind Mode</h3></a>
         </div>
     </div>
 
