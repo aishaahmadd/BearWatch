@@ -17,7 +17,6 @@
                 <a href="/"><h3>Home</h3></a>
                 <a href="news.html"><h3>News</h3></a>
                 <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
-                <a href="#" id="colorblind-button"><h3>Colorblind Mode</h3></a>
             </div>
         </div>
         <!-- SEARCH FORM -->
@@ -25,7 +24,7 @@
             <form id="search-form" method="GET">
                 <div id="search-wrapper">
                     <div id="input-wrapper" style="position: relative; flex-grow: 1;">
-                        <input id="query" name="query" type="text" placeholder="Search stock news" required value="" autocomplete="off">
+                        <input id="query" name="query" type="text" placeholder="Search stock news" value="{{ request.form.get('query', request.args.get('query', '')) }}" data-default="Stock Market" autocomplete="off">
                         <div id="suggestions" class="suggestions-box"></div>
                     </div>
                     <select id="search-type" style="margin-left: 10px; padding: 8px; border-radius: 10px;">
@@ -62,6 +61,7 @@
     </div>
 
     <!-- SCRIPTS -->
+    
     <script>
         window.addEventListener('DOMContentLoaded', () => {
             const logoDiv = document.getElementById('logo');
@@ -73,7 +73,7 @@
             const searchType = document.getElementById('search-type');
             const queryInput = document.getElementById('query');
             const suggestionsBox = document.getElementById('suggestions');
-        
+            
             let offset = 8;
             form.action = '/news.html';
         
@@ -124,18 +124,17 @@
             searchType.addEventListener('change', () => {
                 if (searchType.value === "news") {
                     form.action = "/news.html";
-                    queryInput.name = "query";
                     form.method = "POST";
                     queryInput.placeholder = "Search stock news";
                     suggestionsBox.style.display = 'none';
                     suggestionsBox.innerHTML = "";
                 } else if (searchType.value === "stock") {
                     form.action = "/stock";
-                    queryInput.name = "stock";
                     form.method = "GET";
                     queryInput.placeholder = "Search stock symbol";
                 }
             });
+
         
             logoImage.addEventListener('click', (e) => {
                 e.stopPropagation();
@@ -157,9 +156,9 @@
         
             if (loadMoreButton) {
                 loadMoreButton.addEventListener('click', () => {
-                    const query = queryInput ? queryInput.value : "Stock Market";
-        
-                    fetch(`/load_more_news?query=${encodeURIComponent(query)}&offset=${offset}`)
+                    const queryValue = queryInput.value.trim() || queryInput.dataset.default;
+
+                    fetch(`/load_more_news?query=${encodeURIComponent(queryValue)}&offset=${offset}`)
                         .then(response => response.json())
                         .then(data => {
                             const newsGrid = document.getElementById('newsGrid');
@@ -185,8 +184,8 @@
                 });
             }
         });
-        </script>
-        
+    </script>
+    
 
 </body>
 </html>
