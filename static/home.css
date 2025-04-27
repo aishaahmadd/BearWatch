@@ -14,9 +14,27 @@ body {
     transition: all 0.3s ease;
 }
 
+
+/* Light Mode:
+    font-family: Cambria, Georgia, serif;
+    background-color: #F9F5ED;
+    text color: #311f6b;
+    nav/trending/... background color: #f0ede7;
+    nav.... border color: #f0ede9;
+*/
+
+/* Dark Mode:
+    font-family: Cambria, Georgia, serif;
+    background-color: #141417;
+    text color: #dee4fc;
+    nav/trending/... background color: #222325;
+    nav.... border color: #191a1b;
+*/
+
+
 body.dark-mode {
-    background-color: #1C1D21;
-    color: #7289da;
+    background-color: #141417;
+    color: #dee4fc;
 }
 
 /* --- Logo --- */
@@ -64,8 +82,9 @@ body.dark-mode {
 }
 
 body.dark-mode #nav {
-    background-color: #2A1C5A;
-    border-color: #444;
+    background-color: #222325;
+    color: #dee4fc;
+    border: #191a1b;
 }
 
 #nav a h3 {
@@ -84,7 +103,7 @@ body.dark-mode #nav {
 
 body.dark-mode #nav a h3 {
     /* nav bar dark modetext color */
-    color: #8888f2;
+    color: #dee4fc;
 }
 
 /* --- General Links --- */
