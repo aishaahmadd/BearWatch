@@ -2,7 +2,7 @@ body {
     font-family: 'Times New Roman', Times, serif;
     background-color: #F9F5ED;
     color: #4e4b9f;
-    padding: 0px;
+    padding: 10px;
     margin: 0;
     display: grid;
     grid-template-areas:
@@ -11,9 +11,9 @@ body {
         "title      title            title          title"
         "graph      related-stocks   trending       headlines"
         "buttons    related-stocks   trending       headlines"
-        "information information     stats          stats";
+        "information stats           .              .";
     grid-template-columns: 55% 15% 15% 15%;
-    grid-template-rows: auto 40px auto auto 1fr auto;
+    grid-template-rows: 80px 3% 5% 27% 5% auto;
     min-width: 1280px;
     transition: all 0.3s ease;
 }

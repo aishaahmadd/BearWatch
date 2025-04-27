@@ -1,6 +1,6 @@
 body {
     font-family: 'Times New Roman', Times, serif;
-    padding: 20px;
+    padding: 10px;
     text-align: center;
     display: grid;
     grid-template:
@@ -8,10 +8,11 @@ body {
         "news    news    news"
         "grid    grid    grid"
         "load    load    load";
-    grid-template-rows: 10% 10% auto auto;
+    grid-template-rows: 80px 10% auto auto;
     grid-template-columns: auto;
     transition: all 0.3s ease;
     background-color: #F9F5ED;
+    min-width: 1280px;
     color: #4e4b9f;
 }
 

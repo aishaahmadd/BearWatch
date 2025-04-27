@@ -1,6 +1,6 @@
 body {
     font-family: 'Times New Roman', Times, serif;
-    padding: 20px;
+    padding: 10px;
     background-color: #F9F5ED;
     color: #4e4b9f;
     display: grid;
@@ -10,7 +10,8 @@ body {
         "headlines  time      time       trending"
         "info       info      overview   overview";
     grid-template-columns: 20% 30% 30% 20%;
-    grid-template-rows: 10% 60% 5% 10%;
+    grid-template-rows: 80px 60% 5% 10%;
+    min-width: 1280px;
     transition: all 0.3s ease;
 }
 
