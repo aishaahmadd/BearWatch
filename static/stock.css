@@ -17,6 +17,7 @@ body {
     min-width: 1280px;
     transition: all 0.3s ease;
 }
+  
 
 body.dark-mode {
     background-color: #1E054D;
@@ -54,7 +55,7 @@ body.dark-mode {
 #nav a h3 {
     margin: 10px 0;
     font-family: Cambria, Georgia, serif;
-    color: #101935;
+    color: #311f6b;
     text-decoration: none;
 }
 
@@ -74,7 +75,7 @@ body.dark-mode #nav a h3 {
 button {
     font-family: Cambria, Georgia, serif;
     background-color: #f0ede7;
-    color: black;
+    color: #311f6b;
     border-color: black;
     padding: 10px;
     float: center;
@@ -129,6 +130,8 @@ button:hover {
 }
 
 #news-ticker {
+    font-family: Cambria, Georgia, serif;
+    color: #311f6b;
     grid-area: newsTicker;
     height: 40px;
     line-height: 40px;
@@ -137,7 +140,7 @@ button:hover {
 
 #stock-header {
     grid-area: title;
-    color: #101935;
+    color: #311f6b;
 }
 
 #graph {
@@ -156,11 +159,18 @@ button:hover {
     align-self: start;
 }
 
+.stock-info{
+    background-color: #f0ede7;
+    /* border: 1px solid #f0ede9; */
+}
+
 #headlines {
     grid-area: headlines;
     align-self: start;
     word-wrap: break-word;
     overflow-wrap: break-word;
+    font-family: Cambria, Georgia, serif;
+    color: #311f6b;
 }
 
 #information {
@@ -243,7 +253,7 @@ button:hover {
     box-sizing: border-box;
     border-top: 1px solid #ccc;
     border-bottom: 1px solid #ccc;
-    padding: 10px 0;
+    padding: 5px 0;
     padding-bottom: 20px;
     background-color: #f0ede7;
     grid-column: 1 / -1;
