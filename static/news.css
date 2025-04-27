@@ -30,7 +30,7 @@ body.dark-mode {
 }
 
 #logo img {
-    width: 30%;
+    width: 23%;
     height: auto;
     margin-bottom: 10%;
 }
@@ -85,23 +85,17 @@ body.dark-mode #nav a h3 {
 /* --- Search Section --- */
 #search {
     grid-area: search;
-    text-align: right;
+    text-align: left;
     padding: 10px;
     font-size: 16px;
 }
 
 #search input {
+    width: 100%;
     border-radius: 10px;
-    border: #F2FDFF 1px;
-    text-align: left;
-}
-
-#submit-button {
-    background-color: #F2FDFF;
-    color: black;
     border-color: black;
-    padding: 10px;
-    float: center;
+    text-align: left;
+    padding: 5px;
 }
 
 /* --- News Section --- */

@@ -28,7 +28,6 @@
     <div id="search">
         <form action="/news.html" method="POST">
             <input id="query" name="query" type="text" placeholder="Search stock news" required value="{{ request.form.get('query', 'Stock Market') }}">
-            <button id="submit-button" type="submit">Search</button>
         </form>
     </div>
 

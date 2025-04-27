@@ -89,29 +89,24 @@ button {
 }
 
 #logo img {
-    width: 30%;
+    width: 20%;
     height: auto;
     margin-bottom: 0%;
 }
 
 #search {
     grid-area: search;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
+    text-align: left;
     padding: 10px;
     font-size: 16px;
 }
 
 #search input {
+    width: 100%;
     border-radius: 10px;
-    border: #F2FDFF 1px;
+    border-color: black;
     text-align: left;
-}
-
-#search button {
-    font-size: 16px;
-    padding: 6px;
+    padding: 5px;
 }
 
 #search-wrapper {
