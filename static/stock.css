@@ -257,3 +257,20 @@ button {
         transform: translateX(-100%);
     }
 }
+
+.change-badge {
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+  
+.positive-change { background-color: green; }
+.negative-change { background-color: red; }
+
+body.colorblind-mode .positive-change {
+    background-color: blue;
+}
+body.colorblind-mode .negative-change {
+    background-color: orange;
+}

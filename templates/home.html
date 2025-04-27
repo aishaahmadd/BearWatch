@@ -76,11 +76,11 @@
                         <div class="stock-change-info">
                             {% if stock.change != 'N/A' %}
                                 {% if stock.change > 0 %}
-                                    <span style="background-color:green; color:white; padding:5px 10px; border-radius:5px;">
+                                    <span class="change-badge positive-change">
                                         {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
                                     </span>
                                 {% else %}
-                                    <span style="background-color:red; color:white; padding:5px 10px; border-radius:5px;">
+                                    <span class="change-badge negative-change">
                                         {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
                                     </span>
                                 {% endif %}
@@ -111,7 +111,7 @@
             const stockInput = document.getElementById('stock-input');
             const suggestionsBox = document.getElementById('suggestions');
             const darkModeLink = document.getElementById('dark-mode-button');
-            const colorblindLink = document.getElementById('colorblind-button');
+            const colorblindBtn = document.getElementById('colorblind-button');
             const iframe = document.getElementById('stock-graph');
 
             logoImage.addEventListener('click', (e) => {
@@ -127,26 +127,28 @@
                 });
             }
 
-            if (colorblindLink) {
-                colorblindLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    const src = new URL(iframe.src);
-                    const currentMode = src.searchParams.get('colorblind') === 'true';
-                    src.searchParams.set('colorblind', (!currentMode).toString());
-                    iframe.src = src.toString();
-                    localStorage.setItem('colorblindMode', (!currentMode).toString());
-                });
-            }
-
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.classList.add('dark-mode');
             }
 
-            const savedColorblind = localStorage.getItem('colorblindMode');
-            if (savedColorblind === 'true' || savedColorblind === 'false') {
-                const src = new URL(iframe.src);
-                src.searchParams.set('colorblind', savedColorblind);
-                iframe.src = src.toString();
+            if (colorblindBtn && iframe) {
+                colorblindBtn.addEventListener('click', e => {
+                    e.preventDefault();
+                    const src = new URL(iframe.src, window.location.origin);
+                    const current = src.searchParams.get('colorblind') === 'true';
+                    const next = (!current).toString();
+                    src.searchParams.set('colorblind', next);
+                    iframe.src = src;
+                    localStorage.setItem('colorblindMode', next);
+                    document.body.classList.toggle('colorblind-mode', next === 'true');
+                });
+            }
+            const saved = localStorage.getItem('colorblindMode');
+            if (saved === 'true' || saved === 'false') {
+                document.body.classList.toggle('colorblind-mode', saved === 'true');
+                const url = new URL(iframe.src, window.location.origin);
+                url.searchParams.set('colorblind', saved);
+                iframe.src = url.toString();
             }
 
             stockInput.addEventListener('input', async function () {
