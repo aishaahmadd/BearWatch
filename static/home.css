@@ -200,6 +200,16 @@ a {
     padding: 10px;
 }
 
+body.dark-mode #time-buttons button{
+    background-color: #222325;
+    color: #dee4fc;
+    border: #191a1b;
+}
+
+body.dark-mode #time-buttons button:hover{
+    background-color: #333436;
+}
+
 #info {
     grid-area: info;
     text-align: left;
@@ -270,4 +280,10 @@ button:hover {
 
 body {
     overflow-y: hidden;  /* Disables scrolling */
+}
+
+body.dark-mode #trending-stock-button{
+    background-color: #222325;
+    color: #dee4fc;
+    border: #191a1b;
 }
