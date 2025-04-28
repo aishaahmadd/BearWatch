@@ -67,35 +67,72 @@
             const logoDiv = document.getElementById('logo');
             const logoImage = logoDiv.querySelector('img');
             const nav = document.getElementById('nav');
-            const darkModeLink = document.getElementById('dark-mode-button');
-            const loadMoreButton = document.getElementById('loadMoreButton');
             const form = document.getElementById('search-form');
             const searchType = document.getElementById('search-type');
             const queryInput = document.getElementById('query');
             const suggestionsBox = document.getElementById('suggestions');
-            
-            let offset = 8;
-            form.action = '/news.html';
+            const loadMoreButton = document.getElementById('loadMoreButton');
         
-            queryInput.addEventListener('input', async function () {
-                if (searchType.value !== "stock") {
+            let offset = 8;
+            form.action = '/news.html';  
+            queryInput.name = 'query';   
+        
+            // Toggle navigation menu
+            logoImage.addEventListener('click', (e) => {
+                e.stopPropagation();
+                nav.classList.toggle('hidden');
+            });
+        
+            // Dark mode from localStorage
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+            }
+        
+            const darkModeLink = document.getElementById('dark-mode-button');
+            if (darkModeLink) {
+                darkModeLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.body.classList.toggle('dark-mode');
+                    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode').toString());
+                });
+            }
+        
+            // Handle switching search mode (News vs Stock)
+            searchType.addEventListener('change', () => {
+                if (searchType.value === 'news') {
+                    form.action = '/news.html';
+                    form.method = 'POST';
+                    queryInput.placeholder = 'Search stock news';
+                    queryInput.name = 'query';
                     suggestionsBox.style.display = 'none';
-                    suggestionsBox.innerHTML = "";
+                    suggestionsBox.innerHTML = '';
+                } else if (searchType.value === 'stock') {
+                    form.action = '/stock';
+                    form.method = 'GET';
+                    queryInput.placeholder = 'Search stock symbol';
+                    queryInput.name = 'stock';
+                }
+            });
+        
+            // Autocomplete suggestions (only for stock search)
+            queryInput.addEventListener('input', async () => {
+                if (searchType.value !== 'stock') {
+                    suggestionsBox.style.display = 'none';
+                    suggestionsBox.innerHTML = '';
                     return;
                 }
         
                 const query = queryInput.value.trim();
-        
                 if (query.length === 0) {
                     suggestionsBox.style.display = 'none';
-                    suggestionsBox.innerHTML = "";
+                    suggestionsBox.innerHTML = '';
                     return;
                 }
         
                 try {
                     const response = await fetch(`/autocomplete_stock?query=${query}`);
                     const suggestions = await response.json();
-                    suggestionsBox.innerHTML = "";
+                    suggestionsBox.innerHTML = '';
         
                     if (suggestions.length === 0) {
                         suggestionsBox.style.display = 'none';
@@ -109,7 +146,7 @@
                         div.addEventListener('click', () => {
                             queryInput.value = item.symbol;
                             suggestionsBox.style.display = 'none';
-                            suggestionsBox.innerHTML = "";
+                            suggestionsBox.innerHTML = '';
                             form.submit();
                         });
                         suggestionsBox.appendChild(div);
@@ -121,43 +158,11 @@
                 }
             });
         
-            searchType.addEventListener('change', () => {
-                if (searchType.value === "news") {
-                    form.action = "/news.html";
-                    form.method = "POST";
-                    queryInput.placeholder = "Search stock news";
-                    suggestionsBox.style.display = 'none';
-                    suggestionsBox.innerHTML = "";
-                } else if (searchType.value === "stock") {
-                    form.action = "/stock";
-                    form.method = "GET";
-                    queryInput.placeholder = "Search stock symbol";
-                }
-            });
-
-        
-            logoImage.addEventListener('click', (e) => {
-                e.stopPropagation();
-                nav.classList.toggle('hidden');
-            });
-        
-            if (localStorage.getItem('darkMode') === 'true') {
-                document.body.classList.add('dark-mode');
-            }
-        
-            if (darkModeLink) {
-                darkModeLink.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    document.body.classList.toggle('dark-mode');
-                    const isDark = document.body.classList.contains('dark-mode');
-                    localStorage.setItem('darkMode', isDark.toString());
-                });
-            }
-        
+            // Load more news articles
             if (loadMoreButton) {
                 loadMoreButton.addEventListener('click', () => {
-                    const queryValue = queryInput.value.trim() || queryInput.dataset.default;
-
+                    const queryValue = queryInput.value.trim() || queryInput.dataset.default || 'Stock Market';
+        
                     fetch(`/load_more_news?query=${encodeURIComponent(queryValue)}&offset=${offset}`)
                         .then(response => response.json())
                         .then(data => {
@@ -165,7 +170,7 @@
                             data.forEach(article => {
                                 const link = document.createElement('a');
                                 link.href = article.link;
-                                link.target = "_blank";
+                                link.target = '_blank';
         
                                 const newsItem = document.createElement('div');
                                 newsItem.className = 'news-item';
@@ -184,7 +189,7 @@
                 });
             }
         });
-    </script>
+        </script>        
     
 
 </body>

@@ -126,7 +126,6 @@ a {
     background: #F9F5ED;
     border: 1px solid #ccc;
     z-index: 1000;
-    text-align: left;
     display: none;
     font-size: 16px;
     box-sizing: border-box;
@@ -144,7 +143,6 @@ body.dark-mode .suggestions-box {
 .suggestion {
     padding: 8px;
     cursor: pointer;
-    text-align: left;
 }
 
 .suggestion:hover {
@@ -176,16 +174,61 @@ body.dark-mode #headlines a {
     text-align: center;
 }
 
+
+.trending-stock-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: none;
+    background-color: #f0ede7;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: left;
+    font-family: Cambria, Georgia, serif;
+    color: #311f6b;
+    cursor: pointer;
+}
+
+body.dark-mode .trending-stock-button {
+    background-color: #222325;
+    color: #dee4fc;
+}
+
 #time-buttons {
     grid-area: time;
-    text-align: right;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 30px;
 }
 
 #time-buttons button {
-    border-radius: 0px;
-    float: right;
-    padding: 10px;
+    font-family: Cambria, Georgia, serif;
+    background-color: #f0ede7;
+    color: #311f6b;
+    border: 1px solid #311f6b;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
+
+#time-buttons button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+body.dark-mode #time-buttons button {
+    background-color: #222325;
+    color: #dee4fc;
+    border: 1px solid #191a1b;
+}
+
+
 
 #info {
     grid-area: info;

@@ -78,45 +78,116 @@ def create_graph(stock_symbol, colorblind_mode):
 appHome=Dash(__name__, server=server, routes_pathname_prefix="/home/")
 appHome.layout = html.Div([
     dcc.Location(id="url", refresh=False),
-    dcc.Tabs(id="tabs", value="S&P 500", children=[
-        dcc.Tab(label=name, value=name) for name in home_tickers.keys()
-    ]),
+    html.Div(id="tabs-container"),
     html.Div(id="tabs-content")
 ])
 
-@appHome.callback(
-   Output("tabs-content", "children"),
-    Input("tabs", "value"),
-    Input("url", "search") 
-)
 
+@appHome.callback(
+    Output("tabs-container", "children"),
+    Input("url", "search")
+)
+def update_tabs(search):
+    dark_mode = False
+    if search:
+        query = parse_qs(search.lstrip("?"))
+        dark_mode = query.get("darkmode", ["false"])[0] == "true"
+
+    if dark_mode:
+        tab_bg = "#222325"
+        tab_text = "#dee4fc"
+        tab_selected_bg = "#dee4fc"
+        tab_selected_text = "#141417"
+        border_color = "#191a1b"
+    else:
+        tab_bg = "#f0ede7"
+        tab_text = "#311f6b"
+        tab_selected_bg = "#311f6b"
+        tab_selected_text = "#f0ede7"
+        border_color = "#f0ede9"
+
+    return dcc.Tabs(
+        id="tabs",
+        value="S&P 500",
+        children=[
+            dcc.Tab(label=name, value=name, style={
+                "backgroundColor": tab_bg,
+                "color": tab_text,
+                "border": f"1px solid {border_color}",
+                "fontFamily": "Cambria, Georgia, serif",
+                "padding": "10px",
+                "textAlign": "center",
+                "justifyContent": "center",
+                "alignItems": "center",
+                "display": "flex"
+            }, selected_style={
+                "backgroundColor": tab_selected_bg,
+                "color": tab_selected_text,
+                "border": f"1px solid {border_color}",
+                "fontFamily": "Cambria, Georgia, serif",
+                "padding": "10px",
+                "textAlign": "center",
+                "justifyContent": "center",
+                "alignItems": "center",
+                "display": "flex"
+            }) for name in home_tickers.keys()
+        ],
+        style={
+            "backgroundColor": tab_bg,
+            "borderBottom": f"2px solid {border_color}",
+            "fontFamily": "Cambria, Georgia, serif"
+        }
+    )
+
+
+
+@appHome.callback(
+    Output("tabs-content", "children"),
+    Input("tabs", "value"),
+    Input("url", "search")
+)
 def update_graph(selected_tab, search):
-    # Default time range
     colorblind_mode = False
+    dark_mode = False
     time_range = "1d"
 
-    # Parse ?time=1mo
     if search:
         query = parse_qs(search.lstrip("?"))
         time_range = query.get("time", ["1d"])[0]
         colorblind_mode = query.get("colorblind", ["false"])[0] == "true"
-    
+        dark_mode = query.get("darkmode", ["false"])[0] == "true"
+
     df = fetch_stock_data(home_tickers[selected_tab], time_range)
     line_color, title = determine_color(home_tickers[selected_tab], colorblind_mode)
+
+    if dark_mode:
+        background_color = "#141417"
+        text_color = "#dee4fc"
+    else:
+        background_color = "#F9F5ED"
+        text_color = "#311f6b"
+
     fig = go.Figure()
-    fig.add_trace(
-        go.Scatter
-            (x=df.index, 
-             y=df["Close"], 
-             mode="lines",
-             line=dict(color=line_color, width=2), 
-             name=selected_tab))
+    fig.add_trace(go.Scatter(
+        x=df.index,
+        y=df["Close"],
+        mode="lines",
+        line=dict(color=line_color, width=2),
+        name=selected_tab
+    ))
+
     fig.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        title=title, 
-        xaxis_title="Date", 
-        yaxis_title="Closing Price")
+        plot_bgcolor=background_color,
+        paper_bgcolor=background_color,
+        font=dict(color=text_color),
+        title=title,
+        title_x=0.5,
+        xaxis_title="Date",
+        yaxis_title="Closing Price",
+        xaxis=dict(showgrid=True),
+        yaxis=dict(showgrid=True)
+    )
+
     return dcc.Graph(figure=fig)
 
 

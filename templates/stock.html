@@ -6,31 +6,6 @@
     <title>BearWatch</title>
     <link href="{{ url_for('static', filename='stock.css') }}" rel="stylesheet" type="text/css"/>
 
-    <!-- NEWS TICKER STYLES -->
-    <style>
-        #news-ticker {
-            overflow: hidden;
-            white-space: nowrap;
-            background-color: #f2f2f2;
-            padding: 10px;
-            border-bottom: 2px solid #ccc;
-            font-weight: bold;
-        }
-        #ticker-text {
-            display: inline-block;
-            padding-left: 100%;
-            animation: scroll-left 25s linear infinite;
-        }
-        #ticker-text a {
-            margin-right: 40px;
-            text-decoration: none;
-            color: #333;
-        }
-        @keyframes scroll-left {
-            0% { transform: translateX(0); }
-            100% { transform: translateX(-100%); }
-        }
-    </style>
 </head>
 
 <body>
@@ -60,14 +35,13 @@
 
     <!-- FINANCIAL NEWS TICKER -->
     <div id="news-ticker">
-        <a href="news.html">
-            <div id="ticker-text">
-                {% for article in ticker_news %}
-                    <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
-                {% endfor %}
-            </div>
-        </a>
+        <div id="ticker-text">
+            {% for article in ticker_news %}
+                <a href="{{ article.link }}" target="_blank">{{ article.title }}</a>
+            {% endfor %}
+        </div>
     </div>
+    
 
     <!-- STOCK HEADER -->
     <div id="stock-header">
@@ -98,7 +72,7 @@
                 {% for stock in trending_stocks %}
                     <button type="button" class="trending-stock-button"
                             onclick="window.location.href='/stock?stock={{ stock.ticker }}'"
-                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
+                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; margin-bottom: 10px; width: 100%; text-align: left;">
                         <div class="stock-info" style="flex-grow: 1;">
                             <div class="stock-ticker"><strong>{{ stock.ticker }}</strong></div>
                             <div class="stock-price">
@@ -136,7 +110,7 @@
                 {% for stock in related_stocks %}
                     <button type="button" class="related-stock-button"
                             onclick="window.location.href='/stock?stock={{ stock.ticker }}'"
-                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
+                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; margin-bottom: 10px; width: 100%; text-align: left;">
                         <div class="stock-info" style="flex-grow: 1;">
                             <div class="stock-ticker"><strong>{{ stock.ticker }}</strong></div>
                             <div class="stock-price">
@@ -178,51 +152,51 @@
     </div>
 
     <!-- INFORMATION -->
-    <div id="information">
-        <h2>Stock Overview</h2>
-        {% if stock_overview %}
-            <table id="overview-table">
-                <thead><tr><th></th></tr></thead>
-                <tbody>
-                    {% for key, value in stock_overview.items() %}
-                        <tr>
-                            <td><strong>{{ key }}</strong></td>
-                            <td>{{ value }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% else %}
-            {% if stock_symbol %}
-                <p>Could not retrieve overview information for {{ stock_symbol }}.</p>
+    <div id="info-stats-container">
+        <div id="information">
+            <h2>Stock Overview</h2>
+            {% if stock_overview %}
+                <table id="overview-table">
+                    <thead><tr><th></th></tr></thead>
+                    <tbody>
+                        {% for key, value in stock_overview.items() %}
+                            <tr>
+                                <td><strong>{{ key }}</strong></td>
+                                <td>{{ value }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
             {% else %}
-                <p>Please enter a stock symbol to view its overview.</p>
+                {% if stock_symbol %}
+                    <p>Could not retrieve overview information for {{ stock_symbol }}.</p>
+                {% else %}
+                    <p>Please enter a stock symbol to view its overview.</p>
+                {% endif %}
             {% endif %}
-        {% endif %}
+        </div>
+        <!-- STATS -->
+        <div id="stats">
+            <h2>About {{ stock_symbol }}</h2>
+            {% if stock_about %}
+                {% if "[Read more]" in stock_about %}
+                    {% set parts = stock_about.split('[Read more]') %}
+                    <p>
+                        {{ parts[0] }}
+                        <a href="https://stockanalysis.com/stocks/{{ stock_symbol|lower }}/company/" target="_blank" rel="noopener">[Read More]</a>
+                    </p>
+                {% else %}
+                    <p>{{ stock_about }}</p>
+                {% endif %}
+            {% else %}
+                {% if stock_symbol %}
+                    <p>No about information found for {{ stock_symbol }}.</p>
+                {% else %}
+                    <p>Please enter a stock symbol to view its information.</p>
+                {% endif %}
+            {% endif %}
+        </div>
     </div>
-
-    <!-- STATS -->
-    <div id="stats">
-        <h2>About {{ stock_symbol }}</h2>
-        {% if stock_about %}
-            {% if "[Read more]" in stock_about %}
-                {% set parts = stock_about.split('[Read more]') %}
-                <p>
-                    {{ parts[0] }}
-                    <a href="https://stockanalysis.com/stocks/{{ stock_symbol|lower }}/company/" target="_blank" rel="noopener">[Read More]</a>
-                </p>
-            {% else %}
-                <p>{{ stock_about }}</p>
-            {% endif %}
-        {% else %}
-            {% if stock_symbol %}
-                <p>No about information found for {{ stock_symbol }}.</p>
-            {% else %}
-                <p>Please enter a stock symbol to view its information.</p>
-            {% endif %}
-        {% endif %}
-    </div>
-
     <!-- SCRIPTS -->
     <script>
         window.addEventListener('DOMContentLoaded', () => {

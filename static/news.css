@@ -8,7 +8,7 @@ body {
         "news    news    news"
         "grid    grid    grid"
         "load    load    load";
-    grid-template-rows: 80px 10% auto auto;
+    grid-template-rows: 80px auto auto auto;
     grid-template-columns: auto;
     transition: all 0.3s ease;
     background-color: #F9F5ED;
@@ -55,6 +55,22 @@ body.dark-mode {
     display: flex;
     align-items: center;
     gap: 10px;
+}
+
+#search-type {
+    background-color: #f0ede7;
+    color: #311f6b;
+    border: 1px solid #311f6b;
+    cursor: pointer;
+    font-weight: bold;
+    font-family: Cambria, Georgia, serif;
+
+}
+
+body.dark-mode #search-type {
+    background-color: #222325;
+    color: #dee4fc;
+    border: 1px solid #dee4fc;
 }
 
 #search input {
@@ -143,11 +159,21 @@ body.dark-mode #nav a h3 {
 }
 
 /* --- News Items --- */
+
 .news-item {
     background-color: #f0ede7;
     padding: 10px;
     border-radius: 5px;
     box-shadow: 2px 2px 10px rgba(0,0,0,0.1);
+    height: 300px; 
+    display: flex; 
+    flex-direction: column;
+    justify-content: space-between; 
+}
+
+body.dark-mode .news-item {
+    background-color: #222325; 
+    box-shadow: 2px 2px 10px rgba(255,255,255,0.1); 
 }
 
 .news-item img {
@@ -159,10 +185,23 @@ body.dark-mode #nav a h3 {
 
 .news-item a {
     display: block;
+    text-decoration: none;
+    color: inherit; 
+}
+
+.news-item p {
     margin-top: 10px;
     font-size: 16px;
-    text-decoration: none;
-    color: #311f6b;
+    color: #311f6b; 
+}
+
+#newsGrid a {
+    display: block; /* makes the <a> behave like a block inside grid */
+    height: 100%;
+}
+
+body.dark-mode .news-item p {
+    color: #dee4fc; 
 }
 
 /* --- Load More Button --- */
@@ -181,6 +220,12 @@ body.dark-mode #nav a h3 {
 }
 
 #loadMoreButton:hover {
+    background-color: #222325;
+    color: #dee4fc;
+    border: 1px solid #dee4fc;
+}
+
+body.dark-mode #loadMoreButton {
     background-color: #222325;
     color: #dee4fc;
     border: 1px solid #dee4fc;
