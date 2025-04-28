@@ -1,7 +1,7 @@
 body {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Cambria, Georgia, serif;
     background-color: #F9F5ED;
-    color: #4e4b9f;
+    color: #311f6b;
     padding: 10px;
     margin: 0;
     display: grid;
@@ -19,8 +19,8 @@ body {
 }
 
 body.dark-mode {
-    background-color: #1E054D;
-    color: #e0e0e0;
+    background-color: #141417;
+    color: #dee4fc;
 }
 
 /* --- Top Bar --- */
@@ -70,14 +70,14 @@ body.dark-mode {
     top: 100px; 
     left: 20px; 
     width: 250px; 
-    background-color: white;
-    border: 1px solid #ccc;
+    background-color: #f0ede7;
+    border: 1px solid #f0ede9;
     border-radius: 8px;
     box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 8px; /* spacing between nav links */
+    gap: 8px;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
     opacity: 1;
@@ -94,13 +94,13 @@ body.dark-mode {
 
 a {
     text-decoration: none;
-    color: #4e4b9f;
+    color: #311f6b;
 }
 
 #nav a h3 {
     margin: 10px 0;
-    font-family: 'Times New Roman', Times, serif;
-    color: #101935;
+    font-family: Cambria, Georgia, serif;
+    color: #311f6b;
     text-decoration: none;
 }
 
@@ -109,19 +109,20 @@ a {
 }
 
 body.dark-mode #nav {
-    background-color: #2A1C5A;
+    background-color: #222325;
+    border-color: #191a1b;
 }
 
 body.dark-mode #nav a h3 {
-    color: #e0e0e0;
+    color: #dee4fc;
 }
 
 /* --- Buttons --- */
 button {
-    font-family: 'Times New Roman', Times, serif;
-    background-color: #F2FDFF;
-    color: black;
-    border-color: black;
+    font-family: Cambria, Georgia, serif;
+    background-color: #f0ede7;
+    color: #311f6b;
+    border: 1px solid #311f6b;
     padding: 10px;
     float: center;
 }
@@ -136,7 +137,7 @@ button {
 
 #stock-header {
     grid-area: title;
-    color: #101935;
+    color: #311f6b;
 }
 
 #graph {
@@ -189,14 +190,24 @@ button {
     margin: 10px 0;
 }
 
+#headlines a {
+    color: #311f6b;
+    text-decoration: none;
+}
+
+body.dark-mode #headlines a {
+    color: #dee4fc;
+}
+
+
 /* --- Suggestions Box --- */
 .suggestions-box {
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
     width: 100%;
-    background: white;
-    border: 1px solid #ccc;
+    background: #f0ede7;
+    border: 1px solid #f0ede9;
     z-index: 10000;
     display: none;
     font-size: 16px;
@@ -206,6 +217,12 @@ button {
     border-radius: 4px;
     box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
 }
+
+body.dark-mode .suggestions-box {
+    background: #222325;
+    border: 1px solid #191a1b;
+}
+
 
 .suggestion {
     padding: 8px;
@@ -226,7 +243,7 @@ button {
 .ticker a {
     display: inline-block;
     padding: 0 40px;
-    color: #4e4b9f;
+    color: #311f6b;
     text-decoration: none;
     font-weight: bold;
 }
@@ -240,11 +257,11 @@ button {
     overflow: hidden;
     white-space: nowrap;
     box-sizing: border-box;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #f0ede9;
+    border-bottom: 1px solid #f0ede9;
     padding: 10px 0;
     padding-bottom: 20px;
-    background-color: #f0f0f0;
+    background-color: #f0ede7;
     grid-column: 1 / -1;
 }
 

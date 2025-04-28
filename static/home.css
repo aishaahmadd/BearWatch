@@ -1,8 +1,8 @@
 body {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Cambria, Georgia, serif;
     padding: 10px;
     background-color: #F9F5ED;
-    color: #4e4b9f;
+    color: #311f6b;
     display: grid;
     grid-template:
         "top-bar    top-bar   top-bar    top-bar"
@@ -16,8 +16,8 @@ body {
 }
 
 body.dark-mode {
-    background-color: #1E054D;
-    color: #e0e0e0;
+    background-color: #141417;
+    color: #dee4fc;
 }
 
 /* --- Top Bar --- */
@@ -67,14 +67,14 @@ body.dark-mode {
     top: 100px; 
     left: 20px; 
     width: 250px; 
-    background-color: white;
-    border: 1px solid #ccc;
+    background-color: #f0ede7;
+    border: 1px solid #f0ede9;
     border-radius: 8px;
     box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
     padding: 10px;
     display: flex;
     flex-direction: column;
-    gap: 8px; /* spacing between nav links */
+    gap: 8px;
     z-index: 1000;
     transition: transform 0.3s ease, opacity 0.3s ease;
     opacity: 1;
@@ -90,15 +90,15 @@ body.dark-mode {
 }
 
 body.dark-mode #nav {
-    background-color: #2A1C5A;
-    border-color: #444;
+    background-color: #222325;
+    border-color: #191a1b;
 }
 
 #nav a h3 {
     margin: 10px 0;
-    color: #4e4b9f;
+    color: #311f6b;
     text-decoration: none;
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Cambria, Georgia, serif;
     font-size: 18px;
     text-align: left;
 }
@@ -108,13 +108,13 @@ body.dark-mode #nav {
 }
 
 body.dark-mode #nav a h3 {
-    color: #e0e0e0;
+    color: #dee4fc;
 }
 
 /* --- General Links --- */
 a {
     text-decoration: none;
-    color: #4e4b9f;
+    color: #311f6b;
 }
 
 /* --- Autocomplete Suggestions --- */
@@ -126,6 +126,7 @@ a {
     background: #F9F5ED;
     border: 1px solid #ccc;
     z-index: 1000;
+    text-align: left;
     display: none;
     font-size: 16px;
     box-sizing: border-box;
@@ -135,9 +136,15 @@ a {
     box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
 }
 
+body.dark-mode .suggestions-box {
+    background: #222325;
+    border: 1px solid #191a1b;
+}
+
 .suggestion {
     padding: 8px;
     cursor: pointer;
+    text-align: left;
 }
 
 .suggestion:hover {
@@ -154,6 +161,15 @@ a {
     grid-area: headlines;
     text-align: center;
 }
+
+#headlines a {
+    color: #311f6b;
+}
+
+body.dark-mode #headlines a {
+    color: #dee4fc;
+}
+
 
 #trending {
     grid-area: trending;
@@ -185,10 +201,10 @@ a {
 
 /* --- Buttons --- */
 button {
-    font-family: 'Times New Roman', Times, serif;
-    background-color: white;
-    color: black;
-    border-color: black;
+    font-family: Cambria, Georgia, serif;
+    background-color: #f0ede7;
+    color: #311f6b;
+    border: 1px solid #311f6b;
     border-radius: 5px;
     padding: 10px;
 }
@@ -217,15 +233,18 @@ button {
 }
 
 .headline-title {
-    color: #4e4b9f;
+    color: #311f6b;
     font-weight: 600;
     text-decoration: none;
+}
+
+body.dark-mode .headline-title {
+    color: #dee4fc;
 }
 
 .headline-title:hover {
     text-decoration: underline;
 }
-
 
 .change-badge {
     color: white;
@@ -243,4 +262,3 @@ body.colorblind-mode .positive-change {
 body.colorblind-mode .negative-change {
     background-color: orange;
 }
-  
