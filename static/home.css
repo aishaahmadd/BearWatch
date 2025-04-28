@@ -111,6 +111,9 @@ a {
     text-decoration: none;
     color: #311f6b;
 }
+body.dark-mode #a {
+    color: #dee4fc;
+}
 
 /* --- Search Section --- */
 #search {
