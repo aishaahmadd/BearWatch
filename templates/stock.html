@@ -215,6 +215,26 @@
                 nav.classList.toggle('hidden');
             });
 
+            stockInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    const suggestions = suggestionsBox.querySelectorAll('.suggestion');
+                    if (suggestions.length > 0) {
+                        event.preventDefault();
+                        const firstSuggestion = suggestions[0].textContent;
+                        const match = firstSuggestion.match(/\(([^)]+)\)/);
+                        if (match && match[1]) {
+                            stockInput.value = match[1];
+                            document.getElementById('search-form').submit();
+                        }
+                    } else {
+                        stockInput.value = stockInput.value.toUpperCase();
+                        document.getElementById('search-form').submit();
+                    }
+                }
+            });
+
+
+
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.classList.add('dark-mode');
             }

@@ -61,127 +61,144 @@
 
     <!-- SCRIPTS -->
     <script>
-    window.addEventListener('DOMContentLoaded', () => {
-        const logoDiv = document.getElementById('logo');
-        const logoImage = logoDiv.querySelector('img');
-        const nav = document.getElementById('nav');
-        const darkModeLink = document.getElementById('dark-mode-button');
-        const loadMoreButton = document.getElementById('loadMoreButton');
-        const form = document.getElementById('search-form');
-        const searchType = document.getElementById('search-type');
-        const queryInput = document.getElementById('query');
-        const suggestionsBox = document.getElementById('suggestions');
-
-        let offset = 8;
+        window.addEventListener('DOMContentLoaded', () => {
+            const logoDiv = document.getElementById('logo');
+            const logoImage = logoDiv.querySelector('img');
+            const nav = document.getElementById('nav');
+            const darkModeLink = document.getElementById('dark-mode-button');
+            const loadMoreButton = document.getElementById('loadMoreButton');
+            const form = document.getElementById('search-form');
+            const searchType = document.getElementById('search-type');
+            const queryInput = document.getElementById('query');
+            const suggestionsBox = document.getElementById('suggestions');
         
-
-        queryInput.addEventListener('input', async function () {
-            if (searchType.value !== "stock") {
-                suggestionsBox.style.display = 'none';
-                suggestionsBox.innerHTML = "";
-                return;
-            }
-
-            const query = queryInput.value.trim();
-            if (query.length === 0) {
-                suggestionsBox.style.display = 'none';
-                suggestionsBox.innerHTML = "";
-                return;
-            }
-
-            try {
-                const response = await fetch(`/autocomplete_stock?query=${query}`);
-                const suggestions = await response.json();
-                suggestionsBox.innerHTML = "";
-
-                if (suggestions.length === 0) {
+            let offset = 8;
+        
+            queryInput.addEventListener('input', async function () {
+                if (searchType.value !== "stock") {
                     suggestionsBox.style.display = 'none';
+                    suggestionsBox.innerHTML = "";
                     return;
                 }
-
-                suggestions.forEach(item => {
-                    const div = document.createElement('div');
-                    div.className = 'suggestion';
-                    div.textContent = `${item.name} (${item.symbol})`;
-                    div.addEventListener('click', () => {
-                        queryInput.value = item.symbol;
+        
+                const query = queryInput.value.trim();
+                if (query.length === 0) {
+                    suggestionsBox.style.display = 'none';
+                    suggestionsBox.innerHTML = "";
+                    return;
+                }
+        
+                try {
+                    const response = await fetch(`/autocomplete_stock?query=${query}`);
+                    const suggestions = await response.json();
+                    suggestionsBox.innerHTML = "";
+        
+                    if (suggestions.length === 0) {
                         suggestionsBox.style.display = 'none';
-                        suggestionsBox.innerHTML = "";
-                        form.submit();
-                    });
-                    suggestionsBox.appendChild(div);
-                });
-
-                suggestionsBox.style.display = 'block';
-            } catch (error) {
-                console.error('Error fetching suggestions:', error);
-            }
-        });
-
-        searchType.addEventListener('change', () => {
-            if (searchType.value === "news") {
-                form.action = "/news.html";
-                form.method = "POST";
-                queryInput.placeholder = "Search stock news";
-                queryInput.name = "query"; 
-                suggestionsBox.style.display = 'none';
-                suggestionsBox.innerHTML = "";
-            } else if (searchType.value === "stock") {
-                form.action = "/stock";
-                form.method = "GET";
-                queryInput.placeholder = "Search stock symbol";
-                queryInput.name = "stock"; 
-            }
-        });
-
-
-        logoImage.addEventListener('click', (e) => {
-            e.stopPropagation();
-            nav.classList.toggle('hidden');
-        });
-
-        if (localStorage.getItem('darkMode') === 'true') {
-            document.body.classList.add('dark-mode');
-        }
-
-        if (darkModeLink) {
-            darkModeLink.addEventListener('click', (e) => {
-                e.preventDefault();
-                document.body.classList.toggle('dark-mode');
-                const isDark = document.body.classList.contains('dark-mode');
-                localStorage.setItem('darkMode', isDark.toString());
-            });
-        }
-
-        if (loadMoreButton) {
-            loadMoreButton.addEventListener('click', () => {
-                const queryValue = queryInput.value.trim() || queryInput.dataset.default;
-                fetch(`/load_more_news?query=${encodeURIComponent(queryValue)}&offset=${offset}`)
-                    .then(response => response.json())
-                    .then(data => {
-                        const newsGrid = document.getElementById('newsGrid');
-                        data.forEach(article => {
-                            const link = document.createElement('a');
-                            link.href = article.link;
-                            link.target = "_blank";
-
-                            const newsItem = document.createElement('div');
-                            newsItem.className = 'news-item';
-                            newsItem.innerHTML = `
-                                <img src="${article.image}" alt="News Image">
-                                <p>${article.title}</p>`;
-                            link.appendChild(newsItem);
-                            newsGrid.appendChild(link);
+                        return;
+                    }
+        
+                    suggestions.forEach(item => {
+                        const div = document.createElement('div');
+                        div.className = 'suggestion';
+                        div.textContent = `${item.name} (${item.symbol})`;
+                        div.addEventListener('click', () => {
+                            queryInput.value = item.symbol;
+                            suggestionsBox.style.display = 'none';
+                            suggestionsBox.innerHTML = "";
+                            form.submit();
                         });
-                        offset += data.length;
-                    })
-                    .catch(error => {
-                        console.error('Failed to load more news:', error);
+                        suggestionsBox.appendChild(div);
                     });
+        
+                    suggestionsBox.style.display = 'block';
+                } catch (error) {
+                    console.error('Error fetching suggestions:', error);
+                }
             });
-        }
-    });
-    </script>
+        
+            queryInput.addEventListener('keydown', function (event) {
+                if (event.key === 'Enter' && searchType.value === 'stock') {
+                    const suggestions = suggestionsBox.querySelectorAll('.suggestion');
+                    if (suggestions.length > 0) {
+                        event.preventDefault();
+                        const firstSuggestion = suggestions[0].textContent;
+                        const match = firstSuggestion.match(/\(([^)]+)\)/);
+                        if (match && match[1]) {
+                            queryInput.value = match[1]; 
+                            form.submit();
+                        }
+                    } else {
+                        queryInput.value = queryInput.value.toUpperCase(); 
+                        form.submit();
+                    }
+                }
+            });
+        
+            searchType.addEventListener('change', () => {
+                if (searchType.value === "news") {
+                    form.action = "/news.html";
+                    form.method = "POST";
+                    queryInput.placeholder = "Search stock news";
+                    queryInput.name = "query";
+                    suggestionsBox.style.display = 'none';
+                    suggestionsBox.innerHTML = "";
+                } else if (searchType.value === "stock") {
+                    form.action = "/stock";
+                    form.method = "GET";
+                    queryInput.placeholder = "Search stock symbol";
+                    queryInput.name = "stock";
+                }
+            });
+        
+            logoImage.addEventListener('click', (e) => {
+                e.stopPropagation();
+                nav.classList.toggle('hidden');
+            });
+        
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+            }
+        
+            if (darkModeLink) {
+                darkModeLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.body.classList.toggle('dark-mode');
+                    const isDark = document.body.classList.contains('dark-mode');
+                    localStorage.setItem('darkMode', isDark.toString());
+                });
+            }
+        
+            if (loadMoreButton) {
+                loadMoreButton.addEventListener('click', () => {
+                    const queryValue = queryInput.value.trim() || queryInput.dataset.default;
+                    fetch(`/load_more_news?query=${encodeURIComponent(queryValue)}&offset=${offset}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            const newsGrid = document.getElementById('newsGrid');
+                            data.forEach(article => {
+                                const link = document.createElement('a');
+                                link.href = article.link;
+                                link.target = "_blank";
+        
+                                const newsItem = document.createElement('div');
+                                newsItem.className = 'news-item';
+                                newsItem.innerHTML = `
+                                    <img src="${article.image}" alt="News Image">
+                                    <p>${article.title}</p>`;
+                                link.appendChild(newsItem);
+                                newsGrid.appendChild(link);
+                            });
+                            offset += data.length;
+                        })
+                        .catch(error => {
+                            console.error('Failed to load more news:', error);
+                        });
+                });
+            }
+        });
+        </script>
+        
 
 </body>
 </html>
