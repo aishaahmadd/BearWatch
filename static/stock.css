@@ -147,6 +147,11 @@ body.dark-mode #nav a h3 {
     color: #311f6b;
 }
 
+body.dark-mode #stock-header {
+    grid-area: title;
+    color: #dee4fc;
+}
+
 #graph {
     grid-area: graph;
     overflow: auto;
