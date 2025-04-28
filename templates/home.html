@@ -114,10 +114,20 @@
             const colorblindBtn = document.getElementById('colorblind-button');
             const iframe = document.getElementById('stock-graph');
             const form = document.getElementById('search-form');
+            const timeButtons = document.querySelectorAll('#time-buttons button');
 
             logoImage.addEventListener('click', (e) => {
                 e.stopPropagation();
                 nav.classList.toggle('hidden');
+            });
+
+            timeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const timeValue = button.getAttribute('data-value');
+                    const url = new URL(iframe.src, window.location.origin);
+                    url.searchParams.set('time', timeValue);
+                    iframe.src = url.toString();
+                });
             });
 
             stockInput.addEventListener('keydown', function(event) {
@@ -219,20 +229,10 @@
                     console.error('Error fetching suggestions:', error);
                 }
             });
+
+
         });
 
-        // TIME BUTTONS
-        const iframe = document.getElementById('stock-graph');
-        const buttons = document.querySelectorAll('#time-buttons button');
-
-        buttons.forEach(button => {
-            button.addEventListener('click', () => {
-                const timeValue = button.getAttribute('data-value');
-                const url = new URL(iframe.src, window.location.origin);
-                url.searchParams.set('time', timeValue);
-                iframe.src = url.toString();
-            });
-        });
     </script>
 
 </body>

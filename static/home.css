@@ -10,7 +10,7 @@ body {
         "headlines  time      time       trending"
         "info       info      overview   overview";
     grid-template-columns: 20% 30% 30% 20%;
-    grid-template-rows: 80px 60% 5% 10%;
+    grid-template-rows: 80px 60% 10% 10%;
     min-width: 1280px;
     transition: all 0.3s ease;
 }
@@ -201,7 +201,7 @@ body.dark-mode .trending-stock-button {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    margin-top: 45px;
+    margin-top: 50px;
 }
 
 #time-buttons button {
@@ -215,6 +215,7 @@ body.dark-mode .trending-stock-button {
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
+    
 }
 
 #time-buttons button:hover {
@@ -242,15 +243,6 @@ body.dark-mode #time-buttons button {
     padding-left: 30px;
 }
 
-/* --- Buttons --- */
-button {
-    font-family: Cambria, Georgia, serif;
-    background-color: #f0ede7;
-    color: #311f6b;
-    border: 1px solid #311f6b;
-    border-radius: 5px;
-    padding: 10px;
-}
 
 /* --- Headlines List --- */
 .headline-list {
