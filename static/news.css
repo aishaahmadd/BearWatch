@@ -211,12 +211,15 @@ body.dark-mode .news-item p {
 }
 
 #loadMoreButton {
-    padding: 10px 15px;
+    padding: 10px 16px;
     font-size: 16px;
     background-color: #f0ede7;
     color: #311f6b;
     border: 1px solid #311f6b;
+    border-radius: 8px;
     cursor: pointer;
+    font-family: Cambria, Georgia, serif;
+    transition: all 0.3s ease;
 }
 
 #loadMoreButton:hover {
