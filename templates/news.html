@@ -49,6 +49,7 @@
 </head>
 <body>
 
+<<<<<<< Updated upstream
     <!-- LOGO -->
     <div id="logo">
         <img id="BearLogo" src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
@@ -58,6 +59,23 @@
         <a href="/"><h3>Home</h3></a>
         <a href="news.html"><h3>News</h3></a>
         <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
+=======
+        <!-- SEARCH FORM -->
+        <div id="search">
+            <form id="search-form" method="GET">
+                <div id="search-wrapper">
+                    <div id="input-wrapper" style="position: relative; flex-grow: 1; width: auto;">
+                        <input id="query" name="query" type="text" placeholder="Search stock news" value="{{ request.form.get('query', request.args.get('query', '')) }}" data-default="Stock Market" autocomplete="off">
+                        <div id="suggestions" class="suggestions-box"></div>
+                    </div>
+                    <select id="search-type" style="margin-left: 50px; padding: 10px; border-radius: 10px; width:100px;">
+                        <option value="news">News</option>
+                        <option value="stock">Stock</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+>>>>>>> Stashed changes
     </div>
 
     <!-- HEADLINE -->
@@ -80,8 +98,12 @@
         {% for article in news %}
             <a href="{{ article.link }}" target="_blank">
                 <div class="news-item">
-                    <img src="{{ article.image }}" alt="News Image">
-                    <p>{{ article.title }}</p>
+                    {% if article.image %}
+                        <img src="{{ article.image }}" alt="News Image">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='stockImage.jpg') }}" alt="News Image">
+                    {% endif %}
+                    <h3>{{ article.title }}</h3>
                 </div>
             </a>
         {% endfor %}
@@ -132,8 +154,14 @@
                                 newsItem.className = 'news-item';
                                 newsItem.innerHTML = `
                                     <img src="${article.image}" alt="News Image">
+<<<<<<< Updated upstream
                                     <a href="${article.link}" target="_blank">${article.title}</a>`;
                                 newsGrid.appendChild(newsItem);
+=======
+                                    <h3>${article.title}</h3>`;
+                                link.appendChild(newsItem);
+                                newsGrid.appendChild(link);
+>>>>>>> Stashed changes
                             });
                             offset += data.length;
                         })

@@ -284,7 +284,7 @@ def update_graph(n, search): #added from owen
 @server.route("/", methods=["GET"])
 def home():
     #stock_symbol = request.args.get("stock", "^GSPC")
-    home_news = get_main_news(query="Stock Market", count=4)
+    home_news = get_main_news(query="Stock Market", count=5)
     trending_stocks = get_trending_stocks()
     return render_template("home.html", home_news=home_news, trending_stocks=trending_stocks)
 
@@ -311,7 +311,7 @@ def load_more_news():
 @server.route('/stock', methods=["GET", "POST"])
 def stock():
     stock_symbol = request.args.get("stock", "^GSPC").upper()
-    stock_news = get_stock_news(stock_symbol, count=5)
+    stock_news = get_stock_news(stock_symbol, count=4)
     ticker_news = get_latest_financial_news()
     if stock_symbol:
         stock_overview = get_stock_overview(stock_symbol)

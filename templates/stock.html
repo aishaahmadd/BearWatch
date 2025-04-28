@@ -108,6 +108,7 @@
         </div>
 
 
+<<<<<<< Updated upstream
         <!--TRENDING STOCKS-->
         <div id="trending">
             <h2>Trending Stocks</h2>
@@ -125,6 +126,37 @@
                                 <div class="stock-price">
                                     ${{ "%.2f"|format(stock.price) if stock.price != 'N/A' else 'N/A' }}
                                 </div>
+=======
+    <!-- GRAPH -->
+    <div id="graph">
+        <iframe id="stock-graph" src="/dashboard?stock={{ stock_symbol }}" width="100%" height="600px" style="border:none;"></iframe>
+    </div>
+
+    <!-- TIME BUTTONS -->
+    <div id="time-buttons">
+        <button data-value="1d">1D</button>
+        <button data-value="5d">1W</button>
+        <button data-value="1mo">1M</button>
+        <button data-value="3mo">3M</button>
+        <button data-value="ytd">YTD</button>
+        <button data-value="1y">1Y</button>
+        <button data-value="max">ALL</button>
+    </div>
+
+    <!-- TRENDING STOCKS -->
+    <div id="trending">
+        <h3>Trending Stocks</h3>
+        {% if trending_stocks %}
+            <div id="trending-container">
+                {% for stock in trending_stocks %}
+                    <button type="button" class="trending-stock-button"
+                            onclick="window.location.href='/stock?stock={{ stock.ticker }}'"
+                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; margin-bottom: 10px; width: 100%; text-align: left;">
+                        <div class="stock-info" style="flex-grow: 1;">
+                            <div class="stock-ticker"><strong>{{ stock.ticker }}</strong></div>
+                            <div class="stock-price">
+                                ${{ "%.2f"|format(stock.price) if stock.price != 'N/A' else 'N/A' }}
+>>>>>>> Stashed changes
                             </div>
                             <!-- Right side: Price Change and Percentage -->
                             <div class="stock-change-info">
@@ -141,6 +173,34 @@
                                 {% else %}
                                     <span style="padding:5px 10px;">N/A</span>
                                 {% endif %}
+<<<<<<< Updated upstream
+=======
+                            {% else %}
+                                <span style="padding:5px 10px;">N/A</span>
+                            {% endif %}
+                        </div>
+                    </button>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p>No trending stocks found.</p>
+        {% endif %}
+    </div>
+
+    <!-- RELATED STOCKS -->
+    <div id="related-stocks">
+        <h3>Related Stocks</h3>
+        {% if related_stocks %}
+            <div id="related-stocks-container">
+                {% for stock in related_stocks %}
+                    <button type="button" class="related-stock-button"
+                            onclick="window.location.href='/stock?stock={{ stock.ticker }}'"
+                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; margin-bottom: 10px; width: 100%; text-align: left;">
+                        <div class="stock-info" style="flex-grow: 1;">
+                            <div class="stock-ticker"><strong>{{ stock.ticker }}</strong></div>
+                            <div class="stock-price">
+                                ${{ "%.2f"|format(stock.price) if stock.price != 'N/A' else 'N/A' }}
+>>>>>>> Stashed changes
                             </div>
                         </button>
                     {% endfor %}
@@ -210,11 +270,28 @@
             </ul>
         </div>
 
+<<<<<<< Updated upstream
 
         <!--INFO-->
+=======
+    <!-- STOCK HEADLINES -->
+    <div id="headlines">
+        <h3><a href="news.html">Stock Headlines</a></h3>
+        <div>
+            {% for headline in stock_news %}
+                <div class="news-box">
+                    <img class="headline-img" src="{{ headline.image }}" alt="News Image">
+                    <h4 class="headline-title"><a href="{{ headline.link }}" target="_blank">{{ headline.title }}</a></h4>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+>>>>>>> Stashed changes
         <div id="information">
-            <h2>Stock Overview</h2>
+            <h3>Stock Overview</h3>
             {% if stock_overview %}
+<<<<<<< Updated upstream
                 <table id="overview-table">
                     <thead>
                         <tr>
@@ -230,19 +307,50 @@
                         {% endfor %}
                     </tbody>
                 </table>
+=======
+              {# Turn the dict into a list of (key,value) pairs #}
+              {% set items = stock_overview.items() | list %}
+              {# Compute how many columns we need (4 rows per column) #}
+              {% set cols = (items|length // 4) + (1 if items|length % 4 else 0) %}
+          
+              <table id="overview-table">
+                <tr>
+                  {# Header per column #}
+                  {% for c in range(cols) %}
+                    <th></th>
+                  {% endfor %}
+                </tr>
+          
+                {# 4 rows total #}
+                {% for row in range(4) %}
+                <tr>
+                  {% for c in range(cols) %}
+                    {% set idx = c * 4 + row %}
+                    {% if idx < items|length %}
+                      <td><strong>{{ items[idx][0] }}</strong></td>
+                      <td>{{ items[idx][1] }}</td>
+                    {% else %}
+                      <td></td><td></td>
+                    {% endif %}
+                  {% endfor %}
+                </tr>
+                {% endfor %}
+              </table>
+          
+>>>>>>> Stashed changes
             {% else %}
-                {% if stock_symbol %}
-                    <p>Could not retrieve overview information for {{ stock_symbol }}.</p>
-                {% else %}
-                    <p>Please enter a stock symbol to view its overview.</p>
-                {% endif %}
+              <p>Please enter a stock symbol to view its overview.</p>
             {% endif %}
         </div>
 
         <!--Stats-->
         <div id="stats">
+<<<<<<< Updated upstream
             <h2>About {{ stock_symbol }}</h2>
           
+=======
+            <h3>About {{ stock_symbol }}</h3>
+>>>>>>> Stashed changes
             {% if stock_about %}
               {# Check if the text ends with “[Read More]” #}
               {% if "[Read more]" in stock_about %}
@@ -270,6 +378,7 @@
             {% endif %}
         </div>
 
+<<<<<<< Updated upstream
         <!--SCRIPT TO HANDLE BUTTON CLICKS-->
         <script>
             const iframe = document.getElementById("stock-graph");
@@ -290,6 +399,14 @@
         
         <!-- SCRIPT FROM ACCESSIBILITY -->
         <script>
+=======
+    <!-- SCRIPTS -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const logo = document.getElementById('logo');
+            const nav = document.getElementById('nav');
+            const logoImage = logo.querySelector('img');
+>>>>>>> Stashed changes
             const stockInput = document.getElementById('stock-input');
             const suggestionsBox = document.getElementById('suggestions');
             const toggleButton = document.getElementById('dark-mode-button');
