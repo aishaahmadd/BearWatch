@@ -167,7 +167,6 @@
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.classList.add('dark-mode');
 
-                // Update iframe URL to add ?darkmode=true
                 const iframeURL = new URL(iframe.src, window.location.origin);
                 iframeURL.searchParams.set('darkmode', 'true');
                 iframe.src = iframeURL.toString();

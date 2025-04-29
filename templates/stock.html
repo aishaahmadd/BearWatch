@@ -205,7 +205,7 @@
             const logoImage = logo.querySelector('img');
             const stockInput = document.getElementById('stock-input');
             const suggestionsBox = document.getElementById('suggestions');
-            const toggleButton = document.getElementById('dark-mode-button');
+            const darkModeLink = document.getElementById('dark-mode-button');
             const colorblindBtn = document.getElementById('colorblind-button');
             const iframe = document.getElementById('stock-graph');
             const timeButtons = document.querySelectorAll('#time-buttons button');
@@ -233,10 +233,25 @@
                 }
             });
 
-
-
             if (localStorage.getItem('darkMode') === 'true') {
                 document.body.classList.add('dark-mode');
+
+                const iframeURL = new URL(iframe.src, window.location.origin);
+                iframeURL.searchParams.set('darkmode', 'true');
+                iframe.src = iframeURL.toString();
+            }
+
+            if (darkModeLink) {
+                darkModeLink.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    document.body.classList.toggle('dark-mode');
+                    const isDark = document.body.classList.contains('dark-mode');
+                    localStorage.setItem('darkMode', isDark.toString());
+
+                    const iframeURL = new URL(iframe.src, window.location.origin);
+                    iframeURL.searchParams.set('darkmode', isDark ? 'true' : 'false');
+                    iframe.src = iframeURL.toString();
+                });
             }
 
             if (toggleButton) {

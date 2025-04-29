@@ -281,12 +281,15 @@ app.layout = html.Div([
 def update_graph(n, search): #added from owen
     stock_symbol = "^GSPC"
     time_range = "1d"
+    colorblind_mode = False
+    dark_mode = False
 
     if search:
         query = parse_qs(search.lstrip("?"))
         stock_symbol = query.get("stock", ["^GSPC"])[0]
         time_range = query.get("time", ["1d"])[0]
         colorblind_mode = query.get("colorblind", ["false"])[0] == "true"
+        dark_mode = query.get("darkmode",   ["false"])[0] == "true"
 
     data = fetch_stock_data(stock_symbol, time_range)
     stock = yf.Ticker(stock_symbol)
@@ -317,6 +320,12 @@ def update_graph(n, search): #added from owen
     ${current_price:.2f} <span style='color:{line_color};'> <br>
     {sign}${price_change:.2f} ({sign}{percent_change:.2f}%) Today</span>
     """
+    if dark_mode:
+        background_color = "#141417"
+        text_color       = "#dee4fc"
+    else:
+        background_color = "#F9F5ED"
+        text_color       = "#311f6b"
 
     figure = go.Figure(data=[go.Scatter(
         x=data.index,
@@ -327,8 +336,9 @@ def update_graph(n, search): #added from owen
     )])
 
     figure.update_layout(
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
+        plot_bgcolor=background_color,
+        paper_bgcolor=background_color,
+        font=dict(color=text_color),
         title=title,
         title_x=0.5,
         xaxis_title="Time",
