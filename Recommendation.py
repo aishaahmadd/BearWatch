@@ -4,6 +4,7 @@ import sklearn
 from sklearn.metrics.pairwise import cosine_similarity
 from sklearn.preprocessing import StandardScaler
 import requests
+import numpy as np
 
 # Function to get company info
 def get_company_info(ticker):
@@ -60,6 +61,8 @@ def recommend_stocks(input_ticker, df, top_n=5):
     # Ensure only valid numeric columns are used
     available_columns = [col for col in numeric_columns if col in df.columns]
     features = df[available_columns]
+    features = features.replace([np.inf, -np.inf], np.nan)
+    features = features.dropna()
 
     # Standardize features **AFTER appending the new stock**
     scaler = StandardScaler()
