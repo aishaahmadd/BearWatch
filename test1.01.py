@@ -354,7 +354,7 @@ def update_graph(n, search): #added from owen
 def home():
     #stock_symbol = request.args.get("stock", "^GSPC")
     home_news = get_main_news(query="Stock Market", count=7)
-    trending_stocks = get_trending_stocks()
+    trending_stocks = get_trending_stocks(limit=10)
     return render_template("home.html", home_news=home_news, trending_stocks=trending_stocks)
 
 
@@ -385,7 +385,7 @@ def stock():
     if stock_symbol:
         stock_overview = get_stock_overview(stock_symbol)
         stock_about = get_stock_about(stock_symbol)
-        trending_stocks = get_trending_stocks()
+        trending_stocks = get_trending_stocks(limit=5)
         related_stocks = get_related_stocks(stock_symbol) # Get similar stocks for the given stock symbol
     return render_template("stock.html", stock_symbol=stock_symbol, stock_overview=stock_overview, stock_about=stock_about, trending_stocks=trending_stocks, related_stocks=related_stocks, stock_news=stock_news, ticker_news=ticker_news)
 

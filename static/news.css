@@ -172,7 +172,7 @@ body.dark-mode #nav a h3 {
 }
 
 .news-item:hover {
-    box-shadow: 2px 14px 2px #141417;
+    box-shadow: 10px 5px 5px #141417;
 }
 
 body.dark-mode .news-item {
@@ -200,7 +200,12 @@ body.dark_mode .news-item:hover {
 .news-item h3 {
     margin-top: 10px;
     color:#311f6b; 
-    text-decoration: none;
+    text-decoration: none;     /* Prevents wrapping */
+    display: -webkit-box;
+    -webkit-line-clamp: 2;          /* Show up to 2 lines */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #newsGrid a {

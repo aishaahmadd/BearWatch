@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import yfinance as yf
 
-def get_trending_stocks():
+def get_trending_stocks(limit=5):
     
     
     url = "https://stockanalysis.com/trending/"
@@ -24,7 +24,7 @@ def get_trending_stocks():
     
         if table:
             rows = table.find_all('tr')[1:]  # Skip the header row
-            for row in rows[:5]:  # Get top 5
+            for row in rows[:limit]:  # Get top 5
                 cols = row.find_all('td')
                 if len(cols) >= 2:
                     # Usually the ticker is in the second column with a link
@@ -48,3 +48,4 @@ def get_trending_stocks():
             print("Trending stocks table not found.")
     else:
         print("Failed to retrieve the webpage.")
+

@@ -15,7 +15,9 @@ body {
         grid-template-rows: 7% 3% 5% 30% 15%;          
     min-width: 1280px;
     transition: all 0.3s ease;
+    justify-content: center;
 }
+
 
 body.dark-mode {
     background-color: #141417;
@@ -138,11 +140,13 @@ body.dark-mode #stock-header {
 #trending {
     grid-area: trending;
     align-self: start;
+    padding: 5px;
 }
 
 #related-stocks {
     grid-area: related-stocks;
     align-self: start;
+    padding: 5px;
 }
 
 #headlines {
@@ -216,18 +220,28 @@ body.dark-mode .headline-title {
     border-radius: 8px;
 }
 
+.trending-stock-button:hover,
+.related-stock-button:hover {
+    box-shadow:10px 5px 5px #3a3a3a;
+}
+
 body.dark-mode .trending-stock-button,
 body.dark-mode .related-stock-button {
     background-color: #222325;
     color: #dee4fc;
 }
 
+body.dark-mode .trending-stock-button:hover,
+body.dark-mode .related-stock-button:hover {
+    box-shadow:10px 5px 5px #f0ede7;
+}
 
 #time-buttons {
     grid-area: buttons;
     display: flex;
-    justify-content: center;
+    justify-content:center;
     align-items: center;
+    padding-top: 25px;
 }
 
 #time-buttons button {
@@ -235,7 +249,9 @@ body.dark-mode .related-stock-button {
     background-color: #f0ede7;
     color: #311f6b;
     border: 1px solid #311f6b;
-    font-size: 16px;
+    border-radius: 8px;
+    padding: 8px 8px;
+    font-size: 12px;
     font-weight: bold;
     cursor: pointer;
     transition: all 0.3s ease;
