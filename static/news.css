@@ -171,14 +171,22 @@ body.dark-mode #nav a h3 {
     justify-content: space-between; 
 }
 
+.news-item:hover {
+    box-shadow: 2px 14px 2px #141417;
+}
+
 body.dark-mode .news-item {
     background-color: #222325; 
-    box-shadow: 2px 2px 10px rgba(255,255,255,0.1); 
+    box-shadow: 10px 5px 5px rgba(255,255,255,0.1); 
+}
+
+body.dark_mode .news-item:hover {
+    box-shadow: 10px 5px 5px #eee;
 }
 
 .news-item img {
     max-width: 100%;
-    height: 150px;
+    height: 200px;
     object-fit: cover;
     border-radius: 5px;
 }
@@ -189,18 +197,19 @@ body.dark-mode .news-item {
     color: inherit; 
 }
 
-.news-item p {
+.news-item h3 {
     margin-top: 10px;
-    font-size: 16px;
-    color: #311f6b; 
+    color:#311f6b; 
+    text-decoration: none;
 }
 
 #newsGrid a {
     display: block; /* makes the <a> behave like a block inside grid */
     height: 100%;
+    text-decoration: none;
 }
 
-body.dark-mode .news-item p {
+body.dark-mode .news-item h3 {
     color: #dee4fc; 
 }
 
@@ -223,15 +232,23 @@ body.dark-mode .news-item p {
 }
 
 #loadMoreButton:hover {
-    background-color: #222325;
-    color: #dee4fc;
-    border: 1px solid #dee4fc;
+    background-color: #f0ede7;
+    color: #311f6b;
+    border: 1px solid #311f6b;
+    box-shadow: 1px 10px 1px #141417;
 }
 
 body.dark-mode #loadMoreButton {
     background-color: #222325;
     color: #dee4fc;
     border: 1px solid #dee4fc;
+}
+
+body.dark-mode #loadMoreButton:hover {
+    background-color: #222325;
+    color: #dee4fc;
+    border: 1px solid #ccc;
+    box-shadow: 1px 10px 1px #eee;
 }
 
 .suggestions-box {

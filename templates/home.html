@@ -33,7 +33,7 @@
 
     <!-- GRAPH -->
     <div id="graph">
-        <iframe id="stock-graph" src="/home" width="100%" height="600px" style="border:none;"></iframe>
+        <iframe id="stock-graph" src="/home" width="100%" height="700px" style="border:none;"></iframe>
     </div>
 
     <!-- TIME BUTTONS -->
@@ -50,12 +50,16 @@
     <!-- HEADLINES -->
     <div id="headlines">
         <h2><a href="news.html">Headlines</a></h2>
-        <ul>
+        <div id = "news-container">
             {% for headline in home_news %}
-                <li><a href="{{ headline.link }}" target="_blank">{{ headline.title }}</a></li>
-                <img src="{{ headline.image }}" alt="News Image" class="headline-img">
+                <a href="{{ headline.link }}" target="_blank">
+                <div class="news-box">
+                    <h5 class="headline-title">{{ headline.title }}</h5>
+                    <img src="{{ headline.image }}" alt="News Image" class="headline-img">
+                </div>
+                </a>
             {% endfor %}
-        </ul>
+        </div>
     </div>
 
     <!-- TRENDING STOCKS -->
@@ -95,12 +99,6 @@
             <p>No trending stocks found.</p>
         {% endif %}
     </div>
-
-    <!-- INFO -->
-    <div id="info"></div>
-
-    <!-- OVERVIEW -->
-    <div id="overview"></div>
 
     <!-- SCRIPTS -->
     <script>

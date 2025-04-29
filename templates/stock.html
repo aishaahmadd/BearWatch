@@ -143,38 +143,53 @@
     <!-- STOCK HEADLINES -->
     <div id="headlines">
         <h2><a href="news.html">Stock Headlines</a></h2>
-        <ul>
+        <div class="news-container">
             {% for headline in stock_news %}
-                <li><a href="{{ headline.link }}" target="_blank">{{ headline.title }}</a></li>
-                <img src="{{ headline.image }}" alt="News Image" class="headline-img">
+                <div class="news-box">
+                    <img src="{{ headline.image }}" alt="News Image" class="headline-img">
+                    <a class="headline-title" href="{{ headline.link }}" target="_blank">{{ headline.title }}</a>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     </div>
 
     <!-- INFORMATION -->
-    <div id="info-stats-container">
-        <div id="information">
-            <h2>Stock Overview</h2>
-            {% if stock_overview %}
-                <table id="overview-table">
-                    <thead><tr><th></th></tr></thead>
-                    <tbody>
-                        {% for key, value in stock_overview.items() %}
-                            <tr>
-                                <td><strong>{{ key }}</strong></td>
-                                <td>{{ value }}</td>
-                            </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            {% else %}
-                {% if stock_symbol %}
-                    <p>Could not retrieve overview information for {{ stock_symbol }}.</p>
+    <div id="information">
+        <h2>Stock Overview</h2>
+        {% if stock_overview %}
+          {# Turn the dict into a list of (key,value) pairs #}
+          {% set items = stock_overview.items() | list %}
+          {# Compute how many columns we need (4 rows per column) #}
+          {% set cols = (items|length // 4) + (1 if items|length % 4 else 0) %}
+      
+          <table id="overview-table">
+            <tr>
+              {# Header per column #}
+              {% for c in range(cols) %}
+                <th></th>
+              {% endfor %}
+            </tr>
+      
+            {# 4 rows total #}
+            {% for row in range(4) %}
+            <tr>
+              {% for c in range(cols) %}
+                {% set idx = c * 4 + row %}
+                {% if idx < items|length %}
+                  <td><strong>{{ items[idx][0] }}</strong></td>
+                  <td>{{ items[idx][1] }}</td>
                 {% else %}
-                    <p>Please enter a stock symbol to view its overview.</p>
+                  <td></td><td></td>
                 {% endif %}
-            {% endif %}
-        </div>
+              {% endfor %}
+            </tr>
+            {% endfor %}
+          </table>
+      
+        {% else %}
+          <p>Please enter a stock symbol to view its overview.</p>
+        {% endif %}
+      </div>
         <!-- STATS -->
         <div id="stats">
             <h2>About {{ stock_symbol }}</h2>
@@ -196,7 +211,7 @@
                 {% endif %}
             {% endif %}
         </div>
-    </div>
+
     <!-- SCRIPTS -->
     <script>
         window.addEventListener('DOMContentLoaded', () => {

@@ -47,12 +47,16 @@
         {% for article in news %}
             <a href="{{ article.link }}" target="_blank">
                 <div class="news-item">
-                    <img src="{{ article.image }}" alt="News Image">
-                    <p>{{ article.title }}</p>
+                    {% if article.image %}
+                        <img src="{{ article.image }}" alt="News Image">
+                    {% else %}
+                        <img src="{{ url_for('static', filename='stockImage.jpg') }}" alt="News Image">
+                    {% endif %}
+                    <h3>{{ article.title }}</h3>
                 </div>
             </a>
         {% endfor %}
-    </div>
+    </div>    
 
     <!-- LOAD MORE BUTTON -->
     <div id="loadMoreContainer">
@@ -184,7 +188,7 @@
                                 newsItem.className = 'news-item';
                                 newsItem.innerHTML = `
                                     <img src="${article.image}" alt="News Image">
-                                    <p>${article.title}</p>`;
+                                    <h3>${article.title}</h3>`;
                                 link.appendChild(newsItem);
                                 newsGrid.appendChild(link);
                             });

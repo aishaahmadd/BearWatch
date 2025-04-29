@@ -2,18 +2,17 @@ body {
     font-family: Cambria, Georgia, serif;
     background-color: #F9F5ED;
     color: #311f6b;
-    padding: 10px;
-    margin: 0;
+    padding: 0;
     display: grid;
     grid-template-areas:
-        "top-bar    top-bar          top-bar        top-bar"
-        "newsTicker newsTicker       newsTicker     newsTicker"
-        "title      title            title          title"
-        "graph      related-stocks   trending       headlines"
-        "buttons    related-stocks   trending       headlines"
-        "info-stats info-stats       info-stats    info-stats";
-    grid-template-columns: 55% 15% 15% 15%;
-    grid-template-rows: 80px 3% 5% 27% 5% auto;
+        "top-bar      top-bar          top-bar          top-bar      top-bar"
+        "newsTicker   newsTicker       newsTicker       newsTicker   newsTicker"        /* new code: changed row 2 */
+        "title        buttons          related-stocks   trending     headlines"
+        "graph        graph            related-stocks   trending     headlines"
+        "graph        graph            stats            stats        stats"             /* new code: changed row 5 */
+        "information  information      information      information  information";      /* new code: changed row 6 */
+        grid-template-columns: 27% 27% 15% 15% 15%;
+        grid-template-rows: 7% 3% 5% 30% 15%;          
     min-width: 1280px;
     transition: all 0.3s ease;
 }
@@ -22,28 +21,6 @@ body.dark-mode {
     background-color: #141417;
     color: #dee4fc;
 }
-
-#info-stats-container {
-    display: flex;
-    justify-content: center;
-    align-items: flex-start;
-    gap: 30px; 
-    grid-area: info-stats;
-    width: 40%; 
-    padding: 10px 270px;
-    
-}
-
-
-#information, #stats {
-    flex: 1 1 auto;
-    padding: 10px;
-    min-width: 300px; 
-    max-width: 600px; 
-}
-
-
-
 
 /* --- Top Bar --- */
 #top-bar {
@@ -175,6 +152,53 @@ body.dark-mode #stock-header {
     overflow-wrap: break-word;
 }
 
+.news-box {
+    display: grid;
+    grid-template:"img title";
+    grid-template-columns: 70px 1fr;
+    align-items: center;
+    background-color: #f0ede9;
+    margin: 5px;
+    padding: 5px;
+    gap: 10px;
+    height: 70px;
+    overflow: hidden; /* important to prevent overflow */
+}
+
+body.dark-mode .news-box {
+    background-color: #222325;
+}
+  
+.headline-img {
+    grid-area:img;
+    width: 70px;
+    height: 70px;
+    object-fit: cover;
+    border-radius: 6px;
+}
+  
+.headline-title {
+    grid-area:title;
+    font-size: 14px;
+    color: #311f6b;
+    font-weight: 600;
+    text-align: left;
+    overflow: hidden; /* ✅ allow content to be clipped */
+    display: -webkit-box; /* ✅ flexbox trick */
+    -webkit-line-clamp: 2; /* ✅ limit to 2 lines (or whatever fits) */
+    -webkit-box-orient: vertical; /* ✅ vertical flow */
+    word-break: break-word; /* ✅ break long words */
+}
+  
+body.dark-mode .headline-title {
+    color: #dee4fc;
+}
+
+.headline-title:hover {
+    text-decoration: underline;
+}
+
+
 .trending-stock-button,
 .related-stock-button {
     display: flex;
@@ -204,8 +228,6 @@ body.dark-mode .related-stock-button {
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 8px;
-    margin-top: 50px; 
 }
 
 #time-buttons button {
@@ -213,8 +235,6 @@ body.dark-mode .related-stock-button {
     background-color: #f0ede7;
     color: #311f6b;
     border: 1px solid #311f6b;
-    border-radius: 8px;
-    padding: 10px 16px;
     font-size: 16px;
     font-weight: bold;
     cursor: pointer;
@@ -238,13 +258,6 @@ body.dark-mode #time-buttons button {
     font-size: 28px;
     margin-bottom: 20px;
     text-align: left;
-}
-
-.headline-img {
-    max-height: 100px;
-    width: auto;
-    display: block;
-    margin: 10px 0;
 }
 
 #headlines a {
@@ -352,4 +365,49 @@ body.colorblind-mode .positive-change {
 }
 body.colorblind-mode .negative-change {
     background-color: orange;
+}
+
+#information {
+    grid-area: information;
+    box-sizing: border-box;
+    width: 100%;
+    margin-top: 0;
+}
+
+#overview-table {
+    width: 100%;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+#overview-table th,
+#overview-table td {
+    text-align: left;
+    word-wrap: break-word;
+    font-size: 13px;
+}
+
+#overview-table th {
+    background-color: #f0ede7;
+    color: #311f6b;
+    font-weight: bold;
+}
+
+#overview-table td {
+    color: #311f6b;
+}
+
+body.dark-mode #overview-table th {
+    background-color: #222325;
+    color: #dee4fc;
+}
+
+body.dark-mode #overview-table td {
+    color: #dee4fc;
+}
+
+
+#stats{
+    grid-area: stats;
+
 }
