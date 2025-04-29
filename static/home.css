@@ -1,124 +1,123 @@
-/*used to be style*/
 body {
-    font-family: 'Times New Roman', Times, serif;
-    padding: 20px;
-    /* For Light Mode: */
+    font-family: Cambria, Georgia, serif;
+    padding: 10px;
     background-color: #F9F5ED;
-    color: #4e4b9f;
-    display:grid;
+    color: #311f6b;
+    display: grid;
     grid-template:
-        "nav  top        search    search       search1"
-        "nav  headlines  graph     graph        trending"
-        "nav  headlines  time      time         trending"
-        "nav  info       info      overview     overview";
-    grid-template-columns: var(--nav-width, 10%) 20% 30% 30% 20%;
-    grid-template-rows: 10% 60% 5% 10%;
+        "top-bar    top-bar   top-bar    top-bar"
+        "headlines  graph     graph      trending"
+        "headlines  time      time       trending"
+        "info       info      overview   overview";
+    grid-template-columns: 20% 30% 30% 20%;
+    grid-template-rows: 80px 60% 10% 10%;
+    min-width: 1280px;
     transition: all 0.3s ease;
-}
-
-body.nav-hidden {
-    --nav-width: 0%;
-}
-
-[id="nav"] {
-    grid-area: nav;
-    overflow: hidden;
-    background-color: #4ebbff;
-    transition: all 0.3s ease;
-}
-
-body.nav-hidden #nav {
-    width: 0;
-    padding: 0;
-    opacity: 0;
 }
 
 body.dark-mode {
-    background-color: #1E054D;
-    color: #e0e0e0;
+    background-color: #141417;
+    color: #dee4fc;
 }
 
-body.dark-mode #nav {
-    background-color: #2A1C5A;
-}
-
-#nav {
-    grid-area: nav;
-    overflow: hidden;
-    background-color: #f0f0f0;
-    transition: all 0.3s ease;
-    z-index: 1;
-    position: relative;
+/* --- Top Bar --- */
+#top-bar {
+    grid-area: top-bar;
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    padding: 10px;
+    align-items: center;
+    padding: 20px;
+    gap: 40px;
+    position: relative;
 }
 
-body.nav-hidden #nav {
-    width: 0;
-    padding: 0;
-    opacity: 0;
-}
-
-#nav a h3 {
-    margin: 10px 0;
-    font-family: 'Times New Roman', Times, serif;
-    color: #4e4b9f;
-    text-decoration: none;
-}
-body.dark-mode #nav a h3 {
-    color: #e0e0e0;
-}
-
-[id="logo"]{
-    grid-area: top; 
+#logo {
     text-align: left;
+    position: relative;
+    cursor: pointer;
 }
 
 #logo img {
-    width: 75%;
+    width: 300px;
     height: auto;
-    margin-bottom: 10%;
 }
 
-a {
-    text-decoration: none;
-    color: #4e4b9f;
+#search {
+    flex-grow: 1;
+    padding-top: 0px;  
 }
 
-[id = "search"]{
-    grid-area: search;
-    text-align: left;
-    padding: 10px;
-    font-size: 16px;
+#search-wrapper {
+    width: 100%;
+    max-width: 900px;
+    position: relative;
 }
 
 #search input {
     width: 100%;
-    border-radius: 10px;
-    border-color: black;
-    text-align: left;
-    padding: 5px;
-}
-
-[id="search1"]{
-    grid-area:search1;
-    text-align:left;
-    padding: 10px;
+    padding: 8px;
     font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid black;
+    text-align: left;
 }
 
-#search1 button {
-    font-size: 12px;
-    padding: 6px;
+/* --- Navigation --- */
+#nav {
+    position: absolute;
+    top: 100px; 
+    left: 20px; 
+    width: 250px; 
+    background-color: #f0ede7;
+    border: 1px solid #f0ede9;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 1000;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top;
+    pointer-events: auto;
 }
 
-#search-wrapper {
-    position: relative;
-    width: 100%;
+#nav.hidden {
+    opacity: 0;
+    transform: scaleY(0);
+    pointer-events: none;
 }
 
+body.dark-mode #nav {
+    background-color: #222325;
+    border-color: #191a1b;
+}
+
+#nav a h3 {
+    margin: 10px 0;
+    color: #311f6b;
+    text-decoration: none;
+    font-family: Cambria, Georgia, serif;
+    font-size: 18px;
+    text-align: left;
+}
+
+#nav a h3:hover {
+    text-decoration: underline;
+}
+
+body.dark-mode #nav a h3 {
+    color: #dee4fc;
+}
+
+/* --- General Links --- */
+a {
+    text-decoration: none;
+    color: #311f6b;
+}
+
+/* --- Autocomplete Suggestions --- */
 .suggestions-box {
     position: absolute;
     top: calc(100% + 4px);
@@ -136,6 +135,11 @@ a {
     box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
 }
 
+body.dark-mode .suggestions-box {
+    background: #222325;
+    border: 1px solid #191a1b;
+}
+
 .suggestion {
     padding: 8px;
     cursor: pointer;
@@ -145,51 +149,102 @@ a {
     background: #eee;
 }
 
+/* --- Main Sections --- */
 #graph {
     grid-area: graph;
     text-align: center;
 }
 
-[id = "headlines"]{
+#headlines {
     grid-area: headlines;
     text-align: center;
 }
 
-[id = "trending"]{
+#headlines a {
+    color: #311f6b;
+}
+
+body.dark-mode #headlines a {
+    color: #dee4fc;
+}
+
+
+#trending {
     grid-area: trending;
     text-align: center;
 }
 
-[id = "time-buttons"]{
-    grid-area: time;
-    text-align: right;
-}
-#time-buttons button{
-    border-radius: 0px;
-    float:right;
-    padding:10px;
+
+.trending-stock-button {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border: none;
+    background-color: #f0ede7;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: left;
+    font-family: Cambria, Georgia, serif;
+    color: #311f6b;
+    cursor: pointer;
 }
 
-[id = "info"]{
+body.dark-mode .trending-stock-button {
+    background-color: #222325;
+    color: #dee4fc;
+}
+
+#time-buttons {
+    grid-area: time;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 50px;
+}
+
+#time-buttons button {
+    font-family: Cambria, Georgia, serif;
+    background-color: #f0ede7;
+    color: #311f6b;
+    border: 1px solid #311f6b;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    
+}
+
+#time-buttons button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+body.dark-mode #time-buttons button {
+    background-color: #222325;
+    color: #dee4fc;
+    border: 1px solid #191a1b;
+}
+
+
+
+#info {
     grid-area: info;
     text-align: left;
-    padding-left:30px;
+    padding-left: 30px;
 }
 
-[id = "overview"]{
+#overview {
     grid-area: overview;
     text-align: left;
-    padding-left:30px;
+    padding-left: 30px;
 }
 
-button{
-    font-family: 'Times New Roman', Times, serif;
-    background-color:white;
-    color:black;
-    border-color: black;
-    border-radius: 5px;
-    padding: 10px;
-}
+
+/* --- Headlines List --- */
 .headline-list {
     display: flex;
     flex-direction: column;
@@ -213,64 +268,32 @@ button{
 }
 
 .headline-title {
-    color: #4e4b9f;
+    color: #311f6b;
     font-weight: 600;
     text-decoration: none;
+}
+
+body.dark-mode .headline-title {
+    color: #dee4fc;
 }
 
 .headline-title:hover {
     text-decoration: underline;
 }
 
-#menu-container {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 50px;
-}
-
-#menu-toggle {
-    font-size: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-body.dark-mode #menu-toggle {
+.change-badge {
     color: white;
-}
-
-#menu {
-    position: absolute;
-    top: 50px;
-    left: 0;
-    width: 180px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
-    z-index: 1000;
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
-}
-
-#menu.hidden {
-    display: none;
-}
-
-#menu button {
-    margin: 5px 0;
-    padding: 10px;
-    font-size: 16px;
-    background-color: #eee;
-    border: none;
-    cursor: pointer;
+    padding: 5px 10px;
     border-radius: 5px;
-    text-align: center;
+    display: inline-block;
 }
+  
+.positive-change { background-color: green; }
+.negative-change { background-color: red; }
 
-#menu button:hover {
-    background-color: #ddd;
+body.colorblind-mode .positive-change {
+    background-color: blue;
+}
+body.colorblind-mode .negative-change {
+    background-color: orange;
 }

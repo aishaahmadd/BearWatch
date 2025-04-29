@@ -1,188 +1,270 @@
 body {
-    font-family: 'Times New Roman', Times, serif;
+    font-family: Cambria, Georgia, serif;
     background-color: #F9F5ED;
-    color: #4e4b9f;
-
-    padding: 0px;
+    color: #311f6b;
+    padding: 10px;
+    margin: 0;
     display: grid;
     grid-template-areas:
-        "top         top              search     search"
-        "newsTicker  newsTicker       newsTicker newsTicker"
-        "title       related-stocks   trending   headlines"
-        "buttons     related-stocks   trending   headlines"
-        "graph       related-stocks   trending   headliens"
-        "information information      stats      stats";
+        "top-bar    top-bar          top-bar        top-bar"
+        "newsTicker newsTicker       newsTicker     newsTicker"
+        "title      title            title          title"
+        "graph      related-stocks   trending       headlines"
+        "buttons    related-stocks   trending       headlines"
+        "info-stats info-stats       info-stats    info-stats";
     grid-template-columns: 55% 15% 15% 15%;
-    grid-template-rows: 10% 3% 5% 5% 50% 10%;
+    grid-template-rows: 80px 3% 5% 27% 5% auto;
+    min-width: 1280px;
     transition: all 0.3s ease;
 }
 
 body.dark-mode {
-    background-color: #1E054D;
-    color: #e0e0e0;
+    background-color: #141417;
+    color: #dee4fc;
+}
+
+#info-stats-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 30px; 
+    grid-area: info-stats;
+    width: 40%; 
+    padding: 10px 270px;
+    
 }
 
 
-body.dark-mode #menu-toggle {
-    color: white;
-}
-
-button {
-    font-family: 'Times New Roman', Times, serif;
-    background-color: #F2FDFF;
-    color: black;
-    border-color: black;
+#information, #stats {
+    flex: 1 1 auto;
     padding: 10px;
-    float: center;
+    min-width: 300px; 
+    max-width: 600px; 
+}
+
+
+
+
+/* --- Top Bar --- */
+#top-bar {
+    grid-area: top-bar;
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    gap: 40px;
+    position: relative;
+}
+
+#logo {
+    text-align: left;
+    position: relative;
+    cursor: pointer;
+}
+
+#logo img {
+    width: 300px;
+    height: auto;
+}
+
+#search {
+    flex-grow: 1;
+    padding-top: 0px;   
+}
+
+#search-wrapper {
+    width: 100%;
+    max-width: 900px;
+    position: relative;
+}
+
+#search input {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid black;
+    text-align: left;
+}
+
+/* --- Navigation --- */
+#nav {
+    position: absolute;
+    top: 100px; 
+    left: 20px; 
+    width: 250px; 
+    background-color: #f0ede7;
+    border: 1px solid #f0ede9;
+    border-radius: 8px;
+    box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+    padding: 10px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    z-index: 1000;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 1;
+    transform: scaleY(1);
+    transform-origin: top;
+    pointer-events: auto;
+}
+
+#nav.hidden {
+    opacity: 0;
+    transform: scaleY(0);
+    pointer-events: none;
+}
+
+a {
+    text-decoration: none;
+    color: #311f6b;
+}
+
+#nav a h3 {
+    margin: 10px 0;
+    font-family: Cambria, Georgia, serif;
+    color: #311f6b;
+    text-decoration: none;
+}
+
+#nav a h3:hover {
+    text-decoration: underline;
+}
+
+body.dark-mode #nav {
+    background-color: #222325;
+    border-color: #191a1b;
+}
+
+body.dark-mode #nav a h3 {
+    color: #dee4fc;
+}
+
+
+/* --- Layout Sections --- */
+
+#stock-header {
+    grid-area: title;
+    color: #311f6b;
+}
+
+body.dark-mode #stock-header {
+    grid-area: title;
+    color: #dee4fc;
 }
 
 #graph {
     grid-area: graph;
+    overflow: auto;
+    align-self: start;
 }
 
-#information {
-    grid-area: information;
+#trending {
+    grid-area: trending;
+    align-self: start;
 }
 
-[id="logo"] {
-    grid-area: top;
-    text-align: left;
+#related-stocks {
+    grid-area: related-stocks;
+    align-self: start;
 }
 
-#logo img {
-    width: 30%;
-    height: auto;
-    margin-bottom: 10%;
-    max-width: 400px;
-    margin-bottom: 00px;
+#headlines {
+    grid-area: headlines;
+    align-self: start;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
-#menu {
-    position: absolute;
-    top: 50px;
-    left: 0;
-    width: 180px;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    padding: 10px;
-    border-radius: 8px;
-    box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
-    z-index: 1000;
+.trending-stock-button,
+.related-stock-button {
     display: flex;
-    flex-direction: column;
-    align-items: stretch;
-}
-
-#menu-container {
-    position: absolute;
-    top: 20px;
-    left: 20px;
-    width: 50px;
-}
-
-#menu-toggle {
-    font-size: 30px;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-#menu.hidden {
-    display: none;
-}
-
-#menu button {
-    margin: 5px 0;
+    align-items: center;
+    gap: 10px;
     padding: 10px;
-    font-size: 16px;
-    background-color: #eee;
     border: none;
+    background-color: #f0ede7;
+    margin-bottom: 10px;
+    width: 100%;
+    text-align: left;
+    font-family: Cambria, Georgia, serif;
+    color: #311f6b;
     cursor: pointer;
-    border-radius: 5px;
-    text-align: center;
+    border-radius: 8px;
 }
 
-#menu button:hover {
-    background-color: #ddd;
+body.dark-mode .trending-stock-button,
+body.dark-mode .related-stock-button {
+    background-color: #222325;
+    color: #dee4fc;
 }
 
-#news-ticker {
-    grid-area: newsTicker;
+
+#time-buttons {
+    grid-area: buttons;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 8px;
+    margin-top: 50px; 
 }
 
+#time-buttons button {
+    font-family: Cambria, Georgia, serif;
+    background-color: #f0ede7;
+    color: #311f6b;
+    border: 1px solid #311f6b;
+    border-radius: 8px;
+    padding: 10px 16px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+#time-buttons button:hover {
+    filter: brightness(1.1);
+    transform: scale(1.05);
+}
+
+body.dark-mode #time-buttons button {
+    background-color: #222325;
+    color: #dee4fc;
+    border: 1px solid #191a1b;
+}
+
+
+/* --- Headlines --- */
 #newsHeadline h2 {
     font-size: 28px;
     margin-bottom: 20px;
     text-align: left;
 }
 
-#recommended-stocks {
-    grid-area: related-stocks;
+.headline-img {
+    max-height: 100px;
+    width: auto;
+    display: block;
+    margin: 10px 0;
 }
 
-#search {
-    grid-area: search;
-    display: flex;
-    justify-content: flex-end;
-    align-items: center;
-    padding: 10px;
-    font-size: 16px;
+#headlines a {
+    color: #311f6b;
+    text-decoration: none;
 }
 
-#search input {
-    border-radius: 10px;
-    border: #F2FDFF 1px;
-    text-align: left;
+body.dark-mode #headlines a {
+    color: #dee4fc;
 }
 
-#search button {
-    font-size: 16px;
-    padding: 6px;
-}
 
-#search-wrapper {
-    position: relative;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    width: 100%;
-    max-width: 400px;
-}
-
-#stats {
-    grid-area: stats;
-}
-
-#stock-header {
-    grid-area: title;
-    color: #101935;
-}
-
-#time-buttons {
-    grid-area: buttons;
-    text-align: left;
-}
-
-#trending {
-    grid-area: trending;
-}
-
-.suggestion {
-    padding: 8px;
-    cursor: pointer;
-}
-
-.suggestion:hover {
-    background: #eee;
-}
-
+/* --- Suggestions Box --- */
 .suggestions-box {
     position: absolute;
     top: calc(100% + 4px);
     left: 0;
     width: 100%;
-    background: white;
-    border: 1px solid #ccc;
+    background: #f0ede7;
+    border: 1px solid #f0ede9;
     z-index: 10000;
     display: none;
     font-size: 16px;
@@ -193,42 +275,81 @@ button {
     box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
 }
 
-.ticker {
-    display: inline-block;
-    white-space: nowrap;
-    animation: scroll-left 30s linear infinite;
+body.dark-mode .suggestions-box {
+    background: #222325;
+    border: 1px solid #191a1b;
 }
 
-.ticker a {
-    display: inline-block;
-    padding: 0 40px;
-    color: #4e4b9f;
-    text-decoration: none;
+
+.suggestion {
+    padding: 8px;
+    cursor: pointer;
+}
+
+.suggestion:hover {
+    background: #eee;
+}
+
+/* --- Ticker --- */
+#news-ticker {
+    grid-area: newsTicker;
+    width: 100vw; 
+    position: relative;
+    left: -10px; 
+    padding: 10px;
+    background-color: #f0ede7;
+    border-top: 1px solid #f0ede9;
+    border-bottom: 1px solid #f0ede9;
     font-weight: bold;
-}
-
-.ticker a:hover {
-    text-decoration: underline;
-}
-
-.ticker-container {
-    width: 100%;
     overflow: hidden;
     white-space: nowrap;
-    box-sizing: border-box;
-    border-top: 1px solid #ccc;
-    border-bottom: 1px solid #ccc;
-    padding: 10px 0;
-    background-color: #f0f0f0;
-    margin-top: 10px;
-    grid-column: 1 / -1;
+}
+
+body.dark-mode #news-ticker {
+    background-color: #222325;
+    border-top: 1px solid #191a1b;
+    border-bottom: 1px solid #191a1b;
+}
+
+
+#ticker-text {
+    display: inline-block;
+    white-space: nowrap;
+    animation: scroll-left 40s linear infinite;
+}
+
+#ticker-text a {
+    margin-right: 40px;
+    text-decoration: none;
+    color: #311f6b;
+}
+
+body.dark-mode #ticker-text a {
+    color: #dee4fc;
 }
 
 @keyframes scroll-left {
     0% {
-        transform: translateX(100%);
+        transform: translateX(60%);
     }
     100% {
         transform: translateX(-100%);
     }
+}
+
+.change-badge {
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    display: inline-block;
+}
+  
+.positive-change { background-color: green; }
+.negative-change { background-color: red; }
+
+body.colorblind-mode .positive-change {
+    background-color: blue;
+}
+body.colorblind-mode .negative-change {
+    background-color: orange;
 }

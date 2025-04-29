@@ -1,58 +1,26 @@
-<!--
-------THIS IS THE HOME PAGE------
-9 sections:
-1. Logo = div id = "logo"
-2. Search Engine = div id = "search"
-3. Buttons (Trends) = div id = "trend buttons"
-4. Graph = div id = "graph"
-5. Headlines = div id = "headlines"
-6. Trending (has graphs... will have to figure out) = div id = "trending"
-7. Buttons (time) = div id = "time buttons"
-8. Info = div id = "info"
-9. Overview = div = "overview"
--->
-
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8">
-        <meta name="viewport" content="width=device-width">
-        <title>BearWatch</title>
-        <link href="{{ url_for('static', filename='home.css') }}" rel="stylesheet" type="text/css"/>
-        <script>
-            window.addEventListener("DOMContentLoaded", () => {
-                const logo = document.getElementById("BearLogo");
-                logo.addEventListener("click", () => {
-                    document.body.classList.toggle("nav-hidden");
-                });
-            });
-        </script>
-    </head>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <title>BearWatch</title>
+    <link href="{{ url_for('static', filename='home.css') }}" rel="stylesheet" type="text/css"/>
+</head>
 
-    <body>
-        <div id="nav">
-            <a href="/"><h3>Home</h3></a>
-            <a href="news.html"><h3>News</h3></a>
-            <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
-            <a href="#" id="colorblind-button"><h3>Colorblind Mode</h3></a>
+<body>
+    <div id="top-bar">
+        <!-- LOGO -->
+        <div id="logo">
+            <img src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
+            <!-- NAV -->
+            <div id="nav" class="hidden">
+                <a href="/"><h3>Home</h3></a>
+                <a href="news.html"><h3>News</h3></a>
+                <a href="#" id="dark-mode-button"><h3>Dark Mode</h3></a>
+                <a href="#" id="colorblind-button"><h3>Colorblind Mode</h3></a>
+            </div>
         </div>
-
-        <!--LOGO-->
-        <div id = "logo">
-            <img id="BearLogo" src="{{ url_for('static', filename='BearWatchLogo.png') }}" alt="BearWatch Logo">
-        </div>
-
-        <!-- DARK MODE BUTTON
-        <div id="dark-mode-toggle">
-            <button id="dark-mode-button">Toggle Dark Mode</button>
-        </div> -->
-
-        <!-- COLORBLIND MODE BUTTON -->
-        <div id="colorblind-toggle">
-            <button id="colorblind-button">Toggle Colorblind Mode</button>
-        </div>
-
-        <!--SEARCH-->
+        <!-- SEARCH -->
         <div id="search">
             <form id="search-form" action="/stock" method="GET">
                 <div id="search-wrapper">
@@ -61,61 +29,58 @@
                 </div>
             </form>
         </div>
+    </div>
 
-        <!--GRAPH-->
-        <div id="graph">
-            <iframe id="stock-graph" src="/home" width="100%" height="600px" style="border:none;"></iframe>
-        </div>
+    <!-- GRAPH -->
+    <div id="graph">
+        <iframe id="stock-graph" src="/home" width="100%" height="600px" style="border:none;"></iframe>
+    </div>
 
-        <!--TIME BUTTONS-->
-        <div id = "time-buttons">
-            <button data-value="1d">1D</button>
-            <button data-value="5d">1W</button>
-            <button data-value="1mo">1M</button>
-            <button data-value="3mo">3M</button>
-            <button data-value="ytd">YTD</button>
-            <button data-value="1y">1Y</button>
-            <button data-value="max">ALL</button>
-        </div>
+    <!-- TIME BUTTONS -->
+    <div id="time-buttons">
+        <button data-value="1d">1D</button>
+        <button data-value="5d">1W</button>
+        <button data-value="1mo">1M</button>
+        <button data-value="3mo">3M</button>
+        <button data-value="ytd">YTD</button>
+        <button data-value="1y">1Y</button>
+        <button data-value="max">ALL</button>
+    </div>
 
-        <!--HEADLINES-->
-        <div id = "headlines">
-            <h2><a href="news.html">Headlines</a></h2>
-            <ul>
-                {% for headline in home_news %}
-                    <li><a href="{{ headline.link }}" target="_blank">{{ headline.title }}</a></li>
-                    <img src="{{ headline.image }}" alt="News Image" class="headline-img">
-                {% endfor %}
-            </ul>
-        </div>
+    <!-- HEADLINES -->
+    <div id="headlines">
+        <h2><a href="news.html">Headlines</a></h2>
+        <ul>
+            {% for headline in home_news %}
+                <li><a href="{{ headline.link }}" target="_blank">{{ headline.title }}</a></li>
+                <img src="{{ headline.image }}" alt="News Image" class="headline-img">
+            {% endfor %}
+        </ul>
+    </div>
 
-        <!--TRENDING STOCKS-->
-        <div id="trending">
+    <!-- TRENDING STOCKS -->
+    <div id="trending">
         <h2>Trending Stocks</h2>
         {% if trending_stocks %}
             <div id="trending-container">
                 {% for stock in trending_stocks %}
-                    <button type="button" class="trending-stock-button" 
-                            onclick="window.location.href= '{{ url_for('stock') }}?stock={{ stock.ticker }}'"
-                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; background: #f1f1f1; margin-bottom: 10px; width: 100%; text-align: left;">
-                        <!-- Left side: Ticker and Price -->
+                    <button type="button" class="trending-stock-button"
+                            onclick="window.location.href='/stock?stock={{ stock.ticker }}'"
+                            style="display: flex; align-items: center; gap: 10px; padding: 10px; border: none; margin-bottom: 10px; width: 100%; text-align: left;">
                         <div class="stock-info" style="flex-grow: 1;">
-                            <div class="stock-ticker">
-                                <strong>{{ stock.ticker }}</strong>
-                            </div>
+                            <div class="stock-ticker"><strong>{{ stock.ticker }}</strong></div>
                             <div class="stock-price">
                                 ${{ "%.2f"|format(stock.price) if stock.price != 'N/A' else 'N/A' }}
                             </div>
                         </div>
-                        <!-- Right side: Price Change and Percentage -->
                         <div class="stock-change-info">
                             {% if stock.change != 'N/A' %}
                                 {% if stock.change > 0 %}
-                                    <span style="background-color:green; color:white; padding:5px 10px; border-radius:5px;">
+                                    <span class="change-badge positive-change">
                                         {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
                                     </span>
                                 {% else %}
-                                    <span style="background-color:red; color:white; padding:5px 10px; border-radius:5px;">
+                                    <span class="change-badge negative-change">
                                         {{ "%.2f"|format(stock.change) }} ({{ "%.2f"|format(stock.change_percent) }}%)
                                     </span>
                                 {% endif %}
@@ -129,76 +94,102 @@
         {% else %}
             <p>No trending stocks found.</p>
         {% endif %}
-        </div>
+    </div>
 
-        <!--INFO-->
-        <div id = "info">
+    <!-- INFO -->
+    <div id="info"></div>
 
-        </div>
+    <!-- OVERVIEW -->
+    <div id="overview"></div>
 
-        <!--OVERVIEW-->
-        <div id = "overview">
-
-        </div>
-
-        <!--SCRIPT TO HANDLE BUTTON CLICKS-->
-        <script>
-            const iframe = document.getElementById("stock-graph");
-            const buttons = document.querySelectorAll("#time-buttons button");
-
-            buttons.forEach(button => {
-                button.addEventListener("click", () => {
-                    const timeValue = button.getAttribute("data-value");
-
-                    // Preserve other query parameters like colorblind
-                    const url = new URL(iframe.src, window.location.origin);
-                    url.searchParams.set("time", timeValue);
-
-                    iframe.src = url.toString();
-                });
-            });
-        </script>
-
-        <!-- SCRIPT FROM ACCESSIBILITY -->
-        <script>
+    <!-- SCRIPTS -->
+    <script>
+        window.addEventListener('DOMContentLoaded', () => {
+            const logo = document.getElementById('logo');
+            const nav = document.getElementById('nav');
+            const logoImage = logo.querySelector('img');
             const stockInput = document.getElementById('stock-input');
             const suggestionsBox = document.getElementById('suggestions');
             const darkModeLink = document.getElementById('dark-mode-button');
-            const colorblindLink = document.getElementById('colorblind-button');
+            const colorblindBtn = document.getElementById('colorblind-button');
+            const iframe = document.getElementById('stock-graph');
+            const form = document.getElementById('search-form');
+            const timeButtons = document.querySelectorAll('#time-buttons button');
+
+            logoImage.addEventListener('click', (e) => {
+                e.stopPropagation();
+                nav.classList.toggle('hidden');
+            });
+
+            timeButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    const timeValue = button.getAttribute('data-value');
+                    const url = new URL(iframe.src, window.location.origin);
+                    url.searchParams.set('time', timeValue);
+                    iframe.src = url.toString();
+                });
+            });
+
+            stockInput.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    const suggestions = suggestionsBox.querySelectorAll('.suggestion');
+                    if (suggestions.length > 0) {
+                        event.preventDefault();
+                        const firstSuggestion = suggestions[0].textContent;
+                        const match = firstSuggestion.match(/\(([^)]+)\)/);
+                        if (match && match[1]) {
+                            stockInput.value = match[1]; 
+                            form.submit();
+                        }
+                    } else {
+                        
+                        event.preventDefault();
+                    }
+                }
+            });
+
 
             if (darkModeLink) {
                 darkModeLink.addEventListener('click', (e) => {
                     e.preventDefault();
                     document.body.classList.toggle('dark-mode');
-                    localStorage.setItem('darkMode', document.body.classList.contains('dark-mode').toString());
+                    const isDark = document.body.classList.contains('dark-mode');
+                    localStorage.setItem('darkMode', isDark.toString());
+
+                    const iframeURL = new URL(iframe.src, window.location.origin);
+                    iframeURL.searchParams.set('darkmode', isDark ? 'true' : 'false');
+                    iframe.src = iframeURL.toString();
                 });
             }
 
-            if (colorblindLink) {
-                colorblindLink.addEventListener('click', (e) => {
+
+            if (localStorage.getItem('darkMode') === 'true') {
+                document.body.classList.add('dark-mode');
+
+                const iframeURL = new URL(iframe.src, window.location.origin);
+                iframeURL.searchParams.set('darkmode', 'true');
+                iframe.src = iframeURL.toString();
+            }
+
+            if (colorblindBtn && iframe) {
+                colorblindBtn.addEventListener('click', e => {
                     e.preventDefault();
-                    const iframe = document.getElementById('stock-graph');
-                    const src = new URL(iframe.src);
-                    const currentMode = src.searchParams.get('colorblind') === 'true';
-                    src.searchParams.set('colorblind', (!currentMode).toString());
-                    iframe.src = src.toString();
-                    localStorage.setItem('colorblindMode', (!currentMode).toString());
+                    const src = new URL(iframe.src, window.location.origin);
+                    const current = src.searchParams.get('colorblind') === 'true';
+                    const next = (!current).toString();
+                    src.searchParams.set('colorblind', next);
+                    iframe.src = src;
+                    localStorage.setItem('colorblindMode', next);
+                    document.body.classList.toggle('colorblind-mode', next === 'true');
                 });
             }
-
-            window.addEventListener('DOMContentLoaded', () => {
-                if (localStorage.getItem('darkMode') === 'true') {
-                    document.body.classList.add('dark-mode');
-                }
-
-                const savedColorblind = localStorage.getItem('colorblindMode');
-                if (savedColorblind === 'true' || savedColorblind === 'false') {
-                    const iframe = document.getElementById('stock-graph');
-                    const src = new URL(iframe.src);
-                    src.searchParams.set('colorblind', savedColorblind);
-                    iframe.src = src.toString();
-                }
-            });
+            const saved = localStorage.getItem('colorblindMode');
+            if (saved === 'true' || saved === 'false') {
+                document.body.classList.toggle('colorblind-mode', saved === 'true');
+                const url = new URL(iframe.src, window.location.origin);
+                url.searchParams.set('colorblind', saved);
+                iframe.src = url.toString();
+            }
 
             stockInput.addEventListener('input', async function () {
                 const query = stockInput.value.trim();
@@ -237,19 +228,10 @@
                 }
             });
 
-            const colorblindBtn = document.getElementById('colorblind-button');
 
-            colorblindBtn.addEventListener('click', () => {
-                const iframe = document.getElementById('stock-graph');
-                
-                const src = new URL(iframe.src);
+        });
 
-                const currentMode = src.searchParams.get('colorblind') === 'true';
+    </script>
 
-                src.searchParams.set('colorblind', (!currentMode).toString());
-
-                iframe.src = src.toString();
-            });
-        </script>
-    </body>
+</body>
 </html>
