@@ -227,8 +227,7 @@
                             document.getElementById('search-form').submit();
                         }
                     } else {
-                        stockInput.value = stockInput.value.toUpperCase();
-                        document.getElementById('search-form').submit();
+                        event.preventDefault();
                     }
                 }
             });
