@@ -427,3 +427,8 @@ body.dark-mode #overview-table td {
     grid-area: stats;
 
 }
+
+body {
+    overflow-y: hidden;  /* Disables scrolling */
+    overflow-x: hidden;
+}
