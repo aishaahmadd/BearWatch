@@ -182,7 +182,7 @@ def update_graph(selected_tab, search):
         font=dict(color=text_color),
         title=title,
         title_x=0.5,
-        xaxis_title="Date",
+        xaxis_title="Time",
         yaxis_title="Closing Price",
         xaxis=dict(showgrid=True),
         yaxis=dict(showgrid=True)
